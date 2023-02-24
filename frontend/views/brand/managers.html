@@ -1,0 +1,147 @@
+<div class="brand-admin-manager-div" ng-controller="manager">
+  <div class="add-manager-div">
+    <button
+      class="btn btn-outline-primary"
+      data-toggle="modal"
+      data-target="#addManagerModal"
+    >
+      Add Manager
+    </button>
+  </div>
+  <div class="current-manager-div">
+    <h2>Current Managers</h2>
+    <table>
+      <tr>
+        <th>User Name</th>
+        <th>Email</th>
+        <th>Details</th>
+        <th>Disable</th>
+        <th>Delete</th>
+      </tr>
+      <tr ng-repeat="item in currentManagers">
+        <td>{{item.userName}}</td>
+        <td>{{item.email}}</td>
+        <td><button class="btn btn-success">Details</button></td>
+        <td><button class="btn btn-warning">Disable</button></td>
+        <td><button class="btn btn-danger">Delete</button></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- MODALS -->
+  <!-- ADD MANAGER MODALS -->
+  <div
+    class="modal fade"
+    id="addManagerModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- form -->
+          <form name="myForm" novalidate>
+            <input
+              class="input-element"
+              type="email"
+              id="email"
+              name="email"
+              ng-model="managerEmail"
+              required
+              ng-pattern="emailRegex"
+              placeholder="Enter email"
+            />
+            <br />
+            <label ng-show="myForm.$submitted || myForm.email.$dirty">
+              <label
+                ng-model="emailError1"
+                class="error"
+                ng-show="myForm.email.$error.required"
+                >Email is required</label
+              >
+              <label
+                ng-model="emailError2"
+                class="error"
+                ng-show="myForm.email.$error.pattern"
+                >Email is not valid</label
+              >
+            </label>
+            <br />
+
+            <input
+              class="input-element"
+              type="text"
+              name="name"
+              id="name"
+              ng-model="managerName"
+              required
+              placeholder="Enter name"
+            />
+            <br />
+            <label ng-show="myForm.$submitted || myForm.name.$dirty">
+              <span
+                ng-model="nameError"
+                class="error"
+                ng-show="myForm.name.$error.required"
+                >Name is required</span
+              ><br />
+            </label>
+            <br />
+
+            <input
+              class="input-element"
+              type="password"
+              id="password"
+              name="password"
+              ng-model="password"
+              ng-pattern="passwordRegex"
+              required
+              placeholder="confirm passsword"
+            />
+            <br />
+            <label ng-show="myForm.$submitted || myForm.password.$dirty">
+              <span
+                ng-model="passsError1"
+                class="error"
+                ng-show="myForm.password.$error.required"
+                >Password is required</span
+              ><br />
+            </label>
+            <br />
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                ng-disabled="myForm.$invalid"
+                ng-click="addBrandManager()"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

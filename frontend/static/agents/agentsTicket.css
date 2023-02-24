@@ -1,0 +1,96 @@
+.agents-tickets-container {
+    border: 1px solid grey;
+    border-radius: 10px;
+    background-color: rgb(243, 245, 246);
+    border-left: 7px solid rgba(0, 60, 255, 0.726);
+    -webkit-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+-moz-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+    width: 30%;
+    margin-right: 30px;
+    margin-bottom: 30px;
+}
+
+.ticket-div {
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket-details-div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tickets-options-div {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.text-info1 {
+    font-size: 13px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-top: 7px;
+}
+
+.more-option-icon {
+    margin-right: 10px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.chat-option-icon {
+    margin-right: 7px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.manager-agents-table {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chat-div {
+    height: 400px;
+    overflow-y: scroll;
+    padding: 1%;
+}
+
+.identity {
+    margin: 0px;
+    font-size: 13px;
+}
+
+.message{
+    padding-left: 1%;
+}
+
+.date-and-time-div {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.date-and-time {
+    margin: 0px;
+    font-size: 10px;
+}
+
+.comment-text {
+    margin-bottom: 0px;
+    width: fit-content;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    background-color: rgb(223, 223, 223);
+}
+
+.message-div {
+    margin-bottom: 10px;
+}
+
+.user-icon-comments {
+    width: 25px;
+    margin-right: 5px;
+}

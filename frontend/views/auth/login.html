@@ -1,0 +1,60 @@
+<div class="signup-main-div" ng-controller="login">
+  <div class="signup-inner-div">
+    <div class="signup-inner-div-left">
+      <img
+        class="signup-img"
+        src="/frontend/assets/support-png.png"
+        alt="signup-page-png"
+      />
+    </div>
+    <div class="signup-inner-div-right">
+      <p class="sign-up-text">Log In</p>
+      <form name="myForm" novalidate>
+        <!-- USER NAME -->
+        <input
+          class="input-field1"
+          type="text"
+          name="userName"
+          id="userName"
+          ng-model="userName"
+          required
+          placeholder="Enter User Name"
+        />
+        <br />
+        <label ng-show="myForm.$submitted || myForm.userName.$dirty">
+          <span
+            ng-model="UserNameError"
+            class="error"
+            ng-show="myForm.userName.$error.required"
+            >User Name is required</span
+          ><br />
+        </label>
+        <br />
+
+        <input
+          class="input-field1"
+          type="password"
+          id="password"
+          name="password"
+          ng-model="password"
+          required
+          placeholder="Enter passsword"
+        />
+        <br />
+        <label ng-show="myForm.$submitted || myForm.password.$dirty">
+          <span
+            ng-model="passwordError"
+            class="error"
+            ng-show="myForm.password.$error.required"
+            >Password is required</span
+          ><br />
+        </label>
+        <br />
+
+        <button class="signup-button" type="submit" ng-click="loginHandler()">
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

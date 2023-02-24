@@ -1,0 +1,92 @@
+<div class="brandAdmin-outer-div" ng-controller="brandAdmin">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand navbar-logo" href="#">
+      <img
+        src="https://w7.pngwing.com/pngs/4/758/png-transparent-computer-icons-social-media-facebook-technical-support-blue-team-logo-thumbnail.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      TechSupport
+    </a>
+    <button
+      class="btn-outline-primary manager-logout-button"
+      ng-click="logout()"
+    >
+      Logout
+    </button>
+  </nav>
+  <div class="component-body">
+    <!-- SIDEBAAR -->
+    <div class="component-left-div">
+      <button
+        ui-sref=".managers"
+        class="{{classname1}}"
+        ng-click="handleActiveButton(1)"
+      >
+        Managers
+      </button>
+      <button
+        ui-sref=".agents"
+        class="{{classname2}}"
+        ng-click="handleActiveButton(2)"
+      >
+        Agents
+      </button>
+      <button
+        ui-sref=".brandTickets"
+        class="{{classname3}}"
+        ng-click="handleActiveButton(3)"
+      >
+        Tickets
+      </button>
+      <button
+        ui-sref=".customers"
+        class="{{classname4}}"
+        ng-click="handleActiveButton(4)"
+      >
+        Customers
+      </button>
+      <button
+        ui-sref=".brandSettings"
+        class="{{classname5}}"
+        ng-click="handleActiveButton(5)"
+      >
+        Settings
+      </button>
+    </div>
+    <div class="component-right-div">
+      <div class="component-right-div-upper">
+        <div class="brand-admin-div">
+          <div class="manager-details-div">
+            <div class="manager-photo">
+              <img
+                src="https://www.persofoto.de/apple-touch-icon-180x180.png"
+                alt="manager-photo-png"
+                class="manager-photo-png"
+              />
+            </div>
+            <div class="manager-details">
+              <h6><strong>Name :</strong> {{brandAdminName}}</h6>
+              <h6><strong>Email :</strong> {{brandAdminEmail}}</h6>
+              <h6><strong>BrandId :</strong> {{brandId}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="manager-brand-details">
+          <div class="manager-brand-details-inner-div">
+            <h6><strong>BrandName: </strong>{{brandName}}</h6>
+            <h6><strong>Email: </strong>{{brandEmail}}</h6>
+            <h6><strong>BrandId: </strong>{{brandId}}</h6>
+            <h6><strong>Phone number: </strong>{{brandPhoneNumber}}</h6>
+            <h6><strong>Brand Categoty: </strong>{{brandCategory}}</h6>
+            <h6><strong>Address: </strong>{{brandAddress}}</h6>
+          </div>
+        </div>
+      </div>
+      <div style="width: 96%" class="brand-admin-div" ui-view></div>
+    </div>
+  </div>
+</div>

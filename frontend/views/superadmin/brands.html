@@ -1,0 +1,340 @@
+<div class="superadmin-brand-div" ng-controller="SuperadminBrand">
+  <div class="superadmin-add-brand-div">
+    <button
+      class="btn btn-outline-primary"
+      data-toggle="modal"
+      data-target="#addBrandModal"
+    >
+      Add Brand
+    </button>
+  </div>
+
+  <div class="superadmin-current-brand-div">
+    <!-- BRAND TABLE -->
+    <div class="brand-no-admin-div">
+      <h5><strong>Brands With No Admin</strong></h5>
+      <table>
+        <tr>
+          <th>Brand Id</th>
+          <th>Brand Name</th>
+          <th>Add Admin</th>
+          <th>Disable</th>
+          <th>Delete</th>
+        </tr>
+        <tr ng-repeat="item in currentBrandsWithNoAdmin">
+          <td>{{item.brandId}}</td>
+          <td>{{item.name}}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              data-toggle="modal"
+              data-target="#addBrandAdminModal"
+              ng-click="updateBrandScopes(item.brandId, item.email, item.name, item.category, item.phoneNumber, item.address)"
+            >
+              Add Admin
+            </button>
+          </td>
+          <td>
+            <button type="button" class="btn btn-warning">Disable</button>
+          </td>
+          <td><button type="button" class="btn btn-danger">Delete</button></td>
+        </tr>
+      </table>
+      <div class="brand-with-admin-div">
+        <h5><strong>Active Brands</strong></h5>
+        <table>
+          <tr>
+            <th>Brand Id</th>
+            <th>Brand Name</th>
+            <th>View Details</th>
+            <th>Disable</th>
+            <th>Delete</th>
+          </tr>
+          <tr ng-repeat="item in currentBrandsWithAdmin">
+            <td>{{item.brandId}}</td>
+            <td>{{item.name}}</td>
+            <td>
+              <button type="button" class="btn btn-outline-success">
+                View Details
+              </button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-warning">Disable</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger">Delete</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADD BRAND MODAL -->
+    <div
+      class="modal fade"
+      id="addBrandModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Brand</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form name="myForm" novalidate>
+              <input
+                class="input-element"
+                type="email"
+                id="email"
+                name="email"
+                ng-model="email"
+                required
+                ng-pattern="emailRegex"
+                placeholder="Enter email"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.email.$dirty">
+                <label
+                  ng-model="emailError1"
+                  class="error"
+                  ng-show="myForm.email.$error.required"
+                  >Email is required</label
+                >
+                <label
+                  ng-model="emailError2"
+                  class="error"
+                  ng-show="myForm.email.$error.pattern"
+                  >Email is not valid</label
+                >
+              </label>
+              <br />
+
+              <input
+                class="input-element"
+                type="text"
+                name="name"
+                id="name"
+                ng-model="name"
+                required
+                placeholder="Enter name"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.name.$dirty">
+                <span
+                  ng-model="nameError"
+                  class="error"
+                  ng-show="myForm.name.$error.required"
+                  >Name is required</span
+                ><br />
+              </label>
+              <br />
+
+              <!-- category -->
+              <span for="category">Choose a category:</span>
+              <select name="category" id="category" ng-model="category">
+                <option value="Food">Food</option>
+                <option value="Corporate">Corporate</option>
+                <option value="Banking">Banking</option>
+                <option value="Aviation">Aviation</option>
+                <option value="Private">Private</option>
+                <option value="Sports">Sports</option>
+                <option value="Transport">Transport</option>
+                <option value="Others">Others</option>
+              </select>
+              <br />
+              <br />
+
+              <input
+                class="input-element"
+                type="text"
+                id="phoneNumber"
+                name="phoneNumber"
+                ng-model="phoneNumber"
+                ng-minlength="10"
+                ng-maxlength="10"
+                required
+                placeholder="Enter phone number"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.phoneNumber.$dirty">
+                <label
+                  ng-model="phoneError1"
+                  class="error"
+                  ng-show="myForm.phoneNumber.$error.required"
+                  >Phone Number is required</label
+                >
+                <label
+                  ng-model="phoneError2"
+                  class="error"
+                  ng-show="((myForm.phoneNumber.$error.minlength || myForm.phoneNumber.$error.maxlength) && myForm.phoneNumber.$dirty)"
+                  >Phone Number should be of 10 digits</label
+                >
+              </label>
+              <br />
+
+              <input
+                class="input-element"
+                type="text"
+                name="address"
+                id="address"
+                ng-model="address"
+                required
+                placeholder="Enter address"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.address.$dirty">
+                <span
+                  ng-model="nameError"
+                  class="error"
+                  ng-show="myForm.address.$error.required"
+                  >Address is required</span
+                ><br />
+              </label>
+              <br />
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">
+                  Close
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-disabled="myForm.$invalid"
+                  ng-click="signupSubmit()"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD BRAND ADMIN MODAL -->
+    <div
+      class="modal fade"
+      id="addBrandAdminModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Admin</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form name="myForm" novalidate>
+              <input
+                class="input-element"
+                type="email"
+                id="email"
+                name="email"
+                ng-model="adminEmail"
+                required
+                ng-pattern="emailRegex"
+                placeholder="Enter email"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.email.$dirty">
+                <label
+                  ng-model="emailError1"
+                  class="error"
+                  ng-show="myForm.email.$error.required"
+                  >Email is required</label
+                >
+                <label
+                  ng-model="emailError2"
+                  class="error"
+                  ng-show="myForm.email.$error.pattern"
+                  >Email is not valid</label
+                >
+              </label>
+              <br />
+
+              <input
+                class="input-element"
+                type="text"
+                name="name"
+                id="name"
+                ng-model="adminName"
+                required
+                placeholder="Enter name"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.name.$dirty">
+                <span
+                  ng-model="nameError"
+                  class="error"
+                  ng-show="myForm.name.$error.required"
+                  >Name is required</span
+                ><br />
+              </label>
+              <br />
+
+              <input
+                class="input-element"
+                type="password"
+                id="password"
+                name="password"
+                ng-model="password"
+                ng-pattern="passwordRegex"
+                required
+                placeholder="confirm passsword"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.password.$dirty">
+                <span
+                  ng-model="passsError1"
+                  class="error"
+                  ng-show="myForm.password.$error.required"
+                  >Password is required</span
+                ><br />
+              </label>
+              <br />
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-disabled="myForm.$invalid"
+                  ng-click="addBrandAdmin()"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

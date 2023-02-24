@@ -1,0 +1,160 @@
+<div class="manager-agent-outer-div" ng-controller="agentTickets">
+  <div class="manager-add-agent-div">
+    <button class="btn btn-outline-primary">Add Tickets</button>
+  </div>
+  <div class="manager-agents-table">
+    <div class="agents-tickets-container" ng-repeat="item in tickets">
+      <div class="ticket-div">
+        <div class="ticket-details-div">
+          <div class="ticket-details-div-left">
+            <p class="text-info1">
+              <strong>Ticket Id: </strong> {{item.ticketId}}
+            </p>
+            <p class="text-info1">
+              <strong>Status:</strong>
+              {{item.status}}
+            </p>
+            <p class="text-info1"><strong>Subject: </strong>{{item.subject}}</p>
+            <p class="text-info1"><strong>Query: </strong>{{item.query}}</p>
+          </div>
+          <div class="ticket-details-div-right">
+            <img
+              class="more-option-icon"
+              data-toggle="modal"
+              data-target="#detailModal"
+              src="/frontend/assets/more.png"
+              alt="more-options"
+            />
+          </div>
+        </div>
+        <div class="tickets-options-div">
+          <img
+            class="chat-option-icon"
+            data-toggle="modal"
+            data-target="#commentModal"
+            ng-click="updateTicketDetails(item.ticketId, item.subject, item.query)"
+            src="/frontend/assets/icons8-comments-24.png"
+            alt="chat-icon"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal more option -->
+  <div
+    class="modal fade"
+    id="detailModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ticket</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success">Resolve</button>
+          <button type="button" class="btn btn-warning">Disable</button>
+          <button type="button" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal chat -->
+  <div
+    class="modal fade"
+    id="commentModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">comments</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="chat-div">
+            <div class="message-div" ng-repeat="item in ticketComments">
+              <p class="identity">
+                <img
+                  class="user-icon-comments"
+                  src="/frontend/assets/user-icon.png"
+                  alt="usericon"
+                /><strong>{{item.sentByUserName}}</strong>
+                ({{item.sentByUserType}})
+              </p>
+              <div class="message">
+                <p class="comment-text">{{item.content}}</p>
+              </div>
+              <div class="date-and-time-div">
+                <p class="date-and-time">{{item.dateAndTime}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="chat-form-div">
+            <form name="myForm" novalidate>
+              <input
+                class="input-element"
+                type="text"
+                id="comment"
+                name="comment"
+                ng-model="comment"
+                required
+                placeholder="enter comment"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.comment.$dirty">
+                <label
+                  ng-model="commentError1"
+                  class="error"
+                  ng-show="myForm.comment.$error.required"
+                  >type something to add comment</label
+                >
+              </label>
+              <br />
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-disabled="myForm.$invalid"
+                  ng-click="addcommentHandler()"
+                >
+                  Add comment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

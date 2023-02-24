@@ -1,0 +1,206 @@
+.brand-logo-div {
+    margin: 1%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.brand-logo {
+    height: 30vh;
+    width: 100%;
+    border: 1px solid rgb(173, 173, 173);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.manager-details-div {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.manager-photo {
+    height: 20vh;
+    width: 30%;
+    border: 1px solid rgb(173, 173, 173);
+    background-color: rgba(0, 60, 255, 0.726);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    margin-right: 20px;
+}
+
+.brand-logo-png {
+    width: 90%;
+    height: 90%;
+}
+
+.manager-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    height: 100%;
+}
+
+.manager-photo-png {
+    width: 85%;
+    height: 85%;
+    border-radius: 50%;
+    border: 4px solid rgb(195, 195, 255);
+}
+
+.manager-brand-details {
+    margin-right: 2%;
+    margin-top: 30px;
+    padding: 1%;
+    border: 1px solid rgba(90, 90, 90, 0.401);
+    border-radius: 10px;
+    -webkit-box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+    -moz-box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+    box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+}
+
+.component-right-div-upper {
+    display: flex;
+}
+
+.brand-admin-div {
+    width: 60%;
+}
+
+.manager-brand-details {
+    width: 40%;
+}
+
+.manager-details {
+  margin-top: 10px;
+}
+
+.manager-brand-details {
+  border-left: 15px solid rgba(0, 60, 255, 0.726);
+}
+
+.manager-agents-table-div {
+    margin-left: 2%;
+  margin-right: 2%;
+  width: 96%;
+    margin-top: 30px;
+    border: 1px solid rgba(90, 90, 90, 0.401);
+    border-radius: 10px;
+    -webkit-box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+-moz-box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 23px;
+    width: 23px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: rgb(5, 176, 5);
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .toggle-div-options {
+    display: flex;
+    margin-bottom: -17px;
+  }
+
+  .online-offline-text {
+    font-size: 20px;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  .manager-logout-button {
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 25px;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+
+  .manager-toggle-button {
+    border: none;
+    background-color: transparent;
+  }
+
+  .manager-toggle-button:active {
+    border: none;
+  }
+
+  .manager-toggle-button::focus {
+    border: none;
+  }
+
+  .filter-tickets-option {
+    display: flex;
+    padding: 2%;
+  }
+
+  .filter-buttons {
+    margin-left: 20px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+  }
+
+  .assign-to-agentbutton {
+    margin-right: 10px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    padding: 2px;
+    cursor: pointer;
+    border-radius: 5px;
+  }

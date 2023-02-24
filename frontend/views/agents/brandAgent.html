@@ -1,0 +1,97 @@
+<div class="brandAdmin-outer-div" ng-controller="brandAgents">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand navbar-logo" href="#">
+      <img
+        src="https://w7.pngwing.com/pngs/4/758/png-transparent-computer-icons-social-media-facebook-technical-support-blue-team-logo-thumbnail.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      TechSupport
+    </a>
+    <div class="toggle-div-options">
+      <p class="online-offline-text">{{onlineStatus}}</p>
+      <label class="switch">
+        <input type="checkbox" checked ng-click="toggleHandler()" />
+        <span class="slider round"></span>
+      </label>
+      <button
+        class="btn-outline-primary manager-logout-button"
+        ng-click="logout()"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
+  <div class="component-body">
+    <!-- SIDEBAAR -->
+    <div class="component-left-div">
+      <div class="brand-logo-div">
+        <div class="brand-logo">
+          <img
+            class="brand-logo-png"
+            src="https://img.freepik.com/premium-vector/tacos-always-fresh-logo_187482-396.jpg?w=2000"
+            alt="brand-logo-png"
+          />
+        </div>
+        <div class="brand-name">
+          <h5>{{brandName}}</h5>
+        </div>
+      </div>
+      <button
+        ui-sref=".agenttickets"
+        class="{{classname1}}"
+        ng-click="handleActiveButton(1)"
+      >
+        Tickets
+      </button>
+      <button
+        ui-sref=".agentcustomers"
+        class="{{classname2}}"
+        ng-click="handleActiveButton(2)"
+      >
+        Customers
+      </button>
+      <button
+        ui-sref=".agentsettings"
+        class="{{classname3}}"
+        ng-click="handleActiveButton(3)"
+      >
+        Settings
+      </button>
+    </div>
+    <div class="component-right-div">
+      <div class="component-right-div-upper">
+        <div class="brand-admin-div">
+          <div class="agent-details-div">
+            <div class="agent-photo">
+              <img
+                src="https://www.persofoto.de/apple-touch-icon-180x180.png"
+                alt="agent-photo-png"
+                class="agent-photo-png"
+              />
+            </div>
+            <div class="agent-details">
+              <h6><strong>Name :</strong> {{brandAgentName}}</h6>
+              <h6><strong>Email :</strong> {{brandAgentEmail}}</h6>
+              <h6><strong>BrandId :</strong> {{brandId}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="agent-brand-details">
+          <div class="agent-brand-details-inner-div">
+            <h6><strong>BrandName: </strong>{{brandName}}</h6>
+            <h6><strong>Email: </strong>{{brandEmail}}</h6>
+            <h6><strong>BrandId: </strong>{{brandId}}</h6>
+            <h6><strong>Phone number: </strong>{{brandPhoneNumber}}</h6>
+            <h6><strong>Brand Categoty: </strong>{{brandCategory}}</h6>
+            <h6><strong>Address: </strong>{{brandAddress}}</h6>
+          </div>
+        </div>
+      </div>
+      <div class="agent-tickets-table-div" ui-view></div>
+    </div>
+  </div>
+</div>

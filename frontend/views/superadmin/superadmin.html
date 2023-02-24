@@ -1,0 +1,45 @@
+<div class="admin-outer-div" ng-controller="admin">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand navbar-logo" href="#">
+      <img
+        src="https://w7.pngwing.com/pngs/4/758/png-transparent-computer-icons-social-media-facebook-technical-support-blue-team-logo-thumbnail.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      TechSupport
+    </a>
+    <button
+      class="btn-outline-primary manager-logout-button"
+      ng-click="logout()"
+    >
+      Logout
+    </button>
+  </nav>
+  <div class="component-body">
+    <!-- SIDEBAAR -->
+    <div class="component-left-div">
+      <button
+        class="btn btn-primary sidebar-buttons"
+        ui-sref=".superadminbrands"
+      >
+        Brands
+      </button>
+      <button
+        class="btn btn-primary sidebar-buttons"
+        ui-sref=".superadminstats"
+      >
+        Stats
+      </button>
+      <button
+        class="btn btn-primary sidebar-buttons"
+        ui-sref=".superadminsettings"
+      >
+        Settings
+      </button>
+    </div>
+    <div class="component-right-div" ui-view=""></div>
+  </div>
+</div>

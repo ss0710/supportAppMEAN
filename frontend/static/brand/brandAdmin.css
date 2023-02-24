@@ -1,0 +1,41 @@
+.brand-admin-div {
+    margin-left: 2%;
+  margin-right: 2%;
+    margin-top: 30px;
+    border: 1px solid rgba(90, 90, 90, 0.401);
+    border-radius: 10px;
+    -webkit-box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+-moz-box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
+}
+
+.brandAdmin-sidebar-buttons {
+  width: 100%;
+  height: 40px;
+  border: none;
+  margin-bottom: 10px;
+  background-color: rgb(228, 228, 228);
+}
+
+.brandAdmin-sidebar-buttons:hover {
+  width: 100%;
+  height: 40px;
+  border: none;
+  margin-bottom: 10px;
+  background-color: rgb(228, 228, 228);
+  border: 2px solid rgb(59, 108, 254);
+  color: blue;
+}
+
+.brandAdmin-sidebar-buttons-active {
+  width: 100%;
+  height: 40px;
+  border: none;
+  margin-bottom: 10px;
+  background-color: rgb(59, 108, 254);
+  color: white;
+}
+
+.brand-admin-manager-div{
+  width: 100%;
+}

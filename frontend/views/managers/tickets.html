@@ -1,0 +1,253 @@
+<div class="manager-agent-outer-div" ng-controller="Tickets">
+  <div class="manager-add-agent-div">
+    <button
+      class="btn btn-outline-primary"
+      data-toggle="modal"
+      data-target="#addTicketModal"
+    >
+      Add Tickets
+    </button>
+  </div>
+  <!-- Filter ticket options -->
+  <div class="filter-tickets-option">
+    <p><strong>Filter Tickets By:</strong></p>
+    <button
+      type="button"
+      class="btn btn-outline-success filter-buttons"
+      ng-click="allTickets()"
+    >
+      All
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-success filter-buttons"
+      ng-click="notAssignedTickets()"
+    >
+      Not Assigned
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-success filter-buttons"
+      ng-click="assignedTickets()"
+    >
+      Assigned
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-success filter-buttons"
+      ng-click="inProcessTickets()"
+    >
+      In Process
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-success filter-buttons"
+      ng-click="resolvedTickets()"
+    >
+      Resolved
+    </button>
+  </div>
+  <!-- Tickets -->
+  <div class="manager-agents-table">
+    <div class="agents-tickets-container" ng-repeat="item in tickets">
+      <div class="ticket-div">
+        <div class="ticket-details-div">
+          <div class="ticket-details-div-left">
+            <p class="text-info1">
+              <strong>Ticket Id: </strong> {{item.ticketId}}
+            </p>
+            <p class="text-info1">
+              <strong>Status:</strong>
+              {{item.status}}
+            </p>
+            <p class="text-info1"><strong>Subject: </strong>{{item.subject}}</p>
+            <p class="text-info1"><strong>Query: </strong>{{item.query}}</p>
+          </div>
+          <div class="ticket-details-div-right">
+            <img
+              class="more-option-icon"
+              data-toggle="modal"
+              data-target="#detailModal"
+              src="/frontend/assets/more.png"
+              ng-click="updateTicketDetailsForModal(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName, item.brandName, item.brandId)"
+              alt="more-options"
+            />
+          </div>
+        </div>
+        <div class="tickets-options-div">
+          <img
+            class="chat-option-icon"
+            data-toggle="modal"
+            data-target="#commentModal"
+            ng-click="getTicketComments(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName, item.brandName, item.brandId)"
+            src="/frontend/assets/icons8-comments-24.png"
+            alt="chat-icon"
+          />
+          <button
+            ng-if="item.status == Created"
+            class="btn-outline-primary assign-to-agentbutton"
+          >
+            Assign
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal more option -->
+  <div
+    class="modal fade"
+    id="detailModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ticket</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="tickets-modal-inner-div">
+            <div class="tickets-details-div">
+              <p><strong>Ticket Id: </strong> {{ticketId}}</p>
+              <p><strong>Status:</strong> {{ticketStatus}}</p>
+              <p><strong>Assigned to:</strong> {{assignedTo}}</p>
+              <p><strong>Subject:</strong> {{tickedSubject}}</p>
+              <p><strong>Query:</strong> {{ticketQuery}}</p>
+              <p><strong>Created At:</strong> {{createdAt}}</p>
+            </div>
+            <div class="tickets-brand-details">
+              <p><strong>Created by:</strong> {{createdByUserName}}</p>
+              <p><strong>Brand Name:</strong> {{BrandName}}</p>
+              <p><strong>Brand Id:</strong> {{BrandId}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success">Assign</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal chat -->
+  <div
+    class="modal fade"
+    id="commentModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">comments</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="chat-div">
+            <div class="message-div" ng-repeat="item in ticketComments">
+              <p class="identity">
+                <img
+                  class="user-icon-comments"
+                  src="/frontend/assets/user-icon.png"
+                  alt="usericon"
+                /><strong>{{item.sentByUserName}}</strong>
+                ({{item.sentByUserType}})
+              </p>
+              <div class="message">
+                <p class="comment-text">{{item.content}}</p>
+              </div>
+              <div class="date-and-time-div">
+                <p class="date-and-time">{{item.dateAndTime}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="chat-form-div">
+            <form name="myForm" novalidate>
+              <input
+                class="input-element"
+                type="text"
+                id="comment"
+                name="comment"
+                ng-model="comment"
+                required
+                placeholder="enter comment"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.comment.$dirty">
+                <label
+                  ng-model="commentError1"
+                  class="error"
+                  ng-show="myForm.comment.$error.required"
+                  >type something to add comment</label
+                >
+              </label>
+              <br />
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-disabled="myForm.$invalid"
+                  ng-click="addcommentHandler()"
+                >
+                  Add comment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add Ticket Modal -->
+  <div
+    class="modal fade"
+    id="addTicketModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">comments</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
