@@ -33,16 +33,15 @@ router.put("/permitmanager/:id", managerController.permitBrandManager);
 
 //Brand agents routes
 router.post("/addagents", agentController.addBrandAgent);
-router.get("/getagents", agentController.getBrandAgents);
+router.get("/getagents/:id", agentController.getBrandAgents);
 
 //tickets routes
 router.post("/addticket", ticketController.addTicket);
 router.get("/gettickets/:id", ticketController.getTickets);
-
-//Customers routes
-router.post("/addcomment", commentController.addComment);
-router.get("/getcomments/:id", commentController.getComments);
+router.put("/updateticket/:id", ticketController.updateTicket);
 
 //comments routes
+router.post("/addcomment", commentController.addComment);
+router.get("/getcomments/:id", commentController.getComments);
 
 module.exports = router;

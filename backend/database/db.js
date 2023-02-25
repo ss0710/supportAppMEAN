@@ -14,7 +14,7 @@ module.exports = function () {
       console.log("Connected to database successfully");
       addSuperAdminToDb();
     })
-    .catch(() => {
+    .catch((error) => {
       console.log(error);
       console.log("could not connect to database");
     });

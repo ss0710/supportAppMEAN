@@ -50,7 +50,13 @@ exports.getBrandAgents = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      User.find({ isDeleted: false, isDisabled: false, role: "agent" })
+      var id = req.params.id;
+      User.find({
+        isDeleted: false,
+        isDisabled: false,
+        role: "agent",
+        "brand.brandId": id,
+      })
         .then(function (result) {
           res.status(200).json(result);
         })

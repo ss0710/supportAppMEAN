@@ -86,9 +86,61 @@
           <button
             ng-if="item.status == Created"
             class="btn-outline-primary assign-to-agentbutton"
+            data-toggle="modal"
+            data-target="#exampleModalCenter"
+            ng-click="loadAgents(item.ticketId)"
           >
             Assign
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Assign Ticket Modal  -->
+  <div
+    class="modal fade"
+    id="exampleModalCenter"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="height: 500px">
+          <input type="text" placeholder="search agent" />
+          <div>
+            <table>
+              <tr>
+                <th>Agent Name</th>
+                <th>Agent Email</th>
+                <th>Assign</th>
+              </tr>
+              <tr ng-repeat="item in agents">
+                <td>{{item.userName}}</td>
+                <td>{{item.email}}</td>
+                <td>
+                  <button
+                    class="btn-success"
+                    ng-click="assignTicketToAgent(item._id, item.userName)"
+                  >
+                    Assign
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -236,7 +288,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">comments</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Create Ticket</h5>
           <button
             type="button"
             class="close"
@@ -246,7 +298,71 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body"></div>
+        <div class="modal-body">
+          <p><strong>Brand Name:</strong> {{brandName}}</p>
+          <p><strong>Creating By</strong> {{brandManagerName}}</p>
+          <hr />
+          <div>
+            <form name="myForm" novalidate>
+              <input
+                class="input-element"
+                type="text"
+                id="subject"
+                name="subject"
+                ng-model="subject"
+                required
+                placeholder="enter subject"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.subject.$dirty">
+                <label
+                  ng-model="commentError1"
+                  class="error"
+                  ng-show="myForm.subject.$error.required"
+                  >type something to add comment</label
+                >
+              </label>
+              <br />
+              <textarea
+                class="input-element"
+                type="text"
+                id="query"
+                name="query"
+                ng-model="query"
+                required
+                placeholder="enter query"
+              />
+              <br />
+              <label ng-show="myForm.$submitted || myForm.query.$dirty">
+                <label
+                  ng-model="commentError1"
+                  class="error"
+                  ng-show="myForm.query.$error.required"
+                  >type something to add comment</label
+                >
+              </label>
+              <br />
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-disabled="myForm.$invalid"
+                  ng-click="createTicketsHandler()"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>

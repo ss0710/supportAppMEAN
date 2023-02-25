@@ -47,22 +47,21 @@ app.controller("Tickets", [
           $scope.brandPhoneNumber = result.data.brand.phoneNumber;
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
+
+          //gettings tickets of this particular brand
+          $http
+            .get(`http://localhost:3000/gettickets/${$scope.brandId}`, config)
+            .then(function (result) {
+              $scope.globaltickets = result.data;
+              $scope.tickets = result.data;
+            })
+            .catch(function (error) {
+              console.log(error.data);
+            });
         }
       })
       .catch(function (error) {
         console.log(error);
-      });
-
-    //gettings tickets of this particular brand
-    var brandId = "brand1676634940320";
-    $http
-      .get(`http://localhost:3000/gettickets/${brandId}`, config)
-      .then(function (result) {
-        $scope.globaltickets = result.data;
-        $scope.tickets = result.data;
-      })
-      .catch(function (error) {
-        console.log(error.data);
       });
 
     //filter methods
@@ -187,6 +186,65 @@ app.controller("Tickets", [
         .then(function (result) {
           alert("comment added successfully");
           $scope.comment = "";
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+
+    //create tickets handler
+    $scope.createTicketsHandler = function () {
+      var ticketData = {
+        brandId: $scope.brandId,
+        brandName: $scope.brandName,
+        subject: $scope.subject,
+        query: $scope.query,
+        createdByUserID: $scope.brandManagerId,
+        createdByUserName: $scope.brandManagerName,
+      };
+
+      $http
+        .post("http://localhost:3000/addticket", ticketData, config)
+        .then(function (result) {
+          alert("Succefully Created Ticket");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+
+    //loading agents
+    $scope.globalAgents = [];
+    $scope.agents = [];
+    $scope.loadAgents = function (ticketId) {
+      console.log("load agents called");
+      $scope.ticketId = ticketId;
+      $http
+        .get(`http://localhost:3000/getagents/${$scope.brandId}`, config)
+        .then(function (result) {
+          $scope.globalAgents = result.data;
+          $scope.agents = $scope.globalAgents;
+          console.log($scope.agents);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+
+    //function to assign ticket
+    $scope.assignTicketToAgent = function (agentId, agentName) {
+      var agentData = {
+        agentId: agentId,
+        agentName: agentName,
+      };
+      $http
+        .put(
+          `http://localhost:3000/updateticket/${$scope.ticketId}`,
+          agentData,
+          config
+        )
+        .then(function (result) {
+          alert("Successfully assigned tickets");
         })
         .catch(function (error) {
           console.log(error);

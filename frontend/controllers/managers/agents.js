@@ -17,16 +17,6 @@ app.controller("ManagerAgents", [
       },
     };
 
-    $http
-      .get("http://localhost:3000/getagents", config)
-      .then(function (result) {
-        $scope.agents = result.data;
-        console.log($scope.agents);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
     //to get brandmanager informations
     $scope.brandManagerName,
       $scope.brandManagerEmail,
@@ -52,6 +42,15 @@ app.controller("ManagerAgents", [
           $scope.brandPhoneNumber = result.data.brand.phoneNumber;
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
+          $http
+            .get(`http://localhost:3000/getagents/${$scope.brandId}`, config)
+            .then(function (result) {
+              $scope.agents = result.data;
+              console.log($scope.agents);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         }
       })
       .catch(function (error) {
