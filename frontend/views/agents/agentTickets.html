@@ -1,9 +1,14 @@
 <div class="manager-agent-outer-div" ng-controller="agentTickets">
   <div class="manager-add-agent-div">
-    <button class="btn btn-outline-primary">Add Tickets</button>
+    <!-- <button class="btn btn-outline-primary">Add Tickets</button> -->
   </div>
+  <!-- Not accepted tickets -->
+  <h5 style="padding-left: 2%"><strong>Ticket Requets</strong></h5>
   <div class="manager-agents-table">
-    <div class="agents-tickets-container" ng-repeat="item in tickets">
+    <div
+      class="agents-tickets-container"
+      ng-repeat="item in notAcceptedTickets"
+    >
       <div class="ticket-div">
         <div class="ticket-details-div">
           <div class="ticket-details-div-left">
@@ -36,6 +41,110 @@
             src="/frontend/assets/icons8-comments-24.png"
             alt="chat-icon"
           />
+          <button
+            class="btn-outline-success assign-to-agentbutton"
+            data-toggle="modal"
+            data-target="#exampleModalCenter"
+            ng-click="acceptTicketHandler(item.ticketId)"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- InProcess Tickets -->
+  <h5 style="padding-left: 2%"><strong>Tickets In Process</strong></h5>
+  <div class="manager-agents-table">
+    <div class="agents-tickets-container" ng-repeat="item in AcceptedTickets">
+      <div class="ticket-div">
+        <div class="ticket-details-div">
+          <div class="ticket-details-div-left">
+            <p class="text-info1">
+              <strong>Ticket Id: </strong> {{item.ticketId}}
+            </p>
+            <p class="text-info1">
+              <strong>Status:</strong>
+              {{item.status}}
+            </p>
+            <p class="text-info1"><strong>Subject: </strong>{{item.subject}}</p>
+            <p class="text-info1"><strong>Query: </strong>{{item.query}}</p>
+          </div>
+          <div class="ticket-details-div-right">
+            <img
+              class="more-option-icon"
+              data-toggle="modal"
+              data-target="#detailModal"
+              src="/frontend/assets/more.png"
+              alt="more-options"
+            />
+          </div>
+        </div>
+        <div class="tickets-options-div">
+          <img
+            class="chat-option-icon"
+            data-toggle="modal"
+            data-target="#commentModal"
+            ng-click="updateTicketDetails(item.ticketId, item.subject, item.query)"
+            src="/frontend/assets/icons8-comments-24.png"
+            alt="chat-icon"
+          />
+          <button
+            class="btn-outline-primary assign-to-agentbutton"
+            data-toggle="modal"
+            data-target="#exampleModalCenter"
+            ng-click="resolveTicketHandler(item.ticketId)"
+          >
+            Resolve
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Resolved Tickets -->
+  <h5 style="padding-left: 2%"><strong>Resolved Tickets</strong></h5>
+  <div class="manager-agents-table">
+    <div class="agents-tickets-container" ng-repeat="item in ResolvedTickets">
+      <div class="ticket-div">
+        <div class="ticket-details-div">
+          <div class="ticket-details-div-left">
+            <p class="text-info1">
+              <strong>Ticket Id: </strong> {{item.ticketId}}
+            </p>
+            <p class="text-info1">
+              <strong>Status:</strong>
+              {{item.status}}
+            </p>
+            <p class="text-info1"><strong>Subject: </strong>{{item.subject}}</p>
+            <p class="text-info1"><strong>Query: </strong>{{item.query}}</p>
+          </div>
+          <div class="ticket-details-div-right">
+            <img
+              class="more-option-icon"
+              data-toggle="modal"
+              data-target="#detailModal"
+              src="/frontend/assets/more.png"
+              alt="more-options"
+            />
+          </div>
+        </div>
+        <div class="tickets-options-div">
+          <img
+            class="chat-option-icon"
+            data-toggle="modal"
+            data-target="#commentModal"
+            ng-click="updateTicketDetails(item.ticketId, item.subject, item.query)"
+            src="/frontend/assets/icons8-comments-24.png"
+            alt="chat-icon"
+          />
+          <!-- <button
+            class="btn-outline-success assign-to-agentbutton"
+            data-toggle="modal"
+            data-target="#exampleModalCenter"
+            ng-click="loadAgents(item.ticketId)"
+          >
+            Accept
+          </button> -->
         </div>
       </div>
     </div>

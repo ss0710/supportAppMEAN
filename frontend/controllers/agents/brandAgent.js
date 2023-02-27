@@ -67,5 +67,10 @@ app.controller("brandAgents", [
       .catch(function (error) {
         console.log(error);
       });
+
+    $scope.logout = function () {
+      localStorage.removeItem("token");
+      $location.path("/login");
+    };
   },
 ]);

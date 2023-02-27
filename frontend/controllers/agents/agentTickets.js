@@ -14,17 +14,6 @@ app.controller("agentTickets", [
       },
     };
 
-    //getting tickets
-    var brandId = "brand1676634940320";
-    $http
-      .get(`http://localhost:3000/gettickets/${brandId}`, config)
-      .then(function (result) {
-        $scope.tickets = result.data;
-      })
-      .catch(function (error) {
-        console.log(error.data);
-      });
-
     //to get brandagent informations
     $scope.brandAgentId,
       $scope.brandAgentName,
@@ -46,6 +35,7 @@ app.controller("agentTickets", [
         if (result.data.role != "agent") {
           $location.path("/noaccess");
         } else {
+          console.log("get tickets called");
           $scope.brandAgentId = result.data._id;
           $scope.brandAgentName = result.data.userName;
           $scope.brandAgentEmail = result.data.email;
@@ -55,6 +45,41 @@ app.controller("agentTickets", [
           $scope.brandPhoneNumber = result.data.brand.phoneNumber;
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
+
+          console.log("brandAgent Id = " + $scope.brandAgentId);
+
+          var config1 = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json;odata=verbose",
+            },
+            params: {
+              id1: "agentUserId",
+              id2: $scope.brandAgentId,
+            },
+          };
+
+          $http
+            .get(`http://localhost:3000/gettickets`, config1)
+            .then(function (result) {
+              $scope.tickets = result.data;
+              console.log("ticets");
+              $scope.notAcceptedTickets = $scope.tickets.filter(function (
+                elem
+              ) {
+                return elem.status == "Assigned";
+              });
+              $scope.AcceptedTickets = $scope.tickets.filter(function (elem) {
+                return elem.status == "inProcess";
+              });
+              $scope.ResolvedTickets = $scope.tickets.filter(function (elem) {
+                return elem.status == "resolved";
+              });
+              console.log($scope.notAcceptedTickets);
+            })
+            .catch(function (error) {
+              console.log(error.data);
+            });
         }
       })
       .catch(function (error) {
@@ -107,6 +132,51 @@ app.controller("agentTickets", [
         })
         .catch(function (error) {
           console.log(error);
+        });
+    };
+
+    //function to accept the tickets
+    $scope.acceptTicketHandler = function (ticketId) {
+      console.log(ticketId);
+      console.log(config);
+      $http
+        .put(
+          `http://localhost:3000/acceptTicket/${ticketId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json;odata=verbose",
+            },
+          }
+        )
+        .then(function (result) {
+          alert("Ticket accepted");
+        })
+        .catch(function (error) {
+          console.log(error.data);
+        });
+    };
+
+    $scope.resolveTicketHandler = function (ticketId) {
+      console.log(ticketId);
+      console.log(config);
+      $http
+        .put(
+          `http://localhost:3000/resolveTicket/${ticketId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json;odata=verbose",
+            },
+          }
+        )
+        .then(function (result) {
+          alert("Ticket resolved");
+        })
+        .catch(function (error) {
+          console.log(error.data);
         });
     };
   },

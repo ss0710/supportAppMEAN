@@ -49,8 +49,18 @@ app.controller("Tickets", [
           $scope.brandAddress = result.data.brand.address;
 
           //gettings tickets of this particular brand
+          var config1 = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json;odata=verbose",
+            },
+            params: {
+              id1: "brandId",
+              id2: $scope.brandId,
+            },
+          };
           $http
-            .get(`http://localhost:3000/gettickets/${$scope.brandId}`, config)
+            .get(`http://localhost:3000/gettickets`, config1)
             .then(function (result) {
               $scope.globaltickets = result.data;
               $scope.tickets = result.data;

@@ -37,8 +37,10 @@ router.get("/getagents/:id", agentController.getBrandAgents);
 
 //tickets routes
 router.post("/addticket", ticketController.addTicket);
-router.get("/gettickets/:id", ticketController.getTickets);
+router.get("/gettickets", ticketController.getTickets);
 router.put("/updateticket/:id", ticketController.updateTicket);
+router.put("/acceptTicket/:id", ticketController.acceptTicket);
+router.put("/resolveTicket/:id", ticketController.resolveTicket);
 
 //comments routes
 router.post("/addcomment", commentController.addComment);

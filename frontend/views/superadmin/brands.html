@@ -93,7 +93,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form name="myForm" novalidate>
+            <form name="myForm1" novalidate>
               <input
                 class="input-element"
                 type="email"
@@ -105,17 +105,17 @@
                 placeholder="Enter email"
               />
               <br />
-              <label ng-show="myForm.$submitted || myForm.email.$dirty">
+              <label ng-show="myForm1.$submitted || myForm1.email.$dirty">
                 <label
                   ng-model="emailError1"
                   class="error"
-                  ng-show="myForm.email.$error.required"
+                  ng-show="myForm1.email.$error.required"
                   >Email is required</label
                 >
                 <label
                   ng-model="emailError2"
                   class="error"
-                  ng-show="myForm.email.$error.pattern"
+                  ng-show="myForm1.email.$error.pattern"
                   >Email is not valid</label
                 >
               </label>
@@ -131,11 +131,11 @@
                 placeholder="Enter name"
               />
               <br />
-              <label ng-show="myForm.$submitted || myForm.name.$dirty">
+              <label ng-show="myForm1.$submitted || myForm1.name.$dirty">
                 <span
                   ng-model="nameError"
                   class="error"
-                  ng-show="myForm.name.$error.required"
+                  ng-show="myForm1.name.$error.required"
                   >Name is required</span
                 ><br />
               </label>
@@ -168,17 +168,17 @@
                 placeholder="Enter phone number"
               />
               <br />
-              <label ng-show="myForm.$submitted || myForm.phoneNumber.$dirty">
+              <label ng-show="myForm1.$submitted || myForm1.phoneNumber.$dirty">
                 <label
                   ng-model="phoneError1"
                   class="error"
-                  ng-show="myForm.phoneNumber.$error.required"
+                  ng-show="myForm1.phoneNumber.$error.required"
                   >Phone Number is required</label
                 >
                 <label
                   ng-model="phoneError2"
                   class="error"
-                  ng-show="((myForm.phoneNumber.$error.minlength || myForm.phoneNumber.$error.maxlength) && myForm.phoneNumber.$dirty)"
+                  ng-show="((myForm1.phoneNumber.$error.minlength || myForm1.phoneNumber.$error.maxlength) && myForm.phoneNumber.$dirty)"
                   >Phone Number should be of 10 digits</label
                 >
               </label>
@@ -194,11 +194,11 @@
                 placeholder="Enter address"
               />
               <br />
-              <label ng-show="myForm.$submitted || myForm.address.$dirty">
+              <label ng-show="myForm1.$submitted || myForm1.address.$dirty">
                 <span
                   ng-model="nameError"
                   class="error"
-                  ng-show="myForm.address.$error.required"
+                  ng-show="myForm1.address.$error.required"
                   >Address is required</span
                 ><br />
               </label>
@@ -210,7 +210,7 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  ng-disabled="myForm.$invalid"
+                  ng-disabled="!myForm.$invalid"
                   ng-click="signupSubmit()"
                 >
                   Submit

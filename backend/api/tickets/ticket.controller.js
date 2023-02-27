@@ -49,8 +49,12 @@ exports.getTickets = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      var brandId = req.params.id;
-      Ticket.find({ brandId: brandId })
+      console.log("get tickets route");
+      var feild = req.query.id1;
+      var id = req.query.id2;
+      console.log("id1" + feild);
+      console.log("id2" + id);
+      Ticket.find({ feild: id })
         .then(function (result) {
           res.status(200).json(result);
         })
@@ -77,6 +81,60 @@ exports.updateTicket = function (req, res) {
             agentUserId: req.body.agentId,
             agentName: req.body.agentName,
             status: "Assigned",
+          },
+        }
+      )
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.acceptTicket = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var ticketId = req.params.id;
+      Ticket.updateOne(
+        { ticketId: ticketId },
+        {
+          $set: {
+            status: "inProcess",
+          },
+        }
+      )
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.resolveTicket = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var ticketId = req.params.id;
+      Ticket.updateOne(
+        { ticketId: ticketId },
+        {
+          $set: {
+            status: "resolved",
           },
         }
       )
