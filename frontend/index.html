@@ -63,13 +63,24 @@
     <link rel="stylesheet" href="./static/managers/agents.css" />
     <link rel="stylesheet" href="./static/agents/brandAgent.css" />
     <link rel="stylesheet" href="./static/agents/agentsTicket.css" />
-
-    <script src="./controllers/app.js"></script>
   </head>
   <body ng-app="myApp" ng-contoller="index">
     <div ui-view></div>
 
+    <script src="./controllers/app.js"></script>
+
+    <script src="./directives/upload.directive.js"></script>
+
+    <script src="./services/auth/auth.service.js"></script>
+    <script src="./services/superadmin/superadmin.service.js"></script>
+    <script src="./services/brands/brand.service.js"></script>
+    <script src="./services/managers/manager.service.js"></script>
+    <script src="./services/agents/agent.service.js"></script>
+
     <script src="./controllers/auth/login.js"></script>
+
+    <script src="./controllers/superadmin/brand.js"></script>
+
     <script src="./controllers/superadmin/superadmin.js"></script>
     <script src="./controllers/brandControllers/brandAdmin.js"></script>
     <script src="./controllers/brandControllers/manager.js"></script>
@@ -78,6 +89,5 @@
     <script src="./controllers/agents/brandAgent.js"></script>
     <script src="./controllers/agents/agentTickets.js"></script>
     <script src="./controllers/managers/ticket.js"></script>
-    <script src="./controllers/superadmin/brand.js"></script>
   </body>
 </html>

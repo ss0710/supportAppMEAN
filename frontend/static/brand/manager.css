@@ -5,3 +5,13 @@
 .current-manager-div {
     padding: 0% 2% 2% 2%;
 }
+
+.manager-search-input-div {
+    margin-top: 20px;
+    padding: 1% 0 1% 0;
+}
+
+.manager-search-input {
+    width: 30%;
+    height: 40px;
+}

@@ -1,6 +1,19 @@
+require("dotenv").config();
 var express = require("express");
 var router = express.Router();
 var passport = require("passport");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+var Brand = require("./api/brands/brand.model");
+var User = require("./api/users/user.model");
+
+var fs = require("fs");
+var S3 = require("aws-sdk/clients/s3");
+
+var bucketName = process.env.AWS_BUCKET_NAME;
+var region = process.env.AWS_BUCKET_REGION;
+var accessKeyId = process.env.AWS_ACCESS_KEY;
+var secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 
 //controllers
 var loginController = require("./auth/login.controller");
@@ -21,23 +34,172 @@ router.get("/usertype", userController.getUserType);
 
 //brand routes
 router.get("/getbrands", brandController.getBrand);
-router.post("/addbrand", brandController.addBrand);
+router.get("/getbrandbyid/:id", brandController.getBrandById);
 router.put("/updatebrand", brandController.updateBrand);
 router.put("/deletebrand/:id", brandController.deleteBrand);
 
+var s3 = new S3({
+  region,
+  accessKeyId,
+  secretAccessKey,
+});
+
+function uploadFile(file, cb) {
+  console.log("upload File called");
+  var fileStream = fs.createReadStream(file.path);
+
+  var uploadParams = {
+    Bucket: bucketName,
+    Body: fileStream,
+    Key: file.filename,
+  };
+
+  s3.upload(uploadParams)
+    .promise()
+    .then(function (result) {
+      console.log("success upload");
+      cb(result, null);
+    })
+    .catch(function (error) {
+      console.log(error);
+      console.log("unsuccess upload");
+      cb(null, error);
+    });
+}
+
+router.post("/addbrand", upload.single("image"), function (req, res) {
+  console.log("add brand route called");
+  console.log(req.file);
+  console.log(req.body);
+  uploadFile(req.file, function (result, error) {
+    if (result) {
+      var brandId = "brand" + Date.now();
+      var brandData = {
+        brandId: brandId,
+        email: req.body.email,
+        name: req.body.name,
+        brandLogo: result.Location,
+        brandLogoKey: result.key,
+        category: req.body.category,
+        phoneNumber: req.body.phoneNumber,
+        address: req.body.address,
+      };
+      var brand = new Brand(brandData);
+      brand
+        .save()
+        .then(function (result) {
+          console.log("saving data");
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          console.log("not able to save data");
+          res.status(403).json(error);
+        });
+    } else {
+      res.status(400).json(error);
+    }
+  });
+});
+
 //Brand Managers Routes
-router.get("/getmanager", managerController.getBrandManager);
-router.post("/addmanager", managerController.addBrandManager);
+router.get("/getmanager/:id", managerController.getBrandManager);
 router.put("/disablemanager/:id", managerController.disableBrandManager);
 router.put("/permitmanager/:id", managerController.permitBrandManager);
 
+router.post("/addmanager", upload.single("image"), function (req, res) {
+  console.log("add manager route called");
+  console.log(req.file);
+  console.log(req.body);
+  uploadFile(req.file, function (result, error) {
+    if (result) {
+      var userData = {
+        role: "manager",
+        email: req.body.email,
+        userName: req.body.userName,
+        password: req.body.password,
+        profileImage: result.Location,
+        profileImageKey: result.key,
+        brand: {
+          brandId: req.body.brandId,
+          email: req.body.brandEmail,
+          name: req.body.brandName,
+          category: req.body.brandCategory,
+          phoneNumber: req.body.brandPhoneNumber,
+          address: req.body.brandAddress,
+        },
+        isOnline: req.body.isOnline,
+        isDisabled: req.body.isDisabled,
+        isDeleted: req.body.isDeleted,
+      };
+      var user = new User(userData);
+      user
+        .save()
+        .then(function (result) {
+          console.log("succesffully saved to database");
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          console.log("not able to saved to database");
+          console.log(error);
+          res.status(403).json(error);
+        });
+    } else {
+      res.status(400).json(error);
+    }
+  });
+});
+
 //Brand agents routes
-router.post("/addagents", agentController.addBrandAgent);
 router.get("/getagents/:id", agentController.getBrandAgents);
+
+router.post("/addagents", upload.single("image"), function (req, res) {
+  console.log("add agent route called");
+  console.log(req.file);
+  console.log(req.body);
+  uploadFile(req.file, function (result, error) {
+    if (result) {
+      var userData = {
+        role: "agent",
+        email: req.body.email,
+        userName: req.body.userName,
+        password: req.body.password,
+        brandId: req.body.brandId,
+        profileImage: result.Location,
+        profileImageKey: result.key,
+        brand: {
+          brandId: req.body.brandId,
+          email: req.body.brandEmail,
+          name: req.body.brandName,
+          category: req.body.brandCategory,
+          phoneNumber: req.body.brandPhoneNumber,
+          address: req.body.brandAddress,
+        },
+        isOnline: req.body.isOnline,
+        isDisabled: false,
+        isDeleted: false,
+      };
+      var user = new User(userData);
+      user
+        .save()
+        .then(function (result) {
+          console.log("succesffully saved to database");
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          console.log("not able to saved to database");
+          console.log(error);
+          res.status(403).json(error);
+        });
+    } else {
+      res.status(403).json(error);
+    }
+  });
+});
 
 //tickets routes
 router.post("/addticket", ticketController.addTicket);
-router.get("/gettickets", ticketController.getTickets);
+router.get("/getticketsbybrand/:id", ticketController.getTicketsByBrandId);
+router.get("/getticketsbyagent/:id", ticketController.getTicketsByAgentId);
 router.put("/updateticket/:id", ticketController.updateTicket);
 router.put("/acceptTicket/:id", ticketController.acceptTicket);
 router.put("/resolveTicket/:id", ticketController.resolveTicket);

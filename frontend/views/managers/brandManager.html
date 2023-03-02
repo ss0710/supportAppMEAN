@@ -17,6 +17,12 @@
         <input type="checkbox" checked ng-click="toggleHandler()" />
         <span class="slider round"></span>
       </label>
+      <img
+        class="notification-img"
+        src="../../assets/notification.png"
+        alt="notification-icon"
+      />
+      <div class="notification-bell-number">0</div>
       <button
         class="btn-outline-primary manager-logout-button"
         ng-click="logout()"
@@ -32,7 +38,7 @@
         <div class="brand-logo">
           <img
             class="brand-logo-png"
-            src="https://img.freepik.com/premium-vector/tacos-always-fresh-logo_187482-396.jpg?w=2000"
+            src="{{brandlogo}}"
             alt="brand-logo-png"
           />
         </div>
@@ -75,7 +81,7 @@
           <div class="manager-details-div">
             <div class="manager-photo">
               <img
-                src="https://www.persofoto.de/apple-touch-icon-180x180.png"
+                src="{{brandManagerProfile}}"
                 alt="manager-photo-png"
                 class="manager-photo-png"
               />

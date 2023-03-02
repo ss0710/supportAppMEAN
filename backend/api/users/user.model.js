@@ -23,6 +23,12 @@ var userSchema = new mongoose.Schema({
     required: true,
     minLength: 7,
   },
+  profileImage: {
+    type: String,
+  },
+  profileImageKey: {
+    type: String,
+  },
   brand: {
     brandId: {
       type: String,

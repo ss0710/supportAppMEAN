@@ -11,7 +11,7 @@ module.exports = function () {
     isDisabled: false,
     isDeleted: false,
   };
-  User.findOne({ username: "admin" }).then(function (res) {
+  User.findOne({ username: "superadmin" }).then(function (res) {
     console.log(res);
     if (res == null) {
       var user = new User(admin);
@@ -21,6 +21,7 @@ module.exports = function () {
           console.log("Admin added successfully");
         })
         .catch(function (error) {
+          console.log(error);
           console.log("Admin not added");
         });
     } else {

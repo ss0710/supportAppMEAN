@@ -19,6 +19,12 @@ var brandSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+  brandLogo: {
+    type: String,
+  },
+  brandLogoKey: {
+    type: String,
+  },
   phoneNumber: {
     type: String,
     required: true,

@@ -1,15 +1,16 @@
 ///<reference path="../app.js" />
+///<reference path="../../services/superadmin/superadmin.service.js"/>
 
 app.controller("SuperadminBrand", [
   "$scope",
   "$http",
   "$location",
-  function ($scope, $http, $location) {
+  "superadminService",
+  function ($scope, $http, $location, superadminService) {
     $scope.emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
     var token = localStorage.getItem("token");
-
     var config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -20,10 +21,15 @@ app.controller("SuperadminBrand", [
     $scope.currentBrandsWithAdmin = [];
     $scope.currentBrandsWithNoAdmin = [];
 
-    $http
-      .get("http://localhost:3000/getbrands", config)
-      .then(function (result) {
-        // console.log(result.data);
+    //Update Handler for Modal details
+    $scope.brandDataUpdatesForModal = function (item) {
+      console.log(item);
+      $scope.brandDetails = item;
+    };
+
+    //getting brands
+    superadminService.getBrands(function (result, error) {
+      if (result) {
         var data = result.data;
         data.forEach(function (elem) {
           if (elem.isAdminCreated == true) {
@@ -34,29 +40,32 @@ app.controller("SuperadminBrand", [
         });
         console.log($scope.currentBrandsWithAdmin);
         console.log($scope.currentBrandsWithNoAdmin);
-      })
-      .catch(function (error) {
+      } else {
         console.log(error.data);
-      });
+      }
+    });
 
-    $scope.signupSubmit = function () {
-      var data = {
-        email: $scope.email,
-        name: $scope.name,
-        category: $scope.category,
-        phoneNumber: $scope.phoneNumber,
-        address: $scope.address,
-      };
-      $http
-        .post("http://localhost:3000/addbrand", data, config)
-        .then(function (result) {
+    //add brand function
+    $scope.signupSubmit = function ($event) {
+      $event.preventDefault();
+      var formData = new FormData();
+      formData.append("image", $scope.formData.image);
+      formData.append("email", $scope.email);
+      formData.append("name", $scope.name);
+      formData.append("category", $scope.category);
+      formData.append("phoneNumber", $scope.phoneNumber);
+      formData.append("address", $scope.phoneNumber);
+
+      superadminService.addBrand(formData, function (result, error) {
+        console.log(formData);
+        if (result) {
+          console.log(result);
           alert("successfuly registered");
-          window.location.reload;
-        })
-        .catch(function (error) {
+        } else {
           console.log(error.data);
           alert(error.data);
-        });
+        }
+      });
     };
 
     //updating brand scopes
@@ -106,22 +115,23 @@ app.controller("SuperadminBrand", [
         isDisabled: false,
         isDeleted: false,
       };
-      $http
-        .post("http://localhost:3000/addbrandadmin", data, config)
-        .then(function (result) {
-          $http
-            .put("http://localhost:3000/updatebrand", updatedBrandData, config)
-            .then(function (result) {
-              alert("Successfully added admin");
-            })
-            .catch(function (error) {
-              console.log("alert");
-            });
-        })
-        .catch(function (error) {
-          console.log(error.data);
-          alert(error.data);
-        });
+
+      superadminService.addBrandAdmin(data, function (result, error) {
+        if (result) {
+          superadminService.updateBrandAdmin(
+            updatedBrandData,
+            function (result, error) {
+              if (result) {
+                alert("Successfully added admin");
+              } else {
+                console.log(error);
+              }
+            }
+          );
+        } else {
+          console.log(error);
+        }
+      });
     };
   },
 ]);

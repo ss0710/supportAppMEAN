@@ -94,3 +94,28 @@ box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
     width: 25px;
     margin-right: 5px;
 }
+
+.tickets-stats-div {
+    width: 100%;
+    padding: 2%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.tickets-stats-box {
+    width: 18%;
+    text-align: center;
+    border: 1px solid rgb(173, 173, 173);
+    background-color: rgb(233, 233, 233);
+    border-radius: 5px;
+    padding-top: 1%;
+    -webkit-box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
+-moz-box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
+box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
+}
+
+.tickets-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgb(62, 62, 62);
+}

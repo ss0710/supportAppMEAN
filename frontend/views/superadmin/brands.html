@@ -15,6 +15,7 @@
       <h5><strong>Brands With No Admin</strong></h5>
       <table>
         <tr>
+          <th>Brand Logo</th>
           <th>Brand Id</th>
           <th>Brand Name</th>
           <th>Add Admin</th>
@@ -22,6 +23,9 @@
           <th>Delete</th>
         </tr>
         <tr ng-repeat="item in currentBrandsWithNoAdmin">
+          <td>
+            <img class="logoimage" src="{{item.brandLogo}}" alt="brand-logo" />
+          </td>
           <td>{{item.brandId}}</td>
           <td>{{item.name}}</td>
           <td>
@@ -45,6 +49,7 @@
         <h5><strong>Active Brands</strong></h5>
         <table>
           <tr>
+            <th>Brand Logo</th>
             <th>Brand Id</th>
             <th>Brand Name</th>
             <th>View Details</th>
@@ -52,10 +57,23 @@
             <th>Delete</th>
           </tr>
           <tr ng-repeat="item in currentBrandsWithAdmin">
+            <td>
+              <img
+                class="logoimage"
+                src="{{item.brandLogo}}"
+                alt="brand-logo"
+              />
+            </td>
             <td>{{item.brandId}}</td>
             <td>{{item.name}}</td>
             <td>
-              <button type="button" class="btn btn-outline-success">
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                ng-click="brandDataUpdatesForModal(item)"
+                data-toggle="modal"
+                data-target="#brandDetailsModal"
+              >
                 View Details
               </button>
             </td>
@@ -156,6 +174,25 @@
               <br />
               <br />
 
+              <span for="logoimage">Upload logo:</span>
+              <input
+                class="input-element"
+                type="file"
+                required
+                name="logoimage"
+                file-model="formData.image"
+              />
+              <br />
+              <label ng-show="myForm1.$submitted || myForm1.logoimage.$dirty">
+                <span
+                  ng-model="passsError1"
+                  class="logoimage"
+                  ng-show="myForm1.logoimage.$error.required"
+                  >Logo is required</span
+                ><br />
+              </label>
+              <br />
+
               <input
                 class="input-element"
                 type="text"
@@ -210,8 +247,8 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  ng-disabled="!myForm.$invalid"
-                  ng-click="signupSubmit()"
+                  ng-disabled="myForm1.$invalid"
+                  ng-click="signupSubmit($event)"
                 >
                   Submit
                 </button>
@@ -332,6 +369,61 @@
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAILS MODAL -->
+    <div
+      class="modal fade"
+      id="brandDetailsModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Brand Details</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="brand-modal-details-div">
+              <div class="brand-modal-details-div-upper">
+                <div class="brand-modal-details-div-upper-left">
+                  <div class="brand-modal-details-div-upper-left-logo">
+                    <img
+                      class="photo-of-brand"
+                      src="{{brandDetails.brandLogo}}"
+                      alt="brand-logo"
+                    />
+                  </div>
+                </div>
+                <div class="brand-modal-details-div-upper-right">
+                  <h6><strong>Name: </strong>{{brandDetails.name}}</h6>
+                  <h6><strong>Id: </strong>{{brandDetails.brandId}}</h6>
+                  <h6><strong>Email: </strong>{{brandDetails.email}}</h6>
+                  <h6><strong>Category: </strong>{{brandDetails.category}}</h6>
+                  <h6>
+                    <strong>Phone Number: </strong>{{brandDetails.address}}
+                  </h6>
+                </div>
+              </div>
+              <div class="brand-modal-details-div-lower">
+                <div class="brand-modal-details-div-lower-heading">
+                  <!-- <h3>Admin Details</h3> -->
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

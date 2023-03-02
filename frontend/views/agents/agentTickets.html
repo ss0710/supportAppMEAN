@@ -1,6 +1,20 @@
 <div class="manager-agent-outer-div" ng-controller="agentTickets">
-  <div class="manager-add-agent-div">
-    <!-- <button class="btn btn-outline-primary">Add Tickets</button> -->
+  <!-- <div class="manager-add-agent-div">
+    <button class="btn btn-outline-primary">Add Tickets</button>
+  </div> -->
+  <div class="tickets-stats-div">
+    <div class="tickets-stats-box">
+      <h5 style="color: blue">Requests</h5>
+      <p class="tickets-number">{{length1}}</p>
+    </div>
+    <div class="tickets-stats-box">
+      <h5 style="color: green">Opened</h5>
+      <p class="tickets-number">{{length2}}</p>
+    </div>
+    <div class="tickets-stats-box">
+      <h5 style="color: red">Closed</h5>
+      <p class="tickets-number">{{length3}}</p>
+    </div>
   </div>
   <!-- Not accepted tickets -->
   <h5 style="padding-left: 2%"><strong>Ticket Requets</strong></h5>
@@ -27,7 +41,8 @@
               class="more-option-icon"
               data-toggle="modal"
               data-target="#detailModal"
-              src="/frontend/assets/more.png"
+              ng-click="updateTicketForModal(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName)"
+              src="../../assets/more.png"
               alt="more-options"
             />
           </div>
@@ -38,7 +53,7 @@
             data-toggle="modal"
             data-target="#commentModal"
             ng-click="updateTicketDetails(item.ticketId, item.subject, item.query)"
-            src="/frontend/assets/icons8-comments-24.png"
+            src="../../assets/icons8-comments-24.png"
             alt="chat-icon"
           />
           <button
@@ -75,7 +90,8 @@
               class="more-option-icon"
               data-toggle="modal"
               data-target="#detailModal"
-              src="/frontend/assets/more.png"
+              ng-click="updateTicketForModal(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName)"
+              src="../../assets/more.png"
               alt="more-options"
             />
           </div>
@@ -86,7 +102,7 @@
             data-toggle="modal"
             data-target="#commentModal"
             ng-click="updateTicketDetails(item.ticketId, item.subject, item.query)"
-            src="/frontend/assets/icons8-comments-24.png"
+            src="../../assets/icons8-comments-24.png"
             alt="chat-icon"
           />
           <button
@@ -123,7 +139,8 @@
               class="more-option-icon"
               data-toggle="modal"
               data-target="#detailModal"
-              src="/frontend/assets/more.png"
+              ng-click="updateTicketForModal(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName)"
+              src="../../assets/more.png"
               alt="more-options"
             />
           </div>
@@ -134,7 +151,7 @@
             data-toggle="modal"
             data-target="#commentModal"
             ng-click="updateTicketDetails(item.ticketId, item.subject, item.query)"
-            src="/frontend/assets/icons8-comments-24.png"
+            src="../../assets/icons8-comments-24.png"
             alt="chat-icon"
           />
           <!-- <button
@@ -171,11 +188,27 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body"></div>
+        <div class="modal-body">
+          <div class="tickets-modal-inner-div">
+            <div class="tickets-details-div">
+              <p><strong>Ticket Id: </strong> {{ticketId}}</p>
+              <p><strong>Status:</strong> {{ticketStatus}}</p>
+              <p><strong>Assigned to:</strong> {{assignedTo}}</p>
+              <p><strong>Subject:</strong> {{tickedSubject}}</p>
+              <p><strong>Query:</strong> {{ticketQuery}}</p>
+              <p><strong>Created At:</strong> {{createdAt}}</p>
+            </div>
+            <div class="tickets-brand-details">
+              <p><strong>Created by:</strong> {{createdByUserName}}</p>
+              <p><strong>Brand Name:</strong> {{brandName}}</p>
+              <p><strong>Brand Id:</strong> {{brandId}}</p>
+            </div>
+          </div>
+        </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-success">Resolve</button>
-          <button type="button" class="btn btn-warning">Disable</button>
-          <button type="button" class="btn btn-danger">Delete</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
         </div>
       </div>
     </div>

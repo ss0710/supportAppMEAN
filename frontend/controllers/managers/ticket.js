@@ -1,10 +1,12 @@
 ///<reference path="../app.js" />
+///<reference path="../../services/managers/manager.service.js" />
 
 app.controller("Tickets", [
   "$scope",
   "$http",
   "$location",
-  function ($scope, $http, $location) {
+  "managerService",
+  function ($scope, $http, $location, managerService) {
     //global variables
     $scope.globaltickets = [];
     $scope.tickets = [];
@@ -31,9 +33,9 @@ app.controller("Tickets", [
     };
 
     //getting managers details
-    $http
-      .get("http://localhost:3000/usertype", config)
-      .then(function (result) {
+
+    managerService.getUserType(function (result, error) {
+      if (result) {
         console.log(result.data);
         if (result.data.role != "manager") {
           $location.path("/noaccess");
@@ -59,20 +61,20 @@ app.controller("Tickets", [
               id2: $scope.brandId,
             },
           };
-          $http
-            .get(`http://localhost:3000/gettickets`, config1)
-            .then(function (result) {
+
+          managerService.getTickets($scope.brandId, function (result, error) {
+            if (result) {
               $scope.globaltickets = result.data;
               $scope.tickets = result.data;
-            })
-            .catch(function (error) {
+            } else {
               console.log(error.data);
-            });
+            }
+          });
         }
-      })
-      .catch(function (error) {
+      } else {
         console.log(error);
-      });
+      }
+    });
 
     //filter methods
     $scope.allTickets = function () {
@@ -137,18 +139,18 @@ app.controller("Tickets", [
       $scope.BrandName = brandName;
       $scope.BrandId = brandId;
       //getting comments
-      $http
-        .get(`http://localhost:3000/getcomments/${$scope.ticketId}`, config)
-        .then(function (result) {
+
+      managerService.getComments($scope.ticketId, function (result, error) {
+        if (result) {
           console.log(result.data);
           $scope.ticketComments = result.data;
           $scope.ticketComments.sort(function (a, b) {
             return a.dateAndTime - b.dateAndTime;
           });
-        })
-        .catch(function (error) {
+        } else {
           console.log(error);
-        });
+        }
+      });
     };
 
     $scope.updateTicketDetailsForModal = function (
@@ -191,15 +193,14 @@ app.controller("Tickets", [
         isDeleted: "false",
       };
 
-      $http
-        .post("http://localhost:3000/addcomment", commentData, config)
-        .then(function (result) {
+      managerService.addComments(commentData, function (result, error) {
+        if (result) {
           alert("comment added successfully");
           $scope.comment = "";
-        })
-        .catch(function (error) {
+        } else {
           console.log(error);
-        });
+        }
+      });
     };
 
     //create tickets handler
@@ -213,14 +214,13 @@ app.controller("Tickets", [
         createdByUserName: $scope.brandManagerName,
       };
 
-      $http
-        .post("http://localhost:3000/addticket", ticketData, config)
-        .then(function (result) {
+      managerService.addTickets(ticketData, function (result, error) {
+        if (result) {
           alert("Succefully Created Ticket");
-        })
-        .catch(function (error) {
+        } else {
           console.log(error);
-        });
+        }
+      });
     };
 
     //loading agents
@@ -229,16 +229,19 @@ app.controller("Tickets", [
     $scope.loadAgents = function (ticketId) {
       console.log("load agents called");
       $scope.ticketId = ticketId;
-      $http
-        .get(`http://localhost:3000/getagents/${$scope.brandId}`, config)
-        .then(function (result) {
-          $scope.globalAgents = result.data;
-          $scope.agents = $scope.globalAgents;
-          console.log($scope.agents);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+
+      managerService.loadAgentforModal(
+        $scope.brandId,
+        function (result, error) {
+          if (result) {
+            $scope.globalAgents = result.data;
+            $scope.agents = $scope.globalAgents;
+            console.log($scope.agents);
+          } else {
+            console.log(error);
+          }
+        }
+      );
     };
 
     //function to assign ticket
@@ -247,18 +250,18 @@ app.controller("Tickets", [
         agentId: agentId,
         agentName: agentName,
       };
-      $http
-        .put(
-          `http://localhost:3000/updateticket/${$scope.ticketId}`,
-          agentData,
-          config
-        )
-        .then(function (result) {
-          alert("Successfully assigned tickets");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+
+      managerService.assignTicketToAgentService(
+        $scope.ticketId,
+        agentData,
+        function (result, error) {
+          if (result) {
+            alert("Successfully assigned tickets");
+          } else {
+            console.log(error);
+          }
+        }
+      );
     };
   },
 ]);

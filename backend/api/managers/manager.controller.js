@@ -49,7 +49,13 @@ exports.getBrandManager = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      User.find({ isDeleted: false, isDisabled: false, role: "manager" })
+      var brandId = req.params.id;
+      User.find({
+        isDeleted: false,
+        isDisabled: false,
+        role: "manager",
+        "brand.brandId": brandId,
+      })
         .then(function (result) {
           res.status(200).json(result);
         })

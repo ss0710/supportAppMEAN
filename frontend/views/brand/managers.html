@@ -7,11 +7,32 @@
     >
       Add Manager
     </button>
+    <button
+      class="btn btn-outline-primary"
+      data-toggle="collapse"
+      data-target="#collapseExample"
+      aria-expanded="false"
+      aria-controls="collapseExample"
+    >
+      Search Manager
+    </button>
+    <div class="collapse" id="collapseExample">
+      <div class="manager-search-input-div">
+        <input
+          class="manager-search-input"
+          type="text"
+          placeholder="type manager name"
+          ng-model="searchManagerName"
+          ng-change="onChangeHandler()"
+        />
+      </div>
+    </div>
   </div>
   <div class="current-manager-div">
     <h2>Current Managers</h2>
     <table>
       <tr>
+        <th>Profile</th>
         <th>User Name</th>
         <th>Email</th>
         <th>Details</th>
@@ -19,6 +40,13 @@
         <th>Delete</th>
       </tr>
       <tr ng-repeat="item in currentManagers">
+        <td>
+          <img
+            style="height: 100px; width: 100px; padding: 5px"
+            src="{{item.profileImage}}"
+            alt="profile-img"
+          />
+        </td>
         <td>{{item.userName}}</td>
         <td>{{item.email}}</td>
         <td><button class="btn btn-success">Details</button></td>
@@ -118,6 +146,25 @@
                 class="error"
                 ng-show="myForm.password.$error.required"
                 >Password is required</span
+              ><br />
+            </label>
+            <br />
+
+            <span for="logoimage">Upload profile photo:</span>
+            <input
+              class="input-element"
+              type="file"
+              required
+              name="logoimage"
+              file-model="formData.image"
+            />
+            <br />
+            <label ng-show="myForm.$submitted || myForm.logoimage.$dirty">
+              <span
+                ng-model="passsError1"
+                class="logoimage"
+                ng-show="myForm.logoimage.$error.required"
+                >Logo is required</span
               ><br />
             </label>
             <br />

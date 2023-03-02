@@ -204,3 +204,24 @@ box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
     cursor: pointer;
     border-radius: 5px;
   }
+
+  .notification-img {
+    height: 40px;
+    margin-left: 15px;
+    margin-top: -5px;
+    cursor: pointer;
+  }
+
+  .notification-bell-number {
+    height: 23px;
+    background-color: rgb(63, 63, 255);
+    width: 23px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: 2px solid white;
+    margin-left: -17px;
+    margin-top: -5px;
+  }

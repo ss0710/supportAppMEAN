@@ -1,10 +1,12 @@
 ///<reference path="../app.js" />
+///<reference path="../../services/brands/brand.service.js"/>
 
 app.controller("brandAdmin", [
   "$scope",
   "$http",
   "$location",
-  function ($scope, $http, $location) {
+  "brandService",
+  function ($scope, $http, $location, brandService) {
     //Handling sidebar button css
     $scope.activeClassname =
       "btn btn-outline-primary brandAdmin-sidebar-buttons-active";
@@ -67,9 +69,9 @@ app.controller("brandAdmin", [
       $scope.brandCategory,
       $scope.brandAddress;
 
-    $http
-      .get("http://localhost:3000/usertype", config)
-      .then(function (result) {
+    brandService.getUserType(function (result, error) {
+      console.log("running brandAdmin.js getuserType");
+      if (result) {
         console.log(result.data);
         if (result.data.role != "brandAdmin") {
           $location.path("/noaccess");
@@ -83,10 +85,19 @@ app.controller("brandAdmin", [
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
         }
-      })
-      .catch(function (error) {
+
+        $http
+          .get("http://localhost:3000/getbrandbyid/" + $scope.brandId, config)
+          .then(function (result) {
+            $scope.brandlogo = result.data[0].brandLogo;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
         console.log(error);
-      });
+      }
+    });
 
     //logout function
     $scope.logout = function () {

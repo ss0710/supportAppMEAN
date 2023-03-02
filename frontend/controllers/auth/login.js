@@ -1,21 +1,23 @@
 ///<reference path="../app.js" />
+///<reference path="../../services/auth/auth.service.js" />
 
 app.controller("login", [
   "$scope",
   "$http",
   "$location",
-  function ($scope, $http, $location) {
+  "authService",
+  function ($scope, $http, $location, authService) {
+    console.log("login controller");
     $scope.loginHandler = function () {
       if ($scope.userName && $scope.password) {
         console.log($scope.userName);
         console.log($scope.password);
-        $http
-          .post("http://localhost:3000/login", {
-            username: $scope.userName,
-            password: $scope.password,
-          })
-          .then(
-            function (response) {
+
+        authService.loginApi(
+          $scope.userName,
+          $scope.password,
+          function (response, error) {
+            if (response) {
               console.log(response.data);
               console.log("setting localStorage");
               localStorage.removeItem("token");
@@ -32,11 +34,11 @@ app.controller("login", [
               } else {
                 $location.path("/home");
               }
-            },
-            function (error) {
+            } else {
               alert("Wrong username or password!");
             }
-          );
+          }
+        );
       }
     };
   },

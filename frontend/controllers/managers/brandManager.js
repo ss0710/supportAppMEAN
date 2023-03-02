@@ -1,10 +1,12 @@
 ///<reference path="../app.js" />
+///<reference path="../../services/managers/manager.service.js" />
 
 app.controller("brandManager", [
   "$scope",
   "$http",
   "$location",
-  function ($scope, $http, $location) {
+  "managerService",
+  function ($scope, $http, $location, managerService) {
     //Handling sidebar button css
     $scope.activeClassname =
       "btn btn-outline-primary brandAdmin-sidebar-buttons-active";
@@ -66,10 +68,10 @@ app.controller("brandManager", [
       $scope.brandPhoneNumber,
       $scope.brandCategory,
       $scope.brandAddress;
+    $scope.brandlogo;
 
-    $http
-      .get("http://localhost:3000/usertype", config)
-      .then(function (result) {
+    managerService.getUserType(function (result, error) {
+      if (result) {
         console.log(result.data);
         if (result.data.role != "manager") {
           $location.path("/noaccess");
@@ -82,11 +84,21 @@ app.controller("brandManager", [
           $scope.brandPhoneNumber = result.data.brand.phoneNumber;
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
+          $scope.brandManagerProfile = result.data.profileImage;
+
+          $http
+            .get("http://localhost:3000/getbrandbyid/" + $scope.brandId, config)
+            .then(function (result) {
+              $scope.brandlogo = result.data[0].brandLogo;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         }
-      })
-      .catch(function (error) {
+      } else {
         console.log(error);
-      });
+      }
+    });
 
     $scope.logout = function () {
       localStorage.removeItem("token");

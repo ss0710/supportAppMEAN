@@ -7,10 +7,21 @@
     >
       Add Agents
     </button>
+    <button class="btn btn-outline-primary" ng-click="openNav()">
+      Search Agent
+    </button>
+  </div>
+  <div id="mySidepanel" class="sidepanel">
+    <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">×</a>
+    <div class="sidebar-search-option">
+      <input type="text" placeholder="enter agent username" />
+      <button>Search</button>
+    </div>
   </div>
   <div class="manager-agents-table">
     <table>
       <tr>
+        <th>Profile</th>
         <th>Name</th>
         <th>Email</th>
         <th>details</th>
@@ -19,6 +30,13 @@
         <th>Delete</th>
       </tr>
       <tr ng-repeat="item in agents">
+        <td>
+          <img
+            style="height: 100px; width: 100px; padding: 5px"
+            src="{{item.profileImage}}"
+            alt="profile-img"
+          />
+        </td>
         <td>{{item.userName}}</td>
         <td>{{item.email}}</td>
         <td><button class="btn btn-outline-success">Details</button></td>
@@ -122,6 +140,25 @@
             </label>
             <br />
 
+            <span for="logoimage">Upload profile photo:</span>
+            <input
+              class="input-element"
+              type="file"
+              required
+              name="logoimage"
+              file-model="formData.image"
+            />
+            <br />
+            <label ng-show="myForm.$submitted || myForm.logoimage.$dirty">
+              <span
+                ng-model="passsError1"
+                class="logoimage"
+                ng-show="myForm.logoimage.$error.required"
+                >Logo is required</span
+              ><br />
+            </label>
+            <br />
+
             <div class="modal-footer">
               <button
                 type="button"
@@ -134,7 +171,7 @@
                 type="button"
                 class="btn btn-primary"
                 ng-disabled="myForm.$invalid"
-                ng-click="addBrandManager()"
+                ng-click="addBrandAgent()"
               >
                 Submit
               </button>

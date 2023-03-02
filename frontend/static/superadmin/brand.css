@@ -32,3 +32,36 @@ table {
 .brand-with-admin-div {
     margin-top: 30px;
 }
+
+.logoimage {
+  height: 70px;
+  width: 80px;
+  margin: 10px;
+}
+
+.brand-modal-details-div {
+  padding: 2%;
+}
+
+.brand-modal-details-div-upper {
+  display: flex;
+  flex-direction: row;
+}
+
+.brand-modal-details-div-upper-left {
+  width: 50%;
+  border: 1px solid rgb(163, 163, 163);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo-of-brand {
+  width: 200px;
+  height: 200px;
+}
+
+.brand-modal-details-div-upper-right {
+  padding: 2%;
+}

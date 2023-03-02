@@ -1,10 +1,12 @@
 ///<reference path="../app.js" />
+///<reference path="../../services/agents/agent.service.js" />
 
 app.controller("agentTickets", [
   "$scope",
   "$http",
   "$location",
-  function ($scope, $http, $location) {
+  "agentService",
+  function ($scope, $http, $location, agentService) {
     $scope.tickets = [];
     var token = localStorage.getItem("token");
     var config = {
@@ -28,9 +30,8 @@ app.controller("agentTickets", [
     $scope.ticketSubject;
     $scope.ticketQuery;
 
-    $http
-      .get("http://localhost:3000/usertype", config)
-      .then(function (result) {
+    agentService.getUserType(function (result, error) {
+      if (result) {
         console.log(result.data);
         if (result.data.role != "agent") {
           $location.path("/noaccess");
@@ -48,19 +49,11 @@ app.controller("agentTickets", [
 
           console.log("brandAgent Id = " + $scope.brandAgentId);
 
-          var config1 = {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json;odata=verbose",
-            },
-            params: {
-              id1: "agentUserId",
-              id2: $scope.brandAgentId,
-            },
-          };
-
           $http
-            .get(`http://localhost:3000/gettickets`, config1)
+            .get(
+              `http://localhost:3000/getticketsbyagent/${$scope.brandAgentId}`,
+              config
+            )
             .then(function (result) {
               $scope.tickets = result.data;
               console.log("ticets");
@@ -76,15 +69,37 @@ app.controller("agentTickets", [
                 return elem.status == "resolved";
               });
               console.log($scope.notAcceptedTickets);
+              $scope.length1 = $scope.notAcceptedTickets.length;
+              $scope.length2 = $scope.AcceptedTickets.length;
+              $scope.length3 = $scope.ResolvedTickets.length;
             })
             .catch(function (error) {
               console.log(error.data);
             });
         }
-      })
-      .catch(function (error) {
+      } else {
         console.log(error);
-      });
+      }
+    });
+
+    //to update ticket id details for modal
+    $scope.updateTicketForModal = function (
+      ticketId,
+      status,
+      assignedTo,
+      subject,
+      query,
+      createdAt,
+      CreatedBy
+    ) {
+      $scope.ticketId = ticketId;
+      $scope.ticketStatus = status;
+      $scope.assignedTo = assignedTo;
+      $scope.tickedSubject = subject;
+      $scope.ticketQuery = query;
+      $scope.createdAt = createdAt;
+      $scope.createdByUserName = CreatedBy;
+    };
 
     //to update global ticket details
     $scope.ticketComments = [];
@@ -93,18 +108,22 @@ app.controller("agentTickets", [
       $scope.ticketSubject = subject;
       $scope.ticketQuery = query;
 
+      console.log("update ticket function called");
+
       //getting comments
-      $http
-        .get(`http://localhost:3000/getcomments/${$scope.ticketId}`, config)
-        .then(function (result) {
-          $scope.ticketComments = result.data;
-          $scope.ticketComments.sort(function (a, b) {
-            return a.dateAndTime - b.dateAndTime;
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      agentService.getCommentsByTicketId(
+        $scope.ticketId,
+        function (result, error) {
+          if (result) {
+            $scope.ticketComments = result.data;
+            $scope.ticketComments.sort(function (a, b) {
+              return a.dateAndTime - b.dateAndTime;
+            });
+          } else {
+            console.log(error);
+          }
+        }
+      );
     };
 
     //to comment
@@ -124,60 +143,40 @@ app.controller("agentTickets", [
         isDeleted: "false",
       };
 
-      $http
-        .post("http://localhost:3000/addcomment", commentData, config)
-        .then(function (result) {
+      agentService.addComments(commentData, function (result, error) {
+        if (result) {
           alert("comment added successfully");
           $scope.comment = "";
-        })
-        .catch(function (error) {
+        } else {
           console.log(error);
-        });
+        }
+      });
     };
 
     //function to accept the tickets
     $scope.acceptTicketHandler = function (ticketId) {
-      console.log(ticketId);
-      console.log(config);
-      $http
-        .put(
-          `http://localhost:3000/acceptTicket/${ticketId}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json;odata=verbose",
-            },
-          }
-        )
-        .then(function (result) {
+      agentService.acceptTickets(ticketId, function (result, error) {
+        console.log(ticketId);
+        console.log(config);
+        if (result) {
           alert("Ticket accepted");
-        })
-        .catch(function (error) {
+        } else {
           console.log(error.data);
-        });
+        }
+      });
     };
 
     $scope.resolveTicketHandler = function (ticketId) {
       console.log(ticketId);
       console.log(config);
-      $http
-        .put(
-          `http://localhost:3000/resolveTicket/${ticketId}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json;odata=verbose",
-            },
-          }
-        )
-        .then(function (result) {
+
+      agentService.resolveTickets(ticketId, function (result, error) {
+        if (result) {
           alert("Ticket resolved");
-        })
-        .catch(function (error) {
+        } else {
           console.log(error.data);
-        });
+        }
+      });
     };
   },
 ]);

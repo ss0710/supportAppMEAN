@@ -22,8 +22,8 @@ exports.getBrand = function (req, res) {
   });
 };
 
-// addBrand Controller
-exports.addBrand = function (req, res) {
+// getBrandById Controller
+exports.getBrandById = function (req, res) {
   var t = req.headers["authorization"];
   var tokenArray = t.split(" ");
   var token = tokenArray[1];
@@ -31,21 +31,8 @@ exports.addBrand = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      var brandId = "brand" + Date.now();
-      var brandData = {
-        brandId: brandId,
-        email: req.body.email,
-        name: req.body.name,
-        category: req.body.category,
-        phoneNumber: req.body.phoneNumber,
-        address: req.body.address,
-        isFirstLogin: req.body.isFirstLogin,
-        isDisabled: req.body.isDisabled,
-        isDeleted: req.body.isDeleted,
-      };
-      var brand = new Brand(brandData);
-      brand
-        .save()
+      var id = req.params.id;
+      Brand.find({ idDeleted: false, brandId: id })
         .then(function (result) {
           res.status(200).json(result);
         })
@@ -54,6 +41,19 @@ exports.addBrand = function (req, res) {
         });
     }
   });
+};
+
+// addBrand Controller
+exports.addBrand = function (s3Result, body) {
+  // var t = req.headers["authorization"];
+  // var tokenArray = t.split(" ");
+  // var token = tokenArray[1];
+  // jwt.verify(token, "privatekey", (err, authorizedData) => {
+  //   if (err) {
+  //     res.sendStatus(403).json({ error: "not authenticated user" });
+  //   } else {
+  //   }
+  // });
 };
 
 // deleteBrand Controller

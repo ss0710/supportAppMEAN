@@ -68,7 +68,7 @@
               class="more-option-icon"
               data-toggle="modal"
               data-target="#detailModal"
-              src="/frontend/assets/more.png"
+              src="../../assets/more.png"
               ng-click="updateTicketDetailsForModal(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName, item.brandName, item.brandId)"
               alt="more-options"
             />
@@ -80,7 +80,7 @@
             data-toggle="modal"
             data-target="#commentModal"
             ng-click="getTicketComments(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName, item.brandName, item.brandId)"
-            src="/frontend/assets/icons8-comments-24.png"
+            src="../../assets/icons8-comments-24.png"
             alt="chat-icon"
           />
           <button
@@ -232,7 +232,7 @@
             </div>
           </div>
           <div class="chat-form-div">
-            <form name="myForm" novalidate>
+            <form name="myForm1" novalidate>
               <input
                 class="input-element"
                 type="text"
@@ -243,11 +243,11 @@
                 placeholder="enter comment"
               />
               <br />
-              <label ng-show="myForm.$submitted || myForm.comment.$dirty">
+              <label ng-show="myForm1.$submitted || myForm1.comment.$dirty">
                 <label
                   ng-model="commentError1"
                   class="error"
-                  ng-show="myForm.comment.$error.required"
+                  ng-show="myForm1.comment.$error.required"
                   >type something to add comment</label
                 >
               </label>
@@ -264,7 +264,7 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  ng-disabled="myForm.$invalid"
+                  ng-disabled="myForm1.$invalid"
                   ng-click="addcommentHandler()"
                 >
                   Add comment
@@ -301,67 +301,63 @@
         <div class="modal-body">
           <p><strong>Brand Name:</strong> {{brandName}}</p>
           <p><strong>Creating By</strong> {{brandManagerName}}</p>
-          <hr />
-          <div>
-            <form name="myForm" novalidate>
-              <input
-                class="input-element"
-                type="text"
-                id="subject"
-                name="subject"
-                ng-model="subject"
-                required
-                placeholder="enter subject"
-              />
-              <br />
-              <label ng-show="myForm.$submitted || myForm.subject.$dirty">
-                <label
-                  ng-model="commentError1"
-                  class="error"
-                  ng-show="myForm.subject.$error.required"
-                  >type something to add comment</label
-                >
-              </label>
-              <br />
-              <textarea
-                class="input-element"
-                type="text"
-                id="query"
-                name="query"
-                ng-model="query"
-                required
-                placeholder="enter query"
-              />
-              <br />
-              <label ng-show="myForm.$submitted || myForm.query.$dirty">
-                <label
-                  ng-model="commentError1"
-                  class="error"
-                  ng-show="myForm.query.$error.required"
-                  >type something to add comment</label
-                >
-              </label>
-              <br />
 
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  ng-disabled="myForm.$invalid"
-                  ng-click="createTicketsHandler()"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+          <form name="myForm2" novalidate>
+            <input
+              class="input-element"
+              type="text"
+              id="subject"
+              name="subject"
+              ng-model="subject"
+              required
+              placeholder="enter subject"
+            />
+            <br />
+            <label ng-show="myForm2.$submitted || myForm2.subject.$dirty">
+              <label
+                ng-model="commentError1"
+                class="error"
+                ng-show="myForm2.subject.$error.required"
+                >type something to add comment</label
+              >
+            </label>
+            <br />
+            <input
+              class="input-element"
+              type="text"
+              id="query"
+              name="query"
+              ng-model="query"
+              required
+              placeholder="enter query"
+            />
+            <br />
+            <label ng-show="myForm2.$submitted || myForm2.query.$dirty">
+              <label
+                ng-model="commentError1"
+                class="error"
+                ng-show="myForm2.query.$error.required"
+                >type something to add comment</label
+              >
+            </label>
+
+            <br />
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              ng-disabled="myForm2.$invalid"
+              ng-click="createTicketsHandler()"
+            >
+              Submit
+            </button>
+          </form>
         </div>
       </div>
     </div>

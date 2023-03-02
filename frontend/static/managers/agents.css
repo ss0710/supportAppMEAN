@@ -5,3 +5,54 @@
 .manager-add-agent-div {
     padding: 2%;
 }
+
+.sidepanel  {
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background-color: rgb(245, 239, 239);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    -webkit-box-shadow: -6px -1px 16px -4px rgba(0,0,0,0.75);
+-moz-box-shadow: -6px -1px 16px -4px rgba(0,0,0,0.75);
+box-shadow: -6px -1px 16px -4px rgba(0,0,0,0.75);
+  }
+  
+  .sidepanel a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .sidepanel a:hover {
+    color: #f1f1f1;
+  }
+  
+  .sidepanel .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+  }
+  
+
+  .sidebar-search-option {
+    border: 1px solid rgb(164, 164, 164);
+    margin-left: 10%;
+    height: 90%;
+    width: 80%;
+    padding-left: 10%;
+    padding-top: 10%;
+    background-color: white;
+    -webkit-box-shadow: 1px 5px 16px 2px rgba(150,150,150,1);
+-moz-box-shadow: 1px 5px 16px 2px rgba(150,150,150,1);
+box-shadow: 1px 5px 16px 2px rgba(150,150,150,1);
+border-radius: 10px;
+  }

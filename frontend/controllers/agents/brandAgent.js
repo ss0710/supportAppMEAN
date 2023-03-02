@@ -1,10 +1,12 @@
 ///<reference path="../app.js" />
+///<reference path="../../services/agents/agent.service.js" />
 
 app.controller("brandAgents", [
   "$scope",
   "$http",
   "$location",
-  function ($scope, $http, $location) {
+  "brandService",
+  function ($scope, $http, $location, brandService) {
     //Handling sidebar button css
     $scope.activeClassname =
       "btn btn-outline-primary brandAdmin-sidebar-buttons-active";
@@ -47,10 +49,8 @@ app.controller("brandAgents", [
       $scope.brandCategory,
       $scope.brandAddress;
 
-    $http
-      .get("http://localhost:3000/usertype", config)
-      .then(function (result) {
-        console.log(result.data);
+    brandService.getUserType(function (result, error) {
+      if (result) {
         if (result.data.role != "agent") {
           $location.path("/noaccess");
         } else {
@@ -62,11 +62,21 @@ app.controller("brandAgents", [
           $scope.brandPhoneNumber = result.data.brand.phoneNumber;
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
+          $scope.agentProfile = result.data.profileImage;
+
+          $http
+            .get("http://localhost:3000/getbrandbyid/" + $scope.brandId, config)
+            .then(function (result) {
+              $scope.brandlogo = result.data[0].brandLogo;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         }
-      })
-      .catch(function (error) {
+      } else {
         console.log(error);
-      });
+      }
+    });
 
     $scope.logout = function () {
       localStorage.removeItem("token");
