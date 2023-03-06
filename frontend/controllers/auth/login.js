@@ -6,40 +6,60 @@ app.controller("login", [
   "$http",
   "$location",
   "authService",
-  function ($scope, $http, $location, authService) {
+  "$window",
+  function ($scope, $http, $location, authService, $window) {
     console.log("login controller");
-    $scope.loginHandler = function () {
-      if ($scope.userName && $scope.password) {
-        console.log($scope.userName);
-        console.log($scope.password);
+    var token = localStorage.getItem("token");
 
-        authService.loginApi(
-          $scope.userName,
-          $scope.password,
-          function (response, error) {
-            if (response) {
-              console.log(response.data);
-              console.log("setting localStorage");
-              localStorage.removeItem("token");
-              localStorage.setItem("token", response.data.token);
-              console.log(response.data.userDetails);
-              if (response.data.userDetails.role == "superAdmin") {
-                $location.path("/admin");
-              } else if (response.data.userDetails.role == "brandAdmin") {
-                $location.path("/brandadmin");
-              } else if (response.data.userDetails.role == "manager") {
-                $location.path("/brandmanager");
-              } else if (response.data.userDetails.role == "agent") {
-                $location.path("/brandagent");
-              } else {
-                $location.path("/home");
-              }
-            } else {
-              alert("Wrong username or password!");
-            }
+    if (token) {
+      var config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json;odata=verbose",
+        },
+      };
+
+      $http
+        .get("http://localhost:3000/usertype", config)
+        .then(function (response) {
+          if (response.data.role == "superAdmin") {
+            $location.path("/admin");
+          } else if (response.data.role == "brandAdmin") {
+            $location.path("/brandadmin");
+          } else if (response.data.role == "manager") {
+            $location.path("/brandmanager");
+          } else if (response.data.role == "agent") {
+            $location.path("/brandagent");
+          } else {
+            $location.path("/home");
           }
-        );
-      }
-    };
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      $scope.loginHandler = function () {
+        if ($scope.userName && $scope.password) {
+          console.log($scope.userName);
+          console.log($scope.password);
+
+          authService.loginApi(
+            $scope.userName,
+            $scope.password,
+            function (response, error) {
+              if (response) {
+                console.log(response.data);
+                console.log("setting localStorage");
+                localStorage.removeItem("token");
+                localStorage.setItem("token", response.data.token);
+                window.location.reload();
+              } else {
+                alert("Wrong username or password!");
+              }
+            }
+          );
+        }
+      };
+    }
   },
 ]);

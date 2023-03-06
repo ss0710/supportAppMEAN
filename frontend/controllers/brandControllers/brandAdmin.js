@@ -73,15 +73,6 @@ app.controller("brandAdmin", [
     };
 
     //to get brandAdmin informations
-    $scope.brandAdminName,
-      $scope.brandAdminEmail,
-      $scope.brandId,
-      $scope.brandName,
-      $scope.brandEmail,
-      $scope.brandPhoneNumber,
-      $scope.brandCategory,
-      $scope.brandAddress;
-
     brandService.getUserType(function (result, error) {
       console.log("running brandAdmin.js getuserType");
       if (result) {
@@ -97,6 +88,8 @@ app.controller("brandAdmin", [
           $scope.brandPhoneNumber = result.data.brand.phoneNumber;
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
+
+          console.log("name2 = " + $scope.brandAdminName);
         }
 
         $http
@@ -111,6 +104,8 @@ app.controller("brandAdmin", [
         console.log(error);
       }
     });
+
+    console.log("name1 = " + $scope.brandAdminName);
 
     //logout function
     $scope.logout = function () {

@@ -127,11 +127,13 @@ app.controller("Tickets", [
       createdAt,
       createdByUserName,
       brandName,
-      brandId
+      brandId,
+      agentId
     ) {
       $scope.ticketId = ticketId;
       $scope.ticketStatus = status;
       $scope.assignedTo = agentName;
+      $scope.assignedToId = agentId;
       $scope.tickedSubject = subject;
       $scope.ticketQuery = query;
       $scope.createdAt = createdAt;
@@ -197,6 +199,34 @@ app.controller("Tickets", [
         if (result) {
           alert("comment added successfully");
           $scope.comment = "";
+          console.log(result);
+          var not_data = {
+            notificationType: "agent",
+            brandId: $scope.brandId,
+            ticketId: result.data.ticketId,
+            message:
+              $scope.brandManagerName +
+              " has commented on ticket " +
+              result.data.ticketId,
+            creator: {
+              id: $scope.brandManagerId,
+              name: $scope.brandManagerName,
+              time: Date.now(),
+            },
+            receiver: {
+              id: $scope.assignedToId,
+              name: $scope.assignedTo,
+            },
+            isSeen: false,
+          };
+          $http
+            .post("http://localhost:3000/addnotification", not_data, config)
+            .then(function (result) {
+              console.log("successfully created notofication");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         } else {
           console.log(error);
         }

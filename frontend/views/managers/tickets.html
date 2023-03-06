@@ -79,7 +79,7 @@
             class="chat-option-icon"
             data-toggle="modal"
             data-target="#commentModal"
-            ng-click="getTicketComments(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName, item.brandName, item.brandId)"
+            ng-click="getTicketComments(item.ticketId, item.status, item.agentName, item.subject, item.query, item.createdAt, item.createdByUserName, item.brandName, item.brandId, item.agentUserId)"
             src="../../assets/icons8-comments-24.png"
             alt="chat-icon"
           />
@@ -218,7 +218,7 @@
               <p class="identity">
                 <img
                   class="user-icon-comments"
-                  src="/frontend/assets/user-icon.png"
+                  src="../../assets/user-icon.png"
                   alt="usericon"
                 /><strong>{{item.sentByUserName}}</strong>
                 ({{item.sentByUserType}})

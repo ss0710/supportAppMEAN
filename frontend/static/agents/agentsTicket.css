@@ -119,3 +119,59 @@ box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
     font-weight: bold;
     color: rgb(62, 62, 62);
 }
+
+.agent-ticket-details-outerdiv {
+    width: 100%;
+    display: flex;
+    height: 500px;
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 7px;
+}
+
+.agent-ticket-details-outerdiv-left {
+    width: 20%;
+    padding: 10px 10px 10px 10px;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+.agent-ticket-details-outerdiv-left-u {
+    height:60vh;
+    margin-bottom: 10px;
+    background-color: rgb(209, 209, 209);
+}
+
+.agent-ticket-details-outerdiv-left-d {
+    height: 40vh;
+    background-color: rgb(209, 209, 209);
+}
+
+.agent-ticket-details-outerdiv-middle {
+    padding: 10px 10px 10px 10px;
+    width: 50%;
+}
+
+.agent-ticket-details-outerdiv-right {
+   width: 30%;
+   display: flex;
+   flex-direction: column;
+}
+
+.agent-ticket-details-outerdiv-right-body {
+    height: 80vh;
+    overflow-y: scroll;
+    background-color: rgb(209, 209, 209);
+}
+
+.agent-ticket-details-outerdiv-footer {
+    display: flex;
+}
+
+.add-comment-ticket-input {
+    width: 70%;
+}
+
+.add-comment-ticket-button {
+    width: 30%;
+}

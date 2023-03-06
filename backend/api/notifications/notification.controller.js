@@ -69,3 +69,23 @@ exports.assignNotification = function (req, res) {
     }
   });
 };
+
+exports.getAgentNotification = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var agentId = req.params.id;
+      Notification.find({ "receiver.id": agentId })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};

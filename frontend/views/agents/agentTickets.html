@@ -59,8 +59,7 @@
           <button
             class="btn-outline-success assign-to-agentbutton"
             data-toggle="modal"
-            data-target="#exampleModalCenter"
-            ng-click="acceptTicketHandler(item.ticketId)"
+            data-target="#ticketModal"
           >
             Accept
           </button>
@@ -295,6 +294,78 @@
               </div>
             </form>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Ticket Modal -->
+  <div
+    class="modal fade"
+    id="ticketModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="agent-ticket-details-outerdiv">
+            <div class="agent-ticket-details-outerdiv-left">
+              <div class="agent-ticket-details-outerdiv-left-u">
+                <p>Assignee :- Manager</p>
+                <p>Assigned To:- Agent</p>
+                <p>Status</p>
+              </div>
+              <div class="agent-ticket-details-outerdiv-left-d">
+                <p>Attachments</p>
+              </div>
+            </div>
+            <div class="agent-ticket-details-outerdiv-middle">
+              <p>Ticekt Id: ticketskdfnlk</p>
+              <p>Created At:-</p>
+              <div class="agent-ticket-details-subject">
+                <p>Subject:</p>
+                <p>kjfn aksjn oernf akjsdn dskn aocsn runf alksnc</p>
+              </div>
+              <div class="agent-ticket-details-query">
+                <p>Query</p>
+                <p>
+                  kjfn aksjn oernf akjsdn dskn aocsn runf alksnc dlkwf alksd
+                  dlskv sdlkvn asm
+                </p>
+              </div>
+              <div class="agent-ticket-details-comment-div"></div>
+            </div>
+            <div class="agent-ticket-details-outerdiv-right">
+              <div class="agent-ticket-details-outerdiv-right-body"></div>
+              <div class="agent-ticket-details-outerdiv-footer">
+                <input
+                  class="add-comment-ticket-input"
+                  type="text"
+                  placeholder="type commet..."
+                />
+                <button class="add-comment-ticket-button">Comment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>

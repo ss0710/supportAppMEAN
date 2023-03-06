@@ -39,7 +39,10 @@ app.controller("brandAgents", [
       },
     };
 
+    $scope.notificationLenght = 0;
+
     //to get brandmanager informations
+    $scope.brandAgentId;
     $scope.brandAgentName,
       $scope.brandAgentEmail,
       $scope.brandId,
@@ -54,6 +57,7 @@ app.controller("brandAgents", [
         if (result.data.role != "agent") {
           $location.path("/noaccess");
         } else {
+          $scope.brandAgentId = result.data._id;
           $scope.brandAgentName = result.data.userName;
           $scope.brandAgentEmail = result.data.email;
           $scope.brandId = result.data.brand.brandId;
@@ -68,6 +72,20 @@ app.controller("brandAgents", [
             .get("http://localhost:3000/getbrandbyid/" + $scope.brandId, config)
             .then(function (result) {
               $scope.brandlogo = result.data[0].brandLogo;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+          $scope.agentNotification;
+          $http
+            .get(
+              "http://localhost:3000/agentnotification/" + $scope.brandAgentId,
+              config
+            )
+            .then(function (result) {
+              $scope.agentNotification = result.data;
+              $scope.notificationLenght = $scope.agentNotification.length;
             })
             .catch(function (error) {
               console.log(error);

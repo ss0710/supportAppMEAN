@@ -99,3 +99,7 @@ box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
   position: sticky;
   top: 0px;
 }
+
+.modal-lg {
+  max-width: 1200px;
+}

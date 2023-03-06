@@ -221,5 +221,9 @@ router.put(
   "/assignnotification/:id",
   notificationController.assignNotification
 );
+router.get(
+  "/agentnotification/:id",
+  notificationController.getAgentNotification
+);
 
 module.exports = router;

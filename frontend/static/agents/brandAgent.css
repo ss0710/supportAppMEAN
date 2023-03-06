@@ -92,4 +92,19 @@
 -moz-box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
 box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
 }
+
+.agent-notification-div {
+    width: 100%;
+    height: 450px;
+    overflow-y: scroll;
+}
+
+.agent-notification-msg-div {
+    margin: 5px 8px 5px 8px;
+    border-radius: 7px;
+    padding: 1%;
+    padding-left: 1.5%;
+    border: 1px solid rgb(152, 152, 152);
+    border-left: 5px solid rgb(57, 57, 255);
+}
   
