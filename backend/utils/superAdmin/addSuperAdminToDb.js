@@ -11,7 +11,7 @@ module.exports = function () {
     isDisabled: false,
     isDeleted: false,
   };
-  User.findOne({ username: "superadmin" }).then(function (res) {
+  User.findOne({ userName: "superadmin" }).then(function (res) {
     console.log(res);
     if (res == null) {
       var user = new User(admin);

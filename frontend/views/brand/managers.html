@@ -49,8 +49,19 @@
         </td>
         <td>{{item.userName}}</td>
         <td>{{item.email}}</td>
-        <td><button class="btn btn-success">Details</button></td>
-        <td><button class="btn btn-warning">Disable</button></td>
+        <td>
+          <button
+            class="btn btn-success"
+            data-toggle="modal"
+            data-target="#ManagerDetailsModal"
+            ng-click="managerDetailsupdate(item)"
+          >
+            Details
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-warning">Disable</button>
+        </td>
         <td><button class="btn btn-danger">Delete</button></td>
       </tr>
     </table>
@@ -187,6 +198,71 @@
               </button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGER DETAILS MODALS -->
+  <div
+    class="modal fade"
+    id="ManagerDetailsModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Manager Details</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="manager-details-modal-div">
+            <div class="manager-details-modal-div-up">
+              <div class="manager-details-modal-div-up-left">
+                <img
+                  style="width: 150px"
+                  src="{{ManagerDetail.profileImage}}"
+                  alt="manager-photo"
+                />
+              </div>
+              <div class="manager-details-modal-div-right">
+                <p><strong>Name: </strong>{{ManagerDetail.userName}}</p>
+                <p><strong>Email: </strong>{{ManagerDetail.email}}</p>
+                <p><strong>Role: </strong>Manager</p>
+              </div>
+            </div>
+            <hr />
+            <div class="manager-details-modal-div-down">
+              <div>
+                <h6 style="letter-spacing: 2px; font-weight: bold">
+                  BRAND DETAILS
+                </h6>
+              </div>
+              <div>
+                <p><strong>Brand Name: </strong>{{ManagerDetail.brand.name}}</p>
+                <p>
+                  <strong>Brand Email: </strong>{{ManagerDetail.brand.email}}
+                </p>
+                <p>
+                  <strong>Brand Id: </strong>{{ManagerDetail.brand.brandId}}
+                </p>
+                <p>
+                  <strong>Brand Category: </strong
+                  >{{ManagerDetail.brand.category}}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

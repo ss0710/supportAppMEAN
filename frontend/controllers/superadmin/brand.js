@@ -133,5 +133,104 @@ app.controller("SuperadminBrand", [
         }
       });
     };
+
+    $scope.disableString = "disable";
+    $scope.enableString = "enable";
+
+    $scope.updateAndDelete = function (brandId, brandName, process) {
+      console.log("clicked");
+      $scope.brandIdToD = brandId;
+      $scope.brandNameToD = brandName;
+      $scope.process = process;
+    };
+
+    $scope.deleteBrand = function () {
+      console.log("clicked delete fun");
+      $http
+        .put(
+          "http://localhost:3000/deletebrand/" + $scope.brandIdToD,
+          {},
+          config
+        )
+        .then(function (result) {
+          alert("succesfully deleted");
+          $(function () {
+            $("#deleteModal").modal("hide");
+          });
+          var arr = $scope.currentBrandsWithAdmin;
+          $scope.currentBrandsWithAdmin = arr.filter(function (elem) {
+            return elem.brandId != $scope.brandIdToD;
+          });
+          var arr2 = $scope.currentBrandsWithNoAdmin;
+          $scope.currentBrandsWithNoAdmin = arr2.filter(function (elem) {
+            return elem.brandId != $scope.brandIdToD;
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+
+    $scope.disableBrand = function () {
+      if ($scope.process == "disable") {
+        console.log("clicked disable fun");
+        $http
+          .put(
+            "http://localhost:3000/disablebrand/" + $scope.brandIdToD,
+            {},
+            config
+          )
+          .then(function (result) {
+            alert("successfully marked as disable");
+            $(function () {
+              $("#disableModal").modal("hide");
+            });
+
+            //reflecting changes in frontend
+            $scope.currentBrandsWithAdmin.forEach(function (elem) {
+              if (elem.brandId == $scope.brandIdToD) {
+                elem.isDisabled = true;
+              }
+            });
+            $scope.currentBrandsWithNoAdmin.forEach(function (elem) {
+              if (elem.brandId == $scope.brandIdToD) {
+                elem.isDisabled = true;
+              }
+            });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        console.log("clicked enable fun");
+        $http
+          .put(
+            "http://localhost:3000/enablebrand/" + $scope.brandIdToD,
+            {},
+            config
+          )
+          .then(function (result) {
+            alert("successfully marked as enable");
+            $(function () {
+              $("#disableModal").modal("hide");
+            });
+
+            //reflecting changes in frontend
+            $scope.currentBrandsWithAdmin.forEach(function (elem) {
+              if (elem.brandId == $scope.brandIdToD) {
+                elem.isDisabled = false;
+              }
+            });
+            $scope.currentBrandsWithNoAdmin.forEach(function (elem) {
+              if (elem.brandId == $scope.brandIdToD) {
+                elem.isDisabled = false;
+              }
+            });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    };
   },
 ]);

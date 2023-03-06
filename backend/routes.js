@@ -23,6 +23,7 @@ var managerController = require("./api/managers/manager.controller");
 var agentController = require("./api/agents/agent.controller");
 var ticketController = require("./api/tickets/ticket.controller");
 var commentController = require("./api/comments/comment.controller");
+var notificationController = require("./api/notifications/notification.controller");
 
 //auth routes
 router.post("/login", passport.authenticate("local"), loginController);
@@ -36,6 +37,8 @@ router.get("/usertype", userController.getUserType);
 router.get("/getbrands", brandController.getBrand);
 router.get("/getbrandbyid/:id", brandController.getBrandById);
 router.put("/updatebrand", brandController.updateBrand);
+router.put("/disablebrand/:id", brandController.disableBrand);
+router.put("/enablebrand/:id", brandController.enableBrand);
 router.put("/deletebrand/:id", brandController.deleteBrand);
 
 var s3 = new S3({
@@ -207,5 +210,16 @@ router.put("/resolveTicket/:id", ticketController.resolveTicket);
 //comments routes
 router.post("/addcomment", commentController.addComment);
 router.get("/getcomments/:id", commentController.getComments);
+
+//notification routes
+router.post("/addnotification", notificationController.addNotification);
+router.get(
+  "/getnotifications/:id",
+  notificationController.getNotificationByBrandId
+);
+router.put(
+  "/assignnotification/:id",
+  notificationController.assignNotification
+);
 
 module.exports = router;

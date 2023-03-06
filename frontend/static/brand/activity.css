@@ -1,0 +1,30 @@
+.activity-div {
+    width: 100%;
+    padding: 2%;
+    display: flex;
+  }
+  
+  .activity-div-left {
+    width: 68%;
+    border: 1px solid rgb(153, 153, 153);
+    margin-left: 1.5%;
+    padding-left: 2%;
+    padding-right: 2%;
+    border-radius: 7px;
+  }
+  
+  .activity-div-right {
+    width: 26%;
+    margin-left: 2%;
+    border: 1px solid rgb(153, 153, 153);
+    border-radius: 7px;
+  }
+
+  .notification-msg-div {
+    width: 100%;
+    background-color: rgb(230, 218, 218);
+    padding: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    border-radius: 7px;
+  }

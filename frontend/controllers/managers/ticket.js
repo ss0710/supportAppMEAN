@@ -217,6 +217,34 @@ app.controller("Tickets", [
       managerService.addTickets(ticketData, function (result, error) {
         if (result) {
           alert("Succefully Created Ticket");
+          console.log(result);
+          var not_data = {
+            notificationType: "agent",
+            brandId: $scope.brandId,
+            ticketId: result.data.ticketId,
+            message:
+              $scope.brandManagerName +
+              " created a ticket with Id " +
+              result.data.ticketId,
+            creator: {
+              id: $scope.brandManagerId,
+              name: $scope.brandManagerName,
+              time: Date.now(),
+            },
+            receiver: {
+              id: "",
+              name: "",
+            },
+            isSeen: false,
+          };
+          $http
+            .post("http://localhost:3000/addnotification", not_data, config)
+            .then(function (result) {
+              console.log("successfully created notofication");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         } else {
           console.log(error);
         }
@@ -257,6 +285,19 @@ app.controller("Tickets", [
         function (result, error) {
           if (result) {
             alert("Successfully assigned tickets");
+
+            $http
+              .put(
+                "http://localhost:3000/assignnotification/" + $scope.ticketId,
+                agentData,
+                config
+              )
+              .then(function (result) {
+                console.log("successfully updated notification");
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
           } else {
             console.log(error);
           }

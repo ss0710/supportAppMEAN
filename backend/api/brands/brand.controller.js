@@ -11,7 +11,7 @@ exports.getBrand = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      Brand.find({ idDeleted: false })
+      Brand.find({ isDeleted: false })
         .then(function (result) {
           res.status(200).json(result);
         })
@@ -67,6 +67,48 @@ exports.deleteBrand = function (req, res) {
     } else {
       var id = req.params.id;
       Brand.updateOne({ brandId: id }, { isDeleted: true })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+// disableBrand Controller
+exports.disableBrand = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var id = req.params.id;
+      Brand.updateOne({ brandId: id }, { isDisabled: true })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+// EnableBrand Controller
+exports.enableBrand = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var id = req.params.id;
+      Brand.updateOne({ brandId: id }, { isDisabled: false })
         .then(function (result) {
           res.status(200).json(result);
         })

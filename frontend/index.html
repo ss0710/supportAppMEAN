@@ -54,6 +54,11 @@
     ></script>
 
     <!-- CSS -->
+    <style>
+      body::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
     <link rel="stylesheet" href="./static/auth/login.css" />
     <link rel="stylesheet" href="./static/superadmin/superadmin.css" />
     <link rel="stylesheet" href="./static/superadmin/brand.css" />
@@ -63,6 +68,7 @@
     <link rel="stylesheet" href="./static/managers/agents.css" />
     <link rel="stylesheet" href="./static/agents/brandAgent.css" />
     <link rel="stylesheet" href="./static/agents/agentsTicket.css" />
+    <link rel="stylesheet" href="./static/brand/activity.css" />
   </head>
   <body ng-app="myApp" ng-contoller="index">
     <div ui-view></div>
@@ -89,5 +95,6 @@
     <script src="./controllers/agents/brandAgent.js"></script>
     <script src="./controllers/agents/agentTickets.js"></script>
     <script src="./controllers/managers/ticket.js"></script>
+    <script src="./controllers/brandControllers/activity.js"></script>
   </body>
 </html>

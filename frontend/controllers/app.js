@@ -54,6 +54,10 @@ app.config([
         url: "/brandadmin",
         templateUrl: "./views/brand/brandAdmin.html",
       })
+      .state("brandadmin.activity", {
+        url: "/activity",
+        templateUrl: "./views/brand/activity.html",
+      })
       .state("brandadmin.managers", {
         url: "/managers",
         templateUrl: "./views/brand/managers.html",

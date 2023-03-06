@@ -72,17 +72,6 @@ app.controller("manager", [
 
     //add brand Managers
     $scope.addBrandManager = function () {
-      // var data = {
-      //   email: $scope.managerEmail,
-      //   userName: $scope.managerName,
-      //   password: $scope.password,
-      //   brandId: $scope.brandId,
-      //   brandEmail: $scope.brandEmail,
-      //   brandName: $scope.brandName,
-      //   brandCategory: $scope.brandCategory,
-      //   brandPhoneNumber: $scope.brandPhoneNumber,
-      //   brandAddress: $scope.brandAddress,
-      // };
       var formData = new FormData();
       formData.append("image", $scope.formData.image);
       formData.append("email", $scope.managerEmail);
@@ -94,16 +83,6 @@ app.controller("manager", [
       formData.append("brandCategory", $scope.brandCategory);
       formData.append("brandPhoneNumber", $scope.brandPhoneNumber);
       formData.append("brandAddress", $scope.brandAddress);
-
-      // $http
-      //   .post("http://localhost:3000/addmanager", data, config)
-      //   .then(function (result) {
-      //     alert("Successfully added Manager");
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error.data);
-      //     alert(error.data);
-      //   });
 
       $http({
         method: "POST",
@@ -123,6 +102,13 @@ app.controller("manager", [
           alert(error.data);
         }
       );
+    };
+
+    $scope.ManagerDetail;
+    $scope.managerDetailsupdate = function (details) {
+      console.log("clickded");
+      $scope.ManagerDetail = details;
+      console.log(details);
     };
   },
 ]);
