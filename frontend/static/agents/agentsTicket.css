@@ -3,18 +3,53 @@
     border-radius: 10px;
     background-color: rgb(243, 245, 246);
     border-left: 7px solid rgba(0, 60, 255, 0.726);
-    -webkit-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
--moz-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
-    width: 30%;
+    width: 98%;
     margin-right: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .ticket-div {
     padding: 1%;
     display: flex;
     flex-direction: column;
+}
+
+.tickets-display-div {
+    display: flex;
+}
+
+.tickets-display-div-one {
+    width: 33%;
+    border: 1px solid rgb(131, 131, 131);
+    border-radius: 8px;
+    height: 500px;
+    overflow-y: scroll;
+    margin: 0 10px 20px 10px;
+    -webkit-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+-moz-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+}
+.tickets-display-div-two {
+    width: 33%;
+    border: 1px solid rgb(131, 131, 131);
+    border-radius: 8px;
+    height: 500px;
+    overflow-y: scroll;
+    margin: 0 10px 20px 10px;
+    -webkit-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+-moz-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+}
+.tickets-display-div-three {
+    width: 33%;
+    border: 1px solid rgb(131, 131, 131);
+    border-radius: 8px;
+    height: 500px;
+    overflow-y: scroll;
+    margin: 0 10px 20px 10px;
+    -webkit-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+-moz-box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
+box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
 }
 
 .ticket-details-div {
@@ -25,6 +60,14 @@ box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
 .tickets-options-div {
     display: flex;
     flex-direction: row-reverse;
+}
+
+.heading-center {
+    width: 100%;
+    text-align: center;
+    padding: 2%;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .text-info1 {
@@ -48,7 +91,7 @@ box-shadow: 10px 10px 5px -3px rgba(214,207,214,1);
 
 .manager-agents-table {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .chat-div {
@@ -126,12 +169,13 @@ box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
     height: 500px;
     border: 1px solid rgb(165, 165, 165);
     border-radius: 7px;
+    background-color: rgb(238, 230, 230);
+    padding: 10px 10px 10px 10px;
+    border-left: 5px solid rgb(109, 109, 255);
 }
 
 .agent-ticket-details-outerdiv-left {
     width: 20%;
-    padding: 10px 10px 10px 10px;
-    
     display: flex;
     flex-direction: column;
 }
@@ -139,16 +183,27 @@ box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
 .agent-ticket-details-outerdiv-left-u {
     height:60vh;
     margin-bottom: 10px;
-    background-color: rgb(209, 209, 209);
+    background-color: white;
+    border-radius: 8px;
+    -webkit-box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
+-moz-box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
+box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
+padding: 5px 5px 5px 8px;
 }
 
 .agent-ticket-details-outerdiv-left-d {
     height: 40vh;
-    background-color: rgb(209, 209, 209);
+    background-color: white;
+    border-radius: 8px;
+    -webkit-box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
+-moz-box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
+box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
+display: flex;
+flex-direction: column;
 }
 
 .agent-ticket-details-outerdiv-middle {
-    padding: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 20px;
     width: 50%;
 }
 
@@ -156,16 +211,22 @@ box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
    width: 30%;
    display: flex;
    flex-direction: column;
+   border-radius: 8px;
+   -webkit-box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
+-moz-box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
+box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
 }
 
 .agent-ticket-details-outerdiv-right-body {
     height: 80vh;
     overflow-y: scroll;
-    background-color: rgb(209, 209, 209);
+    background-color: white;
+    border-radius: 8px;
 }
 
 .agent-ticket-details-outerdiv-footer {
     display: flex;
+    border-radius: 8px;
 }
 
 .add-comment-ticket-input {
@@ -175,3 +236,26 @@ box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
 .add-comment-ticket-button {
     width: 30%;
 }
+
+.input-file-upload {
+    width: 40%;
+}
+
+.attachmentinput-div-d {
+    display: flex;
+}
+
+.attachment-upload-button {
+    width: 60%;
+}
+
+.attachmentinput-div-u {
+    height: 30vh;
+    overflow-y: scroll;
+    padding-left: 10px;
+    padding-top: 8px;
+}
+
+.attachmentinput-div-u::-webkit-scrollbar {
+    display: none;
+  }

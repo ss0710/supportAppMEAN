@@ -127,30 +127,63 @@ app.controller("agentTickets", [
     };
 
     //to comment
-    $scope.addcommentHandler = function () {
-      var commentData = {
-        ticketId: $scope.ticketId,
-        ticketSubject: $scope.ticketSubject,
-        ticketQuery: $scope.ticketQuery,
-        content: $scope.comment,
-        sentByUserId: $scope.brandAgentId,
-        sentByUserName: $scope.brandAgentName,
-        sentByUserType: "agent",
-        brandId: $scope.brandId,
-        brandEmail: $scope.brandEmail,
-        brandName: $scope.brandName,
-        brandCategory: $scope.brandCategory,
-        isDeleted: "false",
-      };
+    $scope.addcommentHandler = function (
+      throughCommentModal,
+      throughDetailsModal
+    ) {
+      if (throughCommentModal) {
+        var commentData = {
+          ticketId: $scope.ticketId,
+          ticketSubject: $scope.ticketSubject,
+          ticketQuery: $scope.ticketQuery,
+          content: $scope.comment,
+          sentByUserId: $scope.brandAgentId,
+          sentByUserName: $scope.brandAgentName,
+          sentByUserType: "agent",
+          brandId: $scope.brandId,
+          brandEmail: $scope.brandEmail,
+          brandName: $scope.brandName,
+          brandCategory: $scope.brandCategory,
+          isDeleted: "false",
+        };
 
-      agentService.addComments(commentData, function (result, error) {
-        if (result) {
-          alert("comment added successfully");
-          $scope.comment = "";
+        agentService.addComments(commentData, function (result, error) {
+          if (result) {
+            alert("comment added successfully");
+            $scope.comment = "";
+          } else {
+            console.log(error);
+          }
+        });
+      } else {
+        if ($scope.detailsComment) {
+          var commentData = {
+            ticketId: $scope.ticketDetails.ticketId,
+            ticketSubject: $scope.ticketDetails.ticketSubject,
+            ticketQuery: $scope.ticketDetails.ticketQuery,
+            content: $scope.detailsComment,
+            sentByUserId: $scope.brandAgentId,
+            sentByUserName: $scope.brandAgentName,
+            sentByUserType: "agent",
+            brandId: $scope.brandId,
+            brandEmail: $scope.brandEmail,
+            brandName: $scope.brandName,
+            brandCategory: $scope.brandCategory,
+            isDeleted: "false",
+          };
+
+          agentService.addComments(commentData, function (result, error) {
+            if (result) {
+              alert("comment added successfully");
+              $scope.detailsComment = "";
+            } else {
+              console.log(error.data);
+            }
+          });
         } else {
-          console.log(error);
+          alert("type something to comment");
         }
-      });
+      }
     };
 
     //function to accept the tickets
@@ -177,6 +210,26 @@ app.controller("agentTickets", [
           console.log(error.data);
         }
       });
+    };
+
+    $scope.ticketEditModal = function (ticketDetails) {
+      $scope.ticketDetails = ticketDetails;
+      console.log($scope.ticketDetails);
+      //getting comments
+      agentService.getCommentsByTicketId(
+        $scope.ticketDetails.ticketId,
+        function (result, error) {
+          if (result) {
+            $scope.ticketComments = result.data;
+            $scope.ticketComments.sort(function (a, b) {
+              return a.dateAndTime - b.dateAndTime;
+            });
+            console.log($scope.ticketComments);
+          } else {
+            console.log(error);
+          }
+        }
+      );
     };
   },
 ]);

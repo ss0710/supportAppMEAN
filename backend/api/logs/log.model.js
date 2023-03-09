@@ -1,0 +1,35 @@
+var mongoose = require("mongoose");
+
+var logSchema = new mongoose.Schema({
+  ticketId: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ["create", "statusChange", "comment", "others"],
+    required: true,
+  },
+  message: {
+    type: String,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  userName: {
+    type: String,
+    required: true,
+  },
+  comment: {
+    type: String,
+  },
+  time: {
+    type: Date,
+    retuired: true,
+  },
+});
+
+var Log = mongoose.model("Log", logSchema);
+
+module.exports = Log;
