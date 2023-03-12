@@ -275,6 +275,25 @@ app.controller("Tickets", [
             .catch(function (error) {
               console.log(error);
             });
+
+          var log_data = {
+            brandId: $scope.brandId,
+            ticketId: result.data.ticketId,
+            type: "create",
+            message: $scope.brandManagerName + "created the Ticket",
+            userId: $scope.brandManagerId,
+            userName: $scope.brandManagerName,
+            comment: "",
+          };
+
+          $http
+            .post("http://localhost:3000/addlog", log_data, config)
+            .then(function (result) {
+              console.log("successfully added log");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         } else {
           console.log(error);
         }

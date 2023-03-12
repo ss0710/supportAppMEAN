@@ -24,6 +24,7 @@ var agentController = require("./api/agents/agent.controller");
 var ticketController = require("./api/tickets/ticket.controller");
 var commentController = require("./api/comments/comment.controller");
 var notificationController = require("./api/notifications/notification.controller");
+var logController = require("./api/logs/logs.controller");
 
 //auth routes
 router.post("/login", passport.authenticate("local"), loginController);
@@ -225,5 +226,9 @@ router.get(
   "/agentnotification/:id",
   notificationController.getAgentNotification
 );
+
+//log history routes
+router.post("/addlog", logController.addLogHistory);
+router.get("/getlogsbyticket/:id", logController.getLogsByTicketId);
 
 module.exports = router;

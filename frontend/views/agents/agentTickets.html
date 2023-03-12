@@ -386,6 +386,10 @@
                 <p><strong>Query: </strong>{{ticketDetails.query}}</p>
               </div>
               <div class="agent-ticket-details-comment-div"></div>
+              <div class="agent-ticket-details-logs">
+                <p><strong>Logs</strong></p>
+                <div ng-repeat="items in logs">{{items.message}}</div>
+              </div>
             </div>
             <div class="agent-ticket-details-outerdiv-right">
               <div class="agent-ticket-details-outerdiv-right-body">

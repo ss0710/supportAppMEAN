@@ -1,6 +1,10 @@
 var mongoose = require("mongoose");
 
 var logSchema = new mongoose.Schema({
+  brandId: {
+    type: String,
+    required: true,
+  },
   ticketId: {
     type: String,
     required: true,
@@ -14,7 +18,7 @@ var logSchema = new mongoose.Schema({
     type: String,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
   },
   userName: {

@@ -230,6 +230,20 @@ app.controller("agentTickets", [
           }
         }
       );
+
+      //gettings logs
+      $http
+        .get(
+          "http://localhost:3000/getlogsbyticket/" +
+            $scope.ticketDetails.ticketId,
+          config
+        )
+        .then(function (result) {
+          $scope.logs = result.data;
+        })
+        .cath(function (error) {
+          console.log(error);
+        });
     };
   },
 ]);
