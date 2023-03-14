@@ -25,6 +25,7 @@ var ticketController = require("./api/tickets/ticket.controller");
 var commentController = require("./api/comments/comment.controller");
 var notificationController = require("./api/notifications/notification.controller");
 var logController = require("./api/logs/logs.controller");
+var statsController = require("./api/stats/stats.controller");
 
 //auth routes
 router.post("/login", passport.authenticate("local"), loginController);
@@ -155,7 +156,9 @@ router.post("/addmanager", upload.single("image"), function (req, res) {
 
 //Brand agents routes
 router.get("/getagents/:id", agentController.getBrandAgents);
-
+router.put("/disableagent/:id", agentController.disableAgent);
+router.put("/enableagent/:id", agentController.enableAgents);
+router.put("/deleteagent/:id", agentController.deleteAgents);
 router.post("/addagents", upload.single("image"), function (req, res) {
   console.log("add agent route called");
   console.log(req.file);
@@ -206,7 +209,9 @@ router.get("/getticketsbybrand/:id", ticketController.getTicketsByBrandId);
 router.get("/getticketsbyagent/:id", ticketController.getTicketsByAgentId);
 router.put("/updateticket/:id", ticketController.updateTicket);
 router.put("/acceptTicket/:id", ticketController.acceptTicket);
+router.put("/inprocessticket/:id", ticketController.inProcessTicket);
 router.put("/resolveTicket/:id", ticketController.resolveTicket);
+router.put("/closeticket/:id", ticketController.closeTicket);
 
 //comments routes
 router.post("/addcomment", commentController.addComment);
@@ -226,9 +231,18 @@ router.get(
   "/agentnotification/:id",
   notificationController.getAgentNotification
 );
+router.get(
+  "/managernotification/:id",
+  notificationController.getManagerNotification
+);
 
 //log history routes
 router.post("/addlog", logController.addLogHistory);
 router.get("/getlogsbyticket/:id", logController.getLogsByTicketId);
+
+//stats routes
+router.get("/countManagerAgent/:id", userController.countMangerandAgent);
+router.get("/managerstats/:id", statsController.getManagerStats);
+router.get("/ticketactivity/:id", statsController.getTicketActivityDetails);
 
 module.exports = router;

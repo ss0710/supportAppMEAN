@@ -53,7 +53,6 @@ exports.getBrandAgents = function (req, res) {
       var id = req.params.id;
       User.find({
         isDeleted: false,
-        isDisabled: false,
         role: "agent",
         "brand.brandId": id,
       })
@@ -62,6 +61,69 @@ exports.getBrandAgents = function (req, res) {
         })
         .catch(function (error) {
           res.status(200).json(error);
+        });
+    }
+  });
+};
+
+//desable agent
+exports.disableAgent = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var id = req.params.id;
+      User.findOneAndUpdate({ _id: id }, { isDisabled: true })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(200).json(result);
+        });
+    }
+  });
+};
+
+//enable agent
+exports.enableAgents = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var id = req.params.id;
+      User.findOneAndUpdate({ _id: id }, { isDisabled: false })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(200).json(result);
+        });
+    }
+  });
+};
+
+//delete agent
+exports.deleteAgents = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var id = req.params.id;
+      User.findOneAndUpdate({ _id: id }, { isDeleted: false })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(200).json(result);
         });
     }
   });

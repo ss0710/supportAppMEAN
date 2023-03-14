@@ -63,7 +63,7 @@ app.controller("agentTickets", [
                 return elem.status == "Assigned";
               });
               $scope.AcceptedTickets = $scope.tickets.filter(function (elem) {
-                return elem.status == "inProcess";
+                return elem.status == "Accepted" || elem.status == "inProcess";
               });
               $scope.ResolvedTickets = $scope.tickets.filter(function (elem) {
                 return elem.status == "resolved";
@@ -212,7 +212,9 @@ app.controller("agentTickets", [
       });
     };
 
+    $scope.ticketStatusChangeDetails;
     $scope.ticketEditModal = function (ticketDetails) {
+      $scope.ticketStatusChangeDetails = ticketDetails;
       $scope.ticketDetails = ticketDetails;
       console.log($scope.ticketDetails);
       //getting comments
@@ -244,6 +246,135 @@ app.controller("agentTickets", [
         .cath(function (error) {
           console.log(error);
         });
+    };
+
+    //status change handler
+    $scope.statusChangeHandler = function () {
+      console.log("function called");
+      console.log($scope.currentStatus);
+      console.log($scope.ticketStatusChangeDetails);
+      if ($scope.currentStatus == "inProcess") {
+        $http
+          .put(
+            "http://localhost:3000/inprocessticket/" +
+              $scope.ticketStatusChangeDetails.ticketId,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json;odata=verbose",
+              },
+            }
+          )
+          .then(function (result) {
+            alert("status changed successfully");
+            var not_data = {
+              notificationType: "manager",
+              brandId: $scope.brandId,
+              ticketId: $scope.ticketStatusChangeDetails.ticketId,
+              message:
+                $scope.brandAgentName +
+                " changed the status to Inprocess of ticket " +
+                $scope.ticketStatusChangeDetails.ticketId,
+              creator: {
+                id: $scope.brandAgentId,
+                name: $scope.brandAgentName,
+                time: Date.now(),
+              },
+              receiver: {
+                id: result.data.createdByUserID,
+                name: result.data.createdByUserName,
+              },
+            };
+            $http
+              .post("http://localhost:3000/addnotification", not_data, config)
+              .then(function (result) {
+                console.log("successfully created notofication");
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          })
+          .catch(function (error) {
+            console.log(error.data);
+          });
+      } else if ($scope.currentStatus == "Accepted") {
+        agentService.acceptTickets(
+          $scope.ticketStatusChangeDetails.ticketId,
+          function (result, error) {
+            if (result) {
+              alert("Ticket accepted");
+              var not_data = {
+                notificationType: "manager",
+                brandId: $scope.brandId,
+                ticketId: $scope.ticketStatusChangeDetails.ticketId,
+                message:
+                  $scope.brandAgentName +
+                  " changed ticket status to Accepted of ticket " +
+                  $scope.ticketStatusChangeDetails.ticketId,
+                creator: {
+                  id: $scope.brandAgentId,
+                  name: $scope.brandAgentName,
+                  time: Date.now(),
+                },
+                receiver: {
+                  id: result.data.createdByUserID,
+                  name: result.data.createdByUserName,
+                },
+              };
+              $http
+                .post("http://localhost:3000/addnotification", not_data, config)
+                .then(function (result) {
+                  console.log("successfully created notofication");
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            } else {
+              console.log(error.data);
+            }
+          }
+        );
+      } else if ($scope.currentStatus == "resolved") {
+        console.log("resolved called");
+        agentService.resolveTickets(
+          $scope.ticketStatusChangeDetails.ticketId,
+          function (result, error) {
+            if (result) {
+              alert("Ticket resolved");
+              console.log(result);
+              var not_data = {
+                notificationType: "manager",
+                brandId: $scope.brandId,
+                ticketId: $scope.ticketStatusChangeDetails.ticketId,
+                message:
+                  $scope.brandAgentName +
+                  " resolved the ticket " +
+                  $scope.ticketStatusChangeDetails.ticketId,
+                creator: {
+                  id: $scope.brandAgentId,
+                  name: $scope.brandAgentName,
+                  time: Date.now(),
+                },
+                receiver: {
+                  id: result.data.createdByUserID,
+                  name: result.data.createdByUserName,
+                },
+              };
+              $http
+                .post("http://localhost:3000/addnotification", not_data, config)
+                .then(function (result) {
+                  console.log("successfully created notofication");
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            } else {
+              console.log(error.data);
+            }
+          }
+        );
+      }
     };
   },
 ]);

@@ -21,8 +21,10 @@
         class="notification-img"
         src="../../assets/notification.png"
         alt="notification-icon"
+        data-toggle="modal"
+        data-target="#notificationModal"
       />
-      <div class="notification-bell-number">0</div>
+      <div class="notification-bell-number">{{notificationLenght}}</div>
       <button
         class="btn-outline-primary manager-logout-button"
         ng-click="logout()"
@@ -105,6 +107,49 @@
         </div>
       </div>
       <div class="manager-agents-table-div" ui-view></div>
+    </div>
+  </div>
+  <!-- Notification Modal -->
+  <div
+    class="modal fade"
+    id="notificationModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Notifications</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="agent-notification-div">
+            <div
+              class="agent-notification-msg-div"
+              ng-repeat="item in managerNotification"
+            >
+              <p>{{item.message}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">
+            Mark All As Seen
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -92,6 +92,15 @@
           >
             Assign
           </button>
+          <button
+            ng-if="item.status != Created"
+            class="btn-outline-primary assign-to-agentbutton"
+            data-toggle="modal"
+            data-target="#ticketModal"
+            ng-click="updateTicketDetailsDashboard(item)"
+          >
+            Details
+          </button>
         </div>
       </div>
     </div>
@@ -358,6 +367,139 @@
               Submit
             </button>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Ticket Dashboard Modal -->
+  <div
+    class="modal fade"
+    id="ticketModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            {{ticketDetails.ticketId}}
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="agent-ticket-details-outerdiv">
+            <div class="agent-ticket-details-outerdiv-left">
+              <div class="agent-ticket-details-outerdiv-left-u">
+                <p>
+                  <strong>Assignee : </strong>
+                  {{ticketDetails.createdByUserName}}
+                </p>
+                <p>
+                  <strong>Assigned To: </strong> {{ticketDetails.agentName}}
+                </p>
+                <p><strong>Status: </strong> {{ticketDetails.status}}</p>
+                <p>Change status:</p>
+                <select ng-model="currentStatus">
+                  <option value="inProcess">In Process</option>
+                  <option value="resolved">Resolved</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+              <div class="agent-ticket-details-outerdiv-left-d">
+                <div class="attachmentinput-div-u">
+                  <p>
+                    <img
+                      src="../../assets/icons8-attach-48.png"
+                      alt="attach-png"
+                      style="height: 17px"
+                    />Attachments
+                  </p>
+                </div>
+                <div class="attachmentinput-div-d">
+                  <input class="input-file-upload" type="file" />
+                  <button class="attachment-upload-button">Upload</button>
+                </div>
+              </div>
+            </div>
+            <div class="agent-ticket-details-outerdiv-middle">
+              <div class="agent-ticket-details-outerdiv-middle-upper">
+                <p><strong>Ticekt Id:</strong> {{ticketDetails.ticketId}}</p>
+                <p><strong>Created At: </strong> {{ticketDetails.createdAt}}</p>
+                <div class="agent-ticket-details-subject">
+                  <p><strong>Subject: </strong>{{ticketDetails.subject}}</p>
+                </div>
+                <div class="agent-ticket-details-query">
+                  <p><strong>Query: </strong>{{ticketDetails.query}}</p>
+                </div>
+                <div class="agent-ticket-details-comment-div"></div>
+              </div>
+              <div class="agent-ticket-details-logs">
+                <p><strong>Ticket Logs</strong></p>
+                <div>
+                  <ul style="margin-left: 17px">
+                    <li ng-repeat="items in logs">{{items.message}}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="agent-ticket-details-outerdiv-right">
+              <div class="agent-ticket-details-outerdiv-right-body">
+                <!-- <div class="chat-div"> -->
+                <div class="message-div" ng-repeat="item in ticketComments">
+                  <p class="identity">
+                    <img
+                      class="user-icon-comments"
+                      src="../../assets/user-icon.png"
+                      alt="usericon"
+                    /><strong>{{item.sentByUserName}}</strong>
+                    ({{item.sentByUserType}})
+                  </p>
+                  <div class="message">
+                    <p class="comment-text">{{item.content}}</p>
+                  </div>
+                  <div class="date-and-time-div">
+                    <p class="date-and-time">{{item.dateAndTime}}</p>
+                  </div>
+                </div>
+                <!-- </div> -->
+              </div>
+              <div class="agent-ticket-details-outerdiv-footer">
+                <input
+                  class="add-comment-ticket-input"
+                  type="text"
+                  placeholder="type commet..."
+                  ng-model="detailsComment"
+                />
+                <button
+                  class="add-comment-ticket-button"
+                  ng-click="commentDashboardHandler()"
+                >
+                  Comment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="statusChangeHandler()"
+          >
+            Save changes
+          </button>
         </div>
       </div>
     </div>

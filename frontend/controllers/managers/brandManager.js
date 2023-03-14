@@ -94,6 +94,22 @@ app.controller("brandManager", [
             .catch(function (error) {
               console.log(error);
             });
+
+          $scope.managerNotification;
+          $http
+            .get(
+              "http://localhost:3000/managernotification/" + result.data._id,
+              config
+            )
+            .then(function (result) {
+              $scope.managerNotification = result.data;
+              $scope.notificationLenght = $scope.managerNotification.length;
+              console.log("manager notification array");
+              console.log($scope.managerNotification);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         }
       } else {
         console.log(error);

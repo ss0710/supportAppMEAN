@@ -259,3 +259,16 @@ box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
 .attachmentinput-div-u::-webkit-scrollbar {
     display: none;
   }
+
+.agent-ticket-details-outerdiv-middle-upper {
+    height: 33vh;
+    overflow-y: scroll;
+}
+
+.agent-ticket-details-logs {
+    height: 34vh;
+    border: 1px solid rgb(145, 145, 145);
+    padding: 1%;
+    border-radius: 10px;
+    overflow-y: scroll;
+}

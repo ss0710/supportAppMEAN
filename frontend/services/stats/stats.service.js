@@ -1,6 +1,6 @@
 ///<reference path="../../controllers/app.js" />
 
-app.service("brandService", function ($http) {
+app.service("statsService", function ($http) {
   var token = localStorage.getItem("token");
   var config = {
     headers: {
@@ -9,9 +9,8 @@ app.service("brandService", function ($http) {
     },
   };
 
-  //to get user type
+  //getting user type
   this.getUserType = function (cb) {
-    console.log("get user type running");
     $http
       .get("http://localhost:3000/usertype", config)
       .then(function (result) {
@@ -22,34 +21,22 @@ app.service("brandService", function ($http) {
       });
   };
 
-  //to get managers
-  this.getManager = function (cb) {
+  //getting manager and agent count
+  this.getManagerAndAgentCount = function (brandId, cb) {
     $http
-      .get("http://localhost:3000/getmanager", config)
+      .get("http://localhost:3000/countManagerAgent/" + brandId, config)
       .then(function (result) {
         cb(result, null);
       })
       .catch(function (error) {
-        cb(null, error);
+        cb(null, result);
       });
   };
 
-  //to add brand managers
-  this.addManager = function (data, cb) {
+  //getting managers details
+  this.getManagerStats = function (brandId, cb) {
     $http
-      .post("http://localhost:3000/addmanager", data, config)
-      .then(function (result) {
-        cb(result, null);
-      })
-      .catch(function (error) {
-        cb(null, error);
-      });
-  };
-
-  //to get brand agent
-  this.getBrandAgents = function (brandId, cb) {
-    $http
-      .get("http://localhost:3000/getagents/" + brandId, config)
+      .get("http://localhost:3000/managerstats/" + brandId, config)
       .then(function (result) {
         cb(result, null);
       })

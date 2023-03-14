@@ -53,6 +53,8 @@
       crossorigin="anonymous"
     ></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
     <!-- CSS -->
     <style>
       body::-webkit-scrollbar {
@@ -69,6 +71,8 @@
     <link rel="stylesheet" href="./static/agents/brandAgent.css" />
     <link rel="stylesheet" href="./static/agents/agentsTicket.css" />
     <link rel="stylesheet" href="./static/brand/activity.css" />
+    <link rel="stylesheet" href="./static/brand/stats.css" />
+    <link rel="stylesheet" href="./static/brand/agents.css" />
   </head>
   <body ng-app="myApp" ng-contoller="index">
     <div ui-view></div>
@@ -82,6 +86,7 @@
     <script src="./services/brands/brand.service.js"></script>
     <script src="./services/managers/manager.service.js"></script>
     <script src="./services/agents/agent.service.js"></script>
+    <script src="./services/stats/stats.service.js"></script>
 
     <script src="./controllers/auth/login.js"></script>
 
@@ -89,6 +94,8 @@
 
     <script src="./controllers/superadmin/superadmin.js"></script>
     <script src="./controllers/brandControllers/brandAdmin.js"></script>
+    <script src="./controllers/brandControllers/agent.js"></script>
+    <script src="./controllers/brandControllers/stats.js"></script>
     <script src="./controllers/brandControllers/manager.js"></script>
     <script src="./controllers/managers/brandManager.js"></script>
     <script src="./controllers/managers/agents.js"></script>

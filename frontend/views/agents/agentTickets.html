@@ -12,7 +12,7 @@
       <p class="tickets-number">{{length2}}</p>
     </div>
     <div class="tickets-stats-box">
-      <h5 style="color: red">Closed</h5>
+      <h5 style="color: red">Resolved</h5>
       <p class="tickets-number">{{length3}}</p>
     </div>
   </div>
@@ -176,14 +176,14 @@
                 src="../../assets/icons8-comments-24.png"
                 alt="chat-icon"
               />
-              <!-- <button
-            class="btn-outline-success assign-to-agentbutton"
-            data-toggle="modal"
-            data-target="#exampleModalCenter"
-            ng-click="loadAgents(item.ticketId)"
-          >
-            Accept
-          </button> -->
+              <button
+                class="btn-outline-success assign-to-agentbutton"
+                data-toggle="modal"
+                data-target="#ticketModal"
+                ng-click="ticketEditModal(item)"
+              >
+                Details
+              </button>
             </div>
           </div>
         </div>
@@ -359,6 +359,12 @@
                   <strong>Assigned To: </strong> {{ticketDetails.agentName}}
                 </p>
                 <p><strong>Status: </strong> {{ticketDetails.status}}</p>
+                <p>Change status:</p>
+                <select ng-model="currentStatus">
+                  <option value="Accepted">Accepted</option>
+                  <option value="inProcess">In Process</option>
+                  <option value="resolved">Resolved</option>
+                </select>
               </div>
               <div class="agent-ticket-details-outerdiv-left-d">
                 <div class="attachmentinput-div-u">
@@ -377,18 +383,24 @@
               </div>
             </div>
             <div class="agent-ticket-details-outerdiv-middle">
-              <p><strong>Ticekt Id:</strong> {{ticketDetails.ticketId}}</p>
-              <p><strong>Created At: </strong> {{ticketDetails.createdAt}}</p>
-              <div class="agent-ticket-details-subject">
-                <p><strong>Subject: </strong>{{ticketDetails.subject}}</p>
+              <div class="agent-ticket-details-outerdiv-middle-upper">
+                <p><strong>Ticekt Id:</strong> {{ticketDetails.ticketId}}</p>
+                <p><strong>Created At: </strong> {{ticketDetails.createdAt}}</p>
+                <div class="agent-ticket-details-subject">
+                  <p><strong>Subject: </strong>{{ticketDetails.subject}}</p>
+                </div>
+                <div class="agent-ticket-details-query">
+                  <p><strong>Query: </strong>{{ticketDetails.query}}</p>
+                </div>
+                <div class="agent-ticket-details-comment-div"></div>
               </div>
-              <div class="agent-ticket-details-query">
-                <p><strong>Query: </strong>{{ticketDetails.query}}</p>
-              </div>
-              <div class="agent-ticket-details-comment-div"></div>
               <div class="agent-ticket-details-logs">
-                <p><strong>Logs</strong></p>
-                <div ng-repeat="items in logs">{{items.message}}</div>
+                <p><strong>Ticket Logs</strong></p>
+                <div>
+                  <ul style="margin-left: 17px">
+                    <li ng-repeat="items in logs">{{items.message}}</li>
+                  </ul>
+                </div>
               </div>
             </div>
             <div class="agent-ticket-details-outerdiv-right">
@@ -433,7 +445,13 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="statusChangeHandler()"
+          >
+            Save changes
+          </button>
         </div>
       </div>
     </div>

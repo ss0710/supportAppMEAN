@@ -1,1 +1,24 @@
-<h1>Agents page</h1>
+<div ng-controller="brandAdminAgent">
+  <table>
+    <tr>
+      <th>Profile</th>
+      <th>Name</th>
+      <th>Details</th>
+      <th>Disable</th>
+      <th>Delete</th>
+    </tr>
+    <tr ng-repeat="item in agentDetails">
+      <td style="padding: 0.5%">
+        <img
+          src="{{item.profileImage}}"
+          alt="profile-image"
+          style="height: 70px"
+        />
+      </td>
+      <td>{{item.userName}}</td>
+      <td><button type="button" class="btn btn-success">Details</button></td>
+      <td><button type="button" class="btn btn-warning">Disable</button></td>
+      <td><button type="button" class="btn btn-danger">Delete</button></td>
+    </tr>
+  </table>
+</div>

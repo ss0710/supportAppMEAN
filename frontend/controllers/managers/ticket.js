@@ -11,6 +11,7 @@ app.controller("Tickets", [
     $scope.globaltickets = [];
     $scope.tickets = [];
     $scope.Created = "Created";
+    $scope.Resolved = "resolved";
 
     //to get brandmanager informations
     $scope.brandManagerId,
@@ -33,7 +34,6 @@ app.controller("Tickets", [
     };
 
     //getting managers details
-
     managerService.getUserType(function (result, error) {
       if (result) {
         console.log(result.data);
@@ -243,57 +243,10 @@ app.controller("Tickets", [
         createdByUserID: $scope.brandManagerId,
         createdByUserName: $scope.brandManagerName,
       };
-
       managerService.addTickets(ticketData, function (result, error) {
         if (result) {
           alert("Succefully Created Ticket");
           console.log(result);
-          var not_data = {
-            notificationType: "agent",
-            brandId: $scope.brandId,
-            ticketId: result.data.ticketId,
-            message:
-              $scope.brandManagerName +
-              " created a ticket with Id " +
-              result.data.ticketId,
-            creator: {
-              id: $scope.brandManagerId,
-              name: $scope.brandManagerName,
-              time: Date.now(),
-            },
-            receiver: {
-              id: "",
-              name: "",
-            },
-            isSeen: false,
-          };
-          $http
-            .post("http://localhost:3000/addnotification", not_data, config)
-            .then(function (result) {
-              console.log("successfully created notofication");
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-
-          var log_data = {
-            brandId: $scope.brandId,
-            ticketId: result.data.ticketId,
-            type: "create",
-            message: $scope.brandManagerName + "created the Ticket",
-            userId: $scope.brandManagerId,
-            userName: $scope.brandManagerName,
-            comment: "",
-          };
-
-          $http
-            .post("http://localhost:3000/addlog", log_data, config)
-            .then(function (result) {
-              console.log("successfully added log");
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
         } else {
           console.log(error);
         }
@@ -326,6 +279,11 @@ app.controller("Tickets", [
       var agentData = {
         agentId: agentId,
         agentName: agentName,
+        brandId: $scope.brandId,
+        ticketId: $scope.ticketId,
+        brandManagerName: $scope.brandManagerName,
+        brandManagerId: $scope.brandManagerId,
+        agentName: agentName,
       };
 
       managerService.assignTicketToAgentService(
@@ -334,24 +292,243 @@ app.controller("Tickets", [
         function (result, error) {
           if (result) {
             alert("Successfully assigned tickets");
-
-            $http
-              .put(
-                "http://localhost:3000/assignnotification/" + $scope.ticketId,
-                agentData,
-                config
-              )
-              .then(function (result) {
-                console.log("successfully updated notification");
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
+            console.log(result);
           } else {
             console.log(error);
           }
         }
       );
+    };
+
+    //update details for modal
+    $scope.updateTicketDetailsDashboard = function (ticketDetails) {
+      $scope.ticketDetails = ticketDetails;
+      managerService.getComments(
+        $scope.ticketDetails.ticketId,
+        function (result, error) {
+          if (result) {
+            console.log(result.data);
+            $scope.ticketComments = result.data;
+            $scope.ticketComments.sort(function (a, b) {
+              return a.dateAndTime - b.dateAndTime;
+            });
+          } else {
+            console.log(error);
+          }
+        }
+      );
+
+      //gettings logs
+      $http
+        .get(
+          "http://localhost:3000/getlogsbyticket/" +
+            $scope.ticketDetails.ticketId,
+          config
+        )
+        .then(function (result) {
+          $scope.logs = result.data;
+        })
+        .cath(function (error) {
+          console.log(error);
+        });
+    };
+
+    $scope.commentDashboardHandler = function () {
+      console.log("dashboard comment called");
+      var commentData = {
+        ticketId: $scope.ticketDetails.ticketId,
+        ticketSubject: $scope.ticketDetails.ticketSubject,
+        ticketQuery: $scope.ticketDetails.ticketQuery,
+        content: $scope.detailsComment,
+        sentByUserId: $scope.brandManagerId,
+        sentByUserName: $scope.brandManagerName,
+        sentByUserType: "manager",
+        brandId: $scope.brandId,
+        brandEmail: $scope.brandEmail,
+        brandName: $scope.brandName,
+        brandCategory: $scope.brandCategory,
+        isDeleted: "false",
+      };
+
+      managerService.addComments(commentData, function (result, error) {
+        if (result) {
+          alert("comment added successfully");
+          $scope.comment = "";
+          console.log(result);
+          var not_data = {
+            notificationType: "agent",
+            brandId: $scope.brandId,
+            ticketId: result.data.ticketId,
+            message:
+              $scope.brandManagerName +
+              " has commented on ticket " +
+              result.data.ticketId,
+            creator: {
+              id: $scope.brandManagerId,
+              name: $scope.brandManagerName,
+              time: Date.now(),
+            },
+            receiver: {
+              id: $scope.assignedToId,
+              name: $scope.assignedTo,
+            },
+            isSeen: false,
+          };
+          $http
+            .post("http://localhost:3000/addnotification", not_data, config)
+            .then(function (result) {
+              console.log("successfully created notofication");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        } else {
+          console.log(error);
+        }
+      });
+    };
+
+    $scope.statusChangeHandler = function () {
+      if ($scope.currentStatus == "inProcess") {
+        $http
+          .put(
+            "http://localhost:3000/inprocessticket/" +
+              $scope.ticketDetails.ticketId,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json;odata=verbose",
+              },
+            }
+          )
+          .then(function (result) {
+            alert("status changed successfully");
+            console.log(result);
+            var not_data = {
+              notificationType: "agent",
+              brandId: $scope.brandId,
+              ticketId: $scope.ticketDetails.ticketId,
+              message:
+                $scope.brandManagerName +
+                " changed the status to Inprocess of ticket " +
+                $scope.ticketDetails.ticketId,
+              creator: {
+                id: $scope.brandManagerId,
+                name: $scope.brandManagerName,
+                time: Date.now(),
+              },
+              receiver: {
+                id: result.data.agentUserId,
+                name: result.data.agentName,
+              },
+            };
+            $http
+              .post("http://localhost:3000/addnotification", not_data, config)
+              .then(function (result) {
+                console.log("successfully created notofication");
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          })
+          .catch(function (error) {
+            console.log(error.data);
+          });
+      } else if ($scope.currentStatus == "resolved") {
+        console.log("resolved called");
+        $http
+          .put(
+            "http://localhost:3000/resolveTicket/" +
+              $scope.ticketDetails.ticketId,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json;odata=verbose",
+              },
+            }
+          )
+          .then(function (result) {
+            alert("Ticket resolved");
+            console.log(result);
+            var not_data = {
+              notificationType: "agent",
+              brandId: $scope.brandId,
+              ticketId: $scope.ticketDetails.ticketId,
+              message:
+                $scope.brandManagerName +
+                " changed status to Resolved of ticket " +
+                $scope.ticketDetails.ticketId,
+              creator: {
+                id: $scope.brandManagerId,
+                name: $scope.brandManagerName,
+                time: Date.now(),
+              },
+              receiver: {
+                id: result.data.agentUserId,
+                name: result.data.agentName,
+              },
+            };
+            $http
+              .post("http://localhost:3000/addnotification", not_data, config)
+              .then(function (result) {
+                console.log("successfully created notofication");
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          })
+          .catch(function (error) {
+            console.log(error.data);
+          });
+      } else if ($scope.currentStatus == "closed") {
+        $http
+          .put(
+            "http://localhost:3000/closeticket/" +
+              $scope.ticketDetails.ticketId,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json;odata=verbose",
+              },
+            }
+          )
+          .then(function (result) {
+            alert("Ticket closed");
+            console.log(result);
+            var not_data = {
+              notificationType: "agent",
+              brandId: $scope.brandId,
+              ticketId: $scope.ticketDetails.ticketId,
+              message:
+                $scope.brandManagerName +
+                " closed the ticket " +
+                $scope.ticketDetails.ticketId,
+              creator: {
+                id: $scope.brandManagerId,
+                name: $scope.brandManagerName,
+                time: Date.now(),
+              },
+              receiver: {
+                id: result.data.agentUserId,
+                name: result.data.agentName,
+              },
+            };
+            $http
+              .post("http://localhost:3000/addnotification", not_data, config)
+              .then(function (result) {
+                console.log("successfully created notofication");
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          })
+          .catch(function (error) {
+            console.log(error.data);
+          });
+      }
     };
   },
 ]);

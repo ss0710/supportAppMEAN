@@ -70,9 +70,9 @@ app.config([
         url: "/brandTickets",
         templateUrl: "./views/brand/brandTickets.html",
       })
-      .state("brandadmin.customers", {
-        url: "/customers",
-        templateUrl: "./views/brand/customers.html",
+      .state("brandadmin.stats", {
+        url: "/stats",
+        templateUrl: "./views/brand/stats.html",
       })
       .state("brandadmin.brandSettings", {
         url: "/brandSettings",

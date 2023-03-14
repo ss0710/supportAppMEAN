@@ -11,7 +11,16 @@ var logSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["create", "statusChange", "comment", "others"],
+    enum: [
+      "create",
+      "assign",
+      "accept",
+      "inprocess",
+      "resolve",
+      "close",
+      "comment",
+      "others",
+    ],
     required: true,
   },
   message: {

@@ -14,7 +14,14 @@ var ticketSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Created", "Assigned", "inProcess", "resolved"],
+    enum: [
+      "Created",
+      "Assigned",
+      "Accepted",
+      "inProcess",
+      "resolved",
+      "Closed",
+    ],
     required: true,
   },
   subject: {

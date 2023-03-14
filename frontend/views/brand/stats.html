@@ -1,0 +1,83 @@
+<div ng-controller="agentStats" class="admin-stats-page-div">
+  <div class="stats-count-div">
+    <div class="stats-count-div-box">Total Managers: {{managerCounts}}</div>
+    <div class="stats-count-div-box">Total Agents: {{agentCounts}}</div>
+  </div>
+  <div class="admin-stats-ticekt-div">
+    <div class="admin-stats-ticekt-div-left">
+      <canvas id="myChart"></canvas>
+    </div>
+    <div class="admin-stats-ticekt-div-right">
+      <div class="admin-stats-ticekt-div-right-left">
+        <p>Select Month</p>
+        <select
+          style="width: 100px; margin-bottom: 10px"
+          ng-model="monthNumber"
+        >
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3">Mar</option>
+          <option value="4">Apr</option>
+          <option value="5">May</option>
+          <option value="6">Jun</option>
+          <option value="7">Jul</option>
+          <option value="8">Aug</option>
+          <option value="9">Sep</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+        </select>
+        <button class="view-button" ng-click="onMonthChange(monthNumber)">
+          View
+        </button>
+      </div>
+      <div
+        class="admin-stats-ticekt-div-right-right"
+        style="margin-bottom: 10px"
+      >
+        <div class="div-indicator">
+          <div class="box-colo-indicator" style="background-color: blue"></div>
+          Tickets Created
+        </div>
+        <div class="div-indicator">
+          <div class="box-colo-indicator" style="background-color: green"></div>
+          Tickets Resolved
+        </div>
+        <div class="div-indicator">
+          <div class="box-colo-indicator" style="background-color: red"></div>
+          Tickets Closed
+        </div>
+      </div>
+      <p>Ticket success rate: {{successRate}}%</p>
+    </div>
+  </div>
+  <div class="manager-agent-table-div">
+    <div class="manager-table-div">
+      <div class="stats-manager-data" ng-repeat="item in managerDetails">
+        <div class="stats-manager-data-left">{{item.createdByUserName}}</div>
+        <div class="stats-manager-data-right">
+          <div class="stats-manager-data-box">
+            <div class="stats-manager-data-box-container">
+              <div class="stats-manager-data-box-left">
+                <div style="text-align: center">
+                  <p style="margin-bottom: 0">Tickets created</p>
+                  <p style="margin-bottom: 0">{{item.totalTicketsCreated}}</p>
+                </div>
+              </div>
+              <div class="stats-manager-data-box-middle">
+                {{(item.totalTicketsResolved/item.totalTicketsCreated)*100}}%
+              </div>
+              <div class="stats-manager-data-box-right">
+                <div style="text-align: center">
+                  <p style="margin-bottom: 0">Tickets closed</p>
+                  <p style="margin-bottom: 0">{{item.totalTicketsResolved}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="agent-table-div"></div>
+  </div>
+</div>
