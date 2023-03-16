@@ -137,7 +137,14 @@
               class="agent-notification-msg-div"
               ng-repeat="item in managerNotification"
             >
-              <p>{{item.message}}</p>
+              <p>
+                <input
+                  type="checkbox"
+                  style="width: 30px"
+                  height="width: 30px"
+                  ng-click="markSeen(item._id);"
+                />{{item.message}}
+              </p>
             </div>
           </div>
         </div>
@@ -145,7 +152,11 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
-          <button type="button" class="btn btn-primary">
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="markAllNotSeen()"
+          >
             Mark All As Seen
           </button>
         </div>

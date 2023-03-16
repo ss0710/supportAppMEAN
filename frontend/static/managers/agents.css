@@ -45,14 +45,18 @@ box-shadow: -6px -1px 16px -4px rgba(0,0,0,0.75);
 
   .sidebar-search-option {
     border: 1px solid rgb(164, 164, 164);
-    margin-left: 10%;
+    margin-left: 1.8%;
     height: 90%;
-    width: 80%;
-    padding-left: 10%;
+    width: 96%;
+    padding: 1%;
     padding-top: 10%;
     background-color: white;
     -webkit-box-shadow: 1px 5px 16px 2px rgba(150,150,150,1);
 -moz-box-shadow: 1px 5px 16px 2px rgba(150,150,150,1);
 box-shadow: 1px 5px 16px 2px rgba(150,150,150,1);
 border-radius: 10px;
+  }
+
+  .sidebar-search-option-table-div {
+    overflow-y: scroll;
   }

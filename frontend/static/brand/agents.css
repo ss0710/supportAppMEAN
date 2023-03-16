@@ -1,0 +1,10 @@
+.search-agent-input {
+    width: 50%;
+    height: 40px;
+    border-radius: 5px;
+    margin: 10px;
+    padding-left: 10px;
+    -webkit-box-shadow: 10px 10px 7px -9px rgba(120,120,120,1);
+-moz-box-shadow: 10px 10px 7px -9px rgba(120,120,120,1);
+box-shadow: 10px 10px 7px -9px rgba(120,120,120,1);
+}

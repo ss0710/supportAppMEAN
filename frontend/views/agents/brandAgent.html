@@ -130,7 +130,14 @@
               class="agent-notification-msg-div"
               ng-repeat="item in agentNotification"
             >
-              <p>{{item.message}}</p>
+              <p>
+                <input
+                  type="checkbox"
+                  style="width: 30px"
+                  height="width: 30px"
+                  ng-click="markSeen(item._id);"
+                />{{item.message}}
+              </p>
             </div>
           </div>
         </div>

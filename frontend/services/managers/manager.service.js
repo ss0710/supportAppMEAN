@@ -22,9 +22,18 @@ app.service("managerService", function ($http) {
   };
 
   //to get agents
-  this.getAgents = function (brandId, cb) {
+  this.getAgents = function (brandId, pageNumber, pageSize, cb) {
+    console.log("fetch Api called");
     $http
-      .get(`http://localhost:3000/getagents/${brandId}`, config)
+      .get(
+        "http://localhost:3000/getagents?brandId=" +
+          brandId +
+          "&pageNumber=" +
+          pageNumber +
+          "&pageSize=" +
+          pageSize,
+        config
+      )
       .then(function (result) {
         cb(result, null);
       })

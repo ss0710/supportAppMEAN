@@ -70,6 +70,7 @@ app.controller("agentStats", [
             console.log("ticket Activity");
             console.log($scope.ticketsActivity);
             $scope.onMonthChange(3);
+            $scope.onHeatMonthChange(3);
           })
           .catch(function (error) {
             console.log(error);
@@ -80,6 +81,19 @@ app.controller("agentStats", [
     });
 
     var monthDetails = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var MonthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
 
     $scope.onMonthChange = function (monthNumber) {
       xvalues = [];
@@ -153,6 +167,21 @@ app.controller("agentStats", [
               legend: { display: false },
             },
           });
+        }
+      }
+    };
+
+    $scope.onHeatMonthChange = function (monthNumber) {
+      $scope.activeArray = [];
+      for (var i = 1; i <= monthDetails[monthNumber]; i++) {
+        var data = {
+          demoData: i,
+        };
+        $scope.activeArray.push(data);
+        if (i == monthDetails[monthNumber]) {
+          console.log("Active array");
+          console.log($scope.activeArray);
+          $scope.selectedMonthName = MonthNames[monthNumber];
         }
       }
     };

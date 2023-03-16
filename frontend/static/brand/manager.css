@@ -31,3 +31,31 @@
 .manager-details-modal-div-right {
     width: 60%;
 }
+
+.paginations-button-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1%;
+    margin-top: 20px;
+}
+
+.pagination-button-bg {
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.first-last-btn {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.nxt-prev-btn {
+    margin: 0 5px 0 5px;
+}
+
+.btw-btn {
+    margin: 0 3px 0 3px;
+    padding: 0 2px 0 2px;
+}

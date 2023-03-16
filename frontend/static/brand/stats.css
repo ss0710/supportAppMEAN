@@ -165,3 +165,28 @@ box-shadow: 10px 10px 14px -13px rgba(0,0,0,0.75);
     margin-bottom: -5px;
     margin-left: 20px;
 }
+
+.heat-map-div{
+    display: flex;
+}
+
+.heat-map-div-left {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 130px;
+    width: 220px;
+    border: 1px solid rgb(124, 124, 124);
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.heat-map-box {
+    height: 20px;
+    width: 20px;
+    border: 1px solid rgb(182, 182, 182);
+    background-color: rgb(45, 167, 45);
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 6px;
+}

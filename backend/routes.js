@@ -107,10 +107,11 @@ router.post("/addbrand", upload.single("image"), function (req, res) {
 });
 
 //Brand Managers Routes
-router.get("/getmanager/:id", managerController.getBrandManager);
+router.get("/getmanager", managerController.getBrandManager);
 router.put("/disablemanager/:id", managerController.disableBrandManager);
 router.put("/permitmanager/:id", managerController.permitBrandManager);
-
+router.put("/deletemanager/:id", managerController.deleteBrandManager);
+router.get("/searchmanager", managerController.searchBrandManager);
 router.post("/addmanager", upload.single("image"), function (req, res) {
   console.log("add manager route called");
   console.log(req.file);
@@ -155,10 +156,14 @@ router.post("/addmanager", upload.single("image"), function (req, res) {
 });
 
 //Brand agents routes
-router.get("/getagents/:id", agentController.getBrandAgents);
+router.get("/getagents", agentController.getBrandAgents);
 router.put("/disableagent/:id", agentController.disableAgent);
 router.put("/enableagent/:id", agentController.enableAgents);
 router.put("/deleteagent/:id", agentController.deleteAgents);
+router.get("/searchagent", agentController.searchBrandagents);
+router.put("/updateagentemail/:id", agentController.updateAgentEmail);
+router.put("/updateagentname", agentController.updateAgentName);
+router.put("/updateagentpassword/:id", agentController.uodateAgentPassword);
 router.post("/addagents", upload.single("image"), function (req, res) {
   console.log("add agent route called");
   console.log(req.file);
@@ -234,6 +239,11 @@ router.get(
 router.get(
   "/managernotification/:id",
   notificationController.getManagerNotification
+);
+router.put("/marknotseen/:id", notificationController.markOneNotificationSeen);
+router.put(
+  "/markallmanagernotseen",
+  notificationController.markAllManagerNotSeen
 );
 
 //log history routes

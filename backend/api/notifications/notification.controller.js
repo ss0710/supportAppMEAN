@@ -79,7 +79,7 @@ exports.getAgentNotification = function (req, res) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
       var agentId = req.params.id;
-      Notification.find({ "receiver.id": agentId })
+      Notification.find({ "receiver.id": agentId, isSeen: false })
         .then(function (result) {
           res.status(200).json(result);
         })
@@ -99,7 +99,49 @@ exports.getManagerNotification = function (req, res) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
       var managerId = req.params.id;
-      Notification.find({ "receiver.id": managerId })
+      Notification.find({ "receiver.id": managerId, isSeen: false })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.markOneNotificationSeen = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var not_id = req.params.id;
+      Notification.findOneAndUpdate({ _id: not_id }, { $set: { isSeen: true } })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.markAllManagerNotSeen = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      Notification.updateMany(
+        { notificationType: "manager" },
+        { $set: { isSeen: true } }
+      )
         .then(function (result) {
           res.status(200).json(result);
         })

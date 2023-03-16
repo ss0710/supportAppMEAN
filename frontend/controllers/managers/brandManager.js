@@ -6,7 +6,8 @@ app.controller("brandManager", [
   "$http",
   "$location",
   "managerService",
-  function ($scope, $http, $location, managerService) {
+  "$timeout",
+  function ($scope, $http, $location, managerService, $timeout) {
     //Handling sidebar button css
     $scope.activeClassname =
       "btn btn-outline-primary brandAdmin-sidebar-buttons-active";
@@ -115,6 +116,39 @@ app.controller("brandManager", [
         console.log(error);
       }
     });
+
+    $scope.markSeen = function (notId) {
+      $http
+        .put("http://localhost:3000/marknotseen/" + notId, {}, config)
+        .then(function (result) {
+          console.log(result);
+          $timeout(function () {
+            var arr = $scope.managerNotification.filter(function (elem) {
+              return elem._id != notId;
+            });
+            $scope.managerNotification = arr;
+            $scope.notificationLenght = $scope.managerNotification.length;
+          }, 1000);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+
+    $scope.markAllNotSeen = function () {
+      if ($scope.managerNotification.length != 0) {
+        $http
+          .put("http://localhost:3000/markallmanagernotseen", {}, config)
+          .then(function (result) {
+            console.log(result);
+            $scope.managerNotification = [];
+            $scope.notificationLenght = $scope.managerNotification.length;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    };
 
     $scope.logout = function () {
       localStorage.removeItem("token");

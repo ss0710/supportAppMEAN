@@ -1,4 +1,13 @@
 <div ng-controller="brandAdminAgent">
+  <div>
+    <input
+      class="search-agent-input"
+      type="text"
+      ng-model="searchAgentName"
+      ng-change="onChangeHandler()"
+      placeholder="search agent"
+    />
+  </div>
   <table>
     <tr>
       <th>Profile</th>
@@ -16,9 +25,246 @@
         />
       </td>
       <td>{{item.userName}}</td>
-      <td><button type="button" class="btn btn-success">Details</button></td>
-      <td><button type="button" class="btn btn-warning">Disable</button></td>
-      <td><button type="button" class="btn btn-danger">Delete</button></td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-success"
+          data-toggle="modal"
+          data-target="#AgentDetailsModal"
+          ng-click="AgentDetailsUpdate(item, disableString)"
+        >
+          Details
+        </button>
+      </td>
+      <td>
+        <button
+          ng-if="!item.isDisabled"
+          type="button"
+          class="btn btn-warning"
+          data-toggle="modal"
+          data-target="#disableModal"
+          ng-click="AgentDetailsUpdate(item, disableString)"
+        >
+          Disable
+        </button>
+        <button
+          ng-if="item.isDisabled"
+          type="button"
+          class="btn btn-primary"
+          ng-click="AgentDetailsUpdate(item, enableString)"
+          data-toggle="modal"
+          data-target="#disableModal"
+        >
+          Activate
+        </button>
+      </td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-toggle="modal"
+          data-target="#deleteModal"
+          ng-click="AgentDetailsUpdate(item, disableString)"
+        >
+          Delete
+        </button>
+      </td>
     </tr>
   </table>
+  <div class="paginations-button-div">
+    <button
+      ng-click="getAgentData(1, pageSize)"
+      class="btn-primary pagination-button-bg first-last-btn"
+    >
+      First
+    </button>
+    <button
+      ng-click="getAgentData(pageNumber - 1, pageSize)"
+      ng-disabled="pageNumber == 1"
+      class="btn-outline-primary pagination-button-bg nxt-prev-btn"
+    >
+      Previous
+    </button>
+    <button
+      ng-repeat="page in getPages()"
+      ng-click="getAgentData(page, pageSize)"
+      class="btn-outline-primary btw-btn"
+    >
+      {{page}}
+    </button>
+    <button
+      ng-click="getAgentData(pageNumber + 1, pageSize)"
+      ng-disabled="pageNumber == lastPage"
+      class="btn-outline-primary pagination-button-bg nxt-prev-btn"
+    >
+      Next
+    </button>
+    <button
+      ng-click="getAgentData(lastPage, pageSize)"
+      class="btn-primary pagination-button-bg first-last-btn"
+    >
+      Last
+    </button>
+  </div>
+  <!-- Agent DETAILS MODALS -->
+  <div
+    class="modal fade"
+    id="AgentDetailsModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agent Details</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="manager-details-modal-div">
+            <div class="manager-details-modal-div-up">
+              <div class="manager-details-modal-div-up-left">
+                <img
+                  style="width: 150px"
+                  src="{{agentDeatilsForUpdates.profileImage}}"
+                  alt="manager-photo"
+                />
+              </div>
+              <div class="manager-details-modal-div-right">
+                <p>
+                  <strong>Name: </strong>{{agentDeatilsForUpdates.userName}}
+                </p>
+                <p><strong>Email: </strong>{{agentDeatilsForUpdates.email}}</p>
+                <p><strong>Role: </strong>Agent</p>
+              </div>
+            </div>
+            <hr />
+            <div class="manager-details-modal-div-down">
+              <div>
+                <h6 style="letter-spacing: 2px; font-weight: bold">
+                  BRAND DETAILS
+                </h6>
+              </div>
+              <div>
+                <p>
+                  <strong>Brand Name: </strong
+                  >{{agentDeatilsForUpdates.brand.name}}
+                </p>
+                <p>
+                  <strong>Brand Email: </strong
+                  >{{agentDeatilsForUpdates.brand.email}}
+                </p>
+                <p>
+                  <strong>Brand Id: </strong
+                  >{{agentDeatilsForUpdates.brand.brandId}}
+                </p>
+                <p>
+                  <strong>Brand Category: </strong
+                  >{{agentDeatilsForUpdates.brand.category}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- DESABLE MANAGER MODAL -->
+  <div
+    class="modal fade"
+    id="disableModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{process}} Agent</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <h5>
+              Press confirm to {{process}}
+              <strong>{{agentDeatilsForUpdates.userName}}</strong>
+            </h5>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="disableAgent(process)"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- DELETE Agent MODAL -->
+  <div
+    class="modal fade"
+    id="deleteModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Manager</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <h5>
+              Press confirm to delete
+              <strong>{{agentDeatilsForUpdates.userName}}</strong>
+            </h5>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="deleteAgent()"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

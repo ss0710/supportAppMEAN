@@ -76,7 +76,6 @@ app.controller("brandAdmin", [
     brandService.getUserType(function (result, error) {
       console.log("running brandAdmin.js getuserType");
       if (result) {
-        console.log(result.data);
         if (result.data.role != "brandAdmin") {
           $location.path("/noaccess");
         } else {
@@ -88,8 +87,6 @@ app.controller("brandAdmin", [
           $scope.brandPhoneNumber = result.data.brand.phoneNumber;
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
-
-          console.log("name2 = " + $scope.brandAdminName);
         }
 
         $http
