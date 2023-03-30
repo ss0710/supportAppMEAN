@@ -22,12 +22,12 @@ app.service("managerService", function ($http) {
   };
 
   //to get agents
-  this.getAgents = function (brandId, pageNumber, pageSize, cb) {
+  this.getAgents = function (brandName, pageNumber, pageSize, cb) {
     console.log("fetch Api called");
     $http
       .get(
-        "http://localhost:3000/getagents?brandId=" +
-          brandId +
+        "http://localhost:3000/getagents?brandName=" +
+          brandName +
           "&pageNumber=" +
           pageNumber +
           "&pageSize=" +
@@ -119,6 +119,42 @@ app.service("managerService", function ($http) {
   this.assignTicketToAgentService = function (ticketId, agentData, cb) {
     $http
       .put(`http://localhost:3000/updateticket/${ticketId}`, agentData, config)
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
+  //to assign tickets
+  this.getTicketsByBrandIdAndManagerId = function (
+    brandName,
+    managerName,
+    pageNumber,
+    pageSize,
+    status,
+    cb
+  ) {
+    console.log(brandName);
+    console.log(managerName);
+    console.log(pageNumber);
+    console.log(pageSize);
+    console.log(status);
+    $http
+      .get(
+        `http://localhost:3000/getticketbybrandandmanager?brandName=` +
+          brandName +
+          "&managerName=" +
+          managerName +
+          "&status=" +
+          status +
+          "&pageNumber=" +
+          pageNumber +
+          "&pageSize=" +
+          pageSize,
+        config
+      )
       .then(function (result) {
         cb(result, null);
       })

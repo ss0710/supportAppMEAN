@@ -88,7 +88,10 @@ app.controller("brandManager", [
           $scope.brandManagerProfile = result.data.profileImage;
 
           $http
-            .get("http://localhost:3000/getbrandbyid/" + $scope.brandId, config)
+            .get(
+              "http://localhost:3000/getbrandbyid/" + $scope.brandName,
+              config
+            )
             .then(function (result) {
               $scope.brandlogo = result.data[0].brandLogo;
             })
@@ -99,7 +102,8 @@ app.controller("brandManager", [
           $scope.managerNotification;
           $http
             .get(
-              "http://localhost:3000/managernotification/" + result.data._id,
+              "http://localhost:3000/managernotification/" +
+                $scope.brandManagerName,
               config
             )
             .then(function (result) {

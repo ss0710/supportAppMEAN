@@ -26,9 +26,9 @@ app.config([
         url: "/superadminstats",
         templateUrl: "./views/superadmin/stats.html",
       })
-      .state("admin.superadminsettings", {
-        url: "/superadminsettings",
-        templateUrl: "./views/superadmin/settings.html",
+      .state("admin.inactivebrands", {
+        url: "/inactivebrands",
+        templateUrl: "./views/superadmin/inActiveBrands.html",
       })
       .state("brandmanager", {
         url: "/brandmanager",
@@ -42,13 +42,13 @@ app.config([
         url: "/managertickets",
         templateUrl: "./views/managers/tickets.html",
       })
-      .state("brandmanager.managercustomers", {
-        url: "/managercustomers",
-        templateUrl: "./views/managers/customers.html",
+      .state("brandmanager.ticketrequests", {
+        url: "/ticketrequests",
+        templateUrl: "./views/managers/ticketrequests.html",
       })
-      .state("brandmanager.managersettings", {
-        url: "/managersettings",
-        templateUrl: "./views/managers/settings.html",
+      .state("brandmanager.closedtickets", {
+        url: "/closedtickets",
+        templateUrl: "./views/managers/closedtickets.html",
       })
       .state("brandadmin", {
         url: "/brandadmin",
@@ -87,13 +87,13 @@ app.config([
         url: "/agenttickets",
         templateUrl: "./views/agents/agentTickets.html",
       })
-      .state("brandagent.agentcustomers", {
-        url: "/agentcustomers",
-        templateUrl: "./views/agents/agentCustomers.html",
+      .state("brandagent.rejectedtickets", {
+        url: "/rejectedtickets",
+        templateUrl: "./views/agents/rejectedTickets.html",
       })
-      .state("brandagent.agentsettings", {
-        url: "/agentsettings",
-        templateUrl: "./views/agents/agentSettings.html",
+      .state("brandagent.closedtickets", {
+        url: "/closedtickets",
+        templateUrl: "./views/agents/closedTickets.html",
       })
       .state("noaccess", {
         //no access
@@ -105,4 +105,6 @@ app.config([
   },
 ]);
 
-app.controller("index", function () {});
+app.controller("index", function ($scope) {
+  $scope.socket = io("http://localhost:3000");
+});

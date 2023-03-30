@@ -6,8 +6,12 @@ app.controller("agentStats", [
   "$http",
   "$location",
   "statsService",
-  function ($scope, $http, $location, statsService) {
+  "$timeout",
+  function ($scope, $http, $location, statsService, $timeout) {
     var token = localStorage.getItem("token");
+    $scope.userListShow = false;
+    $scope.prevString = "<<";
+    $scope.nextString = ">>";
 
     var config = {
       headers: {
@@ -15,10 +19,9 @@ app.controller("agentStats", [
         Accept: "application/json;odata=verbose",
       },
     };
+
     statsService.getUserType(function (result, error) {
       if (result) {
-        console.log("stats page");
-        console.log(result.data);
         if (result.data.role != "brandAdmin") {
           $location.path("/noaccess");
         } else {
@@ -28,10 +31,10 @@ app.controller("agentStats", [
 
         //getting manager and agent count
         statsService.getManagerAndAgentCount(
-          $scope.brandAdminDetails.brand.brandId,
+          $scope.brandAdminDetails.brand.name,
           function (result, error) {
             if (result) {
-              var data = result.data;
+              data = result.data;
               data.forEach(function (elem) {
                 if (elem._id == "manager") {
                   $scope.managerCounts = elem.count;
@@ -48,11 +51,10 @@ app.controller("agentStats", [
 
         //getting managers details
         statsService.getManagerStats(
-          $scope.brandAdminDetails.brand.brandId,
+          $scope.brandAdminDetails.brand.name,
           function (result, error) {
             if (result) {
               $scope.managerDetails = result.data;
-              console.log($scope.managerDetails);
             } else {
               console.log(error);
             }
@@ -62,15 +64,28 @@ app.controller("agentStats", [
         $http
           .get(
             "http://localhost:3000/ticketactivity/" +
-              $scope.brandAdminDetails.brand.brandId,
+              $scope.brandAdminDetails.brand.name,
             config
           )
           .then(function (result) {
             $scope.ticketsActivity = result.data;
-            console.log("ticket Activity");
-            console.log($scope.ticketsActivity);
             $scope.onMonthChange(3);
-            $scope.onHeatMonthChange(3);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        $http
+          .get(
+            "http://localhost:3000/ticketstats/" +
+              $scope.brandAdminDetails.brand.name,
+            config
+          )
+          .then(function (result) {
+            $scope.ticketStats = result.data;
+            $scope.avgSolvingTimeInString = $scope.msToTime(
+              $scope.ticketStats[0][0].averageSolvingTime
+            );
           })
           .catch(function (error) {
             console.log(error);
@@ -80,19 +95,37 @@ app.controller("agentStats", [
       }
     });
 
+    $scope.msToTime = function (duration) {
+      var milliseconds = parseInt(duration % 1000);
+      var seconds = parseInt((duration / 1000) % 60);
+      var minutes = parseInt((duration / (1000 * 60)) % 60);
+      var hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      return hours + ":" + minutes + ":" + seconds;
+    };
+
+    $scope.calculateEfficiency = function (ticketsClosed, ticketsCreated) {
+      var percentage = (ticketsClosed / ticketsCreated) * 100;
+      return percentage.toFixed(2);
+    };
+
     var monthDetails = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     var MonthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+      "",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
 
     $scope.onMonthChange = function (monthNumber) {
@@ -112,12 +145,12 @@ app.controller("agentStats", [
         $scope.ticketsActivity.forEach(function (elem) {
           if (elem.month == monthNumber && elem.day == i) {
             if (elem.type == "close") {
+              rs = elem.count;
               closeValues.push(elem.count);
               a = true;
             }
             if (elem.type == "resolve") {
               resolveValues.push(elem.count);
-              rs = elem.count;
               b = true;
             }
             if (elem.type == "create") {
@@ -137,10 +170,6 @@ app.controller("agentStats", [
         if (i == monthDetails[monthNumber]) {
           $scope.successRate = $scope.successRate / ticketCreateDay;
           $scope.successRate.toFixed(2);
-          console.log(createValues);
-          console.log(resolveValues);
-          console.log(closeValues);
-          console.log(xvalues);
           new Chart("myChart", {
             type: "line",
             data: {
@@ -171,19 +200,142 @@ app.controller("agentStats", [
       }
     };
 
-    $scope.onHeatMonthChange = function (monthNumber) {
+    var currentDate = new Date();
+    var currentYear = currentDate.getFullYear();
+    var formattedYear = currentYear.toString().substring(2, 4);
+    $scope.currentYear = "20" + formattedYear;
+
+    console.log("current Year");
+    console.log($scope.currentYear);
+
+    $scope.userActArr = [];
+
+    $scope.generateHeatMap = function () {
       $scope.activeArray = [];
-      for (var i = 1; i <= monthDetails[monthNumber]; i++) {
-        var data = {
-          demoData: i,
+      $scope.totalActivities = 0;
+      $scope.totalActiveDays = 0;
+
+      for (var i = 1; i <= 12; i++) {
+        var obj = {
+          mohthName: MonthNames[i],
+          daysStats: [],
         };
-        $scope.activeArray.push(data);
-        if (i == monthDetails[monthNumber]) {
-          console.log("Active array");
-          console.log($scope.activeArray);
-          $scope.selectedMonthName = MonthNames[monthNumber];
+        var arr = [];
+        for (var j = 1; j <= monthDetails[i]; j++) {
+          var daySt = {
+            className: "heat-map-box",
+            date: j + " " + MonthNames[i],
+            activity: 0,
+          };
+          var counter = 0;
+          $scope.userActArr.forEach(function (elem) {
+            counter++;
+            if (
+              elem._id.year == $scope.currentYear &&
+              elem._id.month == i &&
+              elem._id.day == j
+            ) {
+              $scope.totalActivities = $scope.totalActivities + elem.count;
+              $scope.totalActiveDays++;
+              if (elem.count <= 3) {
+                daySt.className = "heat-map-box-lg";
+                daySt.activity = elem.count;
+              } else if (elem.count > 3 && elem.count <= 7) {
+                daySt.className = "heat-map-box-mg";
+                daySt.activity = elem.count;
+              } else if (elem.count >= 8) {
+                daySt.className = "heat-map-box-dg";
+                daySt.activity = elem.count;
+              }
+            }
+            if (counter == $scope.userActArr.length) {
+              arr.push(daySt);
+            }
+          });
+          if ($scope.userActArr.length == 0) {
+            arr.push(daySt);
+          }
         }
+        obj.daysStats = arr;
+        $scope.activeArray.push(obj);
       }
+    };
+
+    $scope.nextYearNavigate = function () {
+      var next_year = +$scope.currentYear + 1;
+      $scope.currentYear = next_year;
+      $scope.generateHeatMap();
+    };
+
+    $scope.previousNavigate = function () {
+      var next_year = +$scope.currentYear - 1;
+      $scope.currentYear = next_year;
+      $scope.generateHeatMap();
+    };
+
+    $scope.selectUserHandler = function (user) {
+      $scope.searchUserName = user.userName;
+      $scope.userListShow = false;
+    };
+
+    var timeout;
+    $scope.onUserChangeHandler = function () {
+      console.log("function called");
+      $scope.userListShow = true;
+      if (timeout) {
+        $timeout.cancel(timeout);
+      }
+      timeout = $timeout(function () {
+        statsService.searchUsers(
+          $scope.brandAdminDetails.brand.name,
+          $scope.searchUserName,
+          function (result, error) {
+            if (result) {
+              console.log(result.data);
+              $scope.currentUsers = result.data;
+            } else {
+              console.log(error);
+            }
+          }
+        );
+      }, 500);
+    };
+
+    $scope.showActivityStat = function () {
+      $http
+        .get(
+          "http://localhost:3000/useractivity?brandName=" +
+            $scope.brandAdminDetails.brand.name +
+            "&userName=" +
+            $scope.searchUserName,
+          config
+        )
+        .then(function (result) {
+          $scope.userActArr = result.data;
+          console.log("User Acticity");
+          console.log($scope.userActArr);
+          $scope.generateHeatMap();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      $http
+        .get(
+          "http://localhost:3000/userprofilestats?brandName=" +
+            $scope.brandAdminDetails.brand.name +
+            "&userName=" +
+            $scope.searchUserName,
+          config
+        )
+        .then(function (result) {
+          $scope.modalUser = result.data;
+          console.log("modal User");
+          console.log($scope.modalUser);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     };
   },
 ]);

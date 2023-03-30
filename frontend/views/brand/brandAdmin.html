@@ -56,13 +56,13 @@
       >
         Stats
       </button>
-      <button
+      <!-- <button
         ui-sref=".brandSettings"
         class="{{classname6}}"
         ng-click="handleActiveButton(6)"
       >
         Settings
-      </button>
+      </button> -->
     </div>
     <div class="component-right-div">
       <div class="component-right-div-upper">
@@ -76,20 +76,32 @@
               />
             </div>
             <div class="manager-details">
-              <h6><strong>Name :</strong> {{brandAdminName}}</h6>
-              <h6><strong>Email :</strong> {{brandAdminEmail}}</h6>
-              <h6><strong>BrandId :</strong> {{brandId}}</h6>
+              <h6>
+                <strong>User Name: </strong>{{brandAdminDetails.userName}}
+              </h6>
+              <h6>
+                <strong>Name :</strong> {{brandAdminDetails.name.firstName}}
+                {{brandAdminDetails.name.lastName}}
+              </h6>
+              <h6><strong>Email :</strong> {{brandAdminDetails.email}}</h6>
             </div>
           </div>
         </div>
         <div class="manager-brand-details">
           <div class="manager-brand-details-inner-div">
-            <h6><strong>BrandName: </strong>{{brandName}}</h6>
-            <h6><strong>Email: </strong>{{brandEmail}}</h6>
-            <h6><strong>BrandId: </strong>{{brandId}}</h6>
-            <h6><strong>Phone number: </strong>{{brandPhoneNumber}}</h6>
-            <h6><strong>Brand Categoty: </strong>{{brandCategory}}</h6>
-            <h6><strong>Address: </strong>{{brandAddress}}</h6>
+            <h6>
+              <strong>BrandName: </strong>{{brandAdminDetails.brand.name}}
+            </h6>
+            <h6><strong>Email: </strong>{{brandAdminDetails.brand.email}}</h6>
+            <h6>
+              <strong>Phone number: </strong
+              >{{brandAdminDetails.brand.phoneNumber}}
+            </h6>
+            <h6>
+              <strong>Brand Categoty: </strong
+              >{{brandAdminDetails.brand.category}}
+            </h6>
+            <!-- <h6><strong>Address: </strong>{{brandAddress}}</h6> -->
           </div>
         </div>
       </div>

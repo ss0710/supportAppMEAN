@@ -4,42 +4,33 @@
 app.controller("brandAdminAgent", [
   "$scope",
   "$http",
-  "$location",
   "brandService",
   "$timeout",
-  function ($scope, $http, $location, brandService, $timeout) {
-    var token = localStorage.getItem("token");
-    var config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json;odata=verbose",
-      },
-    };
-
+  function ($scope, $http, brandService, $timeout) {
     $scope.pageNumber = 1;
     $scope.pageSize = 5;
     $scope.totalCount = 0;
+    $scope.disableString = "disable";
+    $scope.enableString = "enable";
 
     brandService.getUserType(function (result, error) {
       if (result) {
-        console.log("brandAdmin - Agent Page");
         $scope.brandAdminDetails = result.data;
         brandService.getBrandAgents(
-          $scope.brandAdminDetails.brand.brandId,
+          $scope.brandAdminDetails.brand.name,
           $scope.pageNumber,
           $scope.pageSize,
           function (result1, error) {
-            console.log("callback function");
             if (result1) {
-              console.log("result1");
-              console.log(result1);
               $scope.agentDetails = result1.data.data;
               $scope.pageNumber = result1.data.pageNumber;
               $scope.pageSize = result1.data.pageSize;
               $scope.totalCount = result1.data.totalCount;
-              $scope.lastPageNumber($scope.totalCount, $scope.pageSize);
+              $scope.lastPage = brandService.LastPageNum(
+                $scope.totalCount,
+                $scope.pageSize
+              );
             } else {
-              console.log("fetching agent error");
               console.log(error);
             }
           }
@@ -77,18 +68,6 @@ app.controller("brandAdminAgent", [
       return pages;
     };
 
-    $scope.lastPageNumber = function (totalCount, pageSize) {
-      if (totalCount % pageSize == 0) {
-        $scope.lastPage = totalCount / pageSize;
-      } else {
-        var r = totalCount / pageSize;
-        $scope.lastPage = Math.ceil(r - 0.1);
-      }
-    };
-
-    $scope.disableString = "disable";
-    $scope.enableString = "enable";
-
     $scope.AgentDetailsUpdate = function (details, process) {
       $scope.agentDeatilsForUpdates = details;
       $scope.process = process;
@@ -100,94 +79,81 @@ app.controller("brandAdminAgent", [
         $timeout.cancel(timeout);
       }
       timeout = $timeout(function () {
-        $http
-          .get(
-            "http://localhost:3000/searchagent?brandId=" +
-              $scope.brandId +
-              "&name=" +
-              $scope.searchAgentName,
-            config
-          )
-          .then(function (result) {
-            console.log(result.data);
-            $scope.agentDetails = result.data;
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      }, 800);
+        brandService.searchAgent(
+          $scope.brandId,
+          $scope.searchAgentName,
+          function (result, error) {
+            if (result) {
+              $scope.agentDetails = result.data;
+            } else {
+              console.log(error);
+            }
+          }
+        );
+      }, 500);
     };
 
     //to disable brand
     $scope.disableAgent = function (process) {
       if (process == $scope.disableString) {
-        $http
-          .put(
-            "http://localhost:3000/disableagent/" +
-              $scope.agentDeatilsForUpdates._id,
-            {},
-            config
-          )
-          .then(function (result) {
-            alert("manager disabled");
-            $scope.agentDetails.forEach(function (elem) {
-              if (elem._id == $scope.agentDeatilsForUpdates._id) {
-                elem.isDisabled = true;
-              }
-            });
-            $(function () {
-              $("#disableModal").modal("hide");
-            });
-          })
-          .catch(function (error) {
-            console.log(error.data);
-          });
+        brandService.disableAgents(
+          $scope.agentDeatilsForUpdates._id,
+          function (result, error) {
+            if (result) {
+              alert("manager disabled");
+              $scope.agentDetails.forEach(function (elem) {
+                if (elem._id == $scope.agentDeatilsForUpdates._id) {
+                  elem.isDisabled = true;
+                }
+              });
+              $(function () {
+                $("#disableModal").modal("hide");
+              });
+            } else {
+              onsole.log(error.data);
+            }
+          }
+        );
       } else {
-        $http
-          .put(
-            "http://localhost:3000/enableagent/" +
-              $scope.agentDeatilsForUpdates._id,
-            {},
-            config
-          )
-          .then(function (result) {
-            alert("manager disabled");
-            $scope.agentDetails.forEach(function (elem) {
-              if (elem._id == $scope.agentDeatilsForUpdates._id) {
-                elem.isDisabled = false;
-              }
-            });
-            $(function () {
-              $("#disableModal").modal("hide");
-            });
-          })
-          .catch(function (error) {
-            console.log(error.data);
-          });
+        brandService.enableAgents(
+          $scope.agentDeatilsForUpdates._id,
+          function (result, error) {
+            if (result) {
+              alert("manager disabled");
+              $scope.agentDetails.forEach(function (elem) {
+                if (elem._id == $scope.agentDeatilsForUpdates._id) {
+                  elem.isDisabled = false;
+                }
+              });
+              $(function () {
+                $("#disableModal").modal("hide");
+              });
+            } else {
+              console.log(error.data);
+            }
+          }
+        );
       }
     };
 
     $scope.deleteAgent = function () {
-      $http
-        .put(
-          "http://localhost:3000/deleteagent/" +
-            $scope.agentDeatilsForUpdates._id,
-          {},
-          config
-        )
-        .then(function (result) {
-          alert("manager deleted");
-          var arr = $scope.agentDetails.filter(function (elem) {
-            return elem._id != $scope.agentDeatilsForUpdates._id;
-          });
-          $scope.agentDetails = arr;
-          $(function () {
-            $("#deleteModal").modal("hide");
-          });
-        })
-        .catch(function (error) {
-          console.log(error.data);
-        });
+      brandService.deleteAgents(
+        $scope.agentDeatilsForUpdates._id,
+        function (result, error) {
+          if (result) {
+            alert("manager deleted");
+            var arr = $scope.agentDetails.filter(function (elem) {
+              return elem._id != $scope.agentDeatilsForUpdates._id;
+            });
+            $scope.agentDetails = arr;
+            $(function () {
+              $("#deleteModal").modal("hide");
+            });
+          } else {
+            console.log(error.data);
+          }
+        }
+      );
     };
   },
 ]);

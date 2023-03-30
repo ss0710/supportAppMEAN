@@ -11,6 +11,8 @@ var bodyParser = require("body-parser");
 
 var PORT = process.env.PORT || 3000;
 var app = express();
+// const http = require("http").Server(app);
+// const io = require("socket.io")(http);
 
 //database connection
 connect();
@@ -43,9 +45,37 @@ passport.deserializeUser(function (user, done) {
 
 passport.use(new LocalStrategy(passportAuth.passportAuth));
 
+// app.get("/", function (req, res) {
+//   res.send("hello world");
+// });
 //routes
 app.use(Routes);
 
-app.listen(PORT, function () {
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
+
+//   socket.on("disconnect", () => {
+//     console.log("user disconnected");
+//   });
+
+//   socket.on("chat message", (msg) => {
+//     console.log("message: " + msg);
+//     io.emit("chat message", msg);
+//   });
+// });
+
+var server = app.listen(PORT, function () {
   console.log(`Server is reunning on PORT ${PORT}`);
+});
+
+var io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", function (socket) {
+  console.log("connection made");
+  console.log(socket.id);
 });

@@ -2,8 +2,8 @@ var Brand = require("./brand.model");
 var User = require("../users/user.model");
 var jwt = require("jsonwebtoken");
 
-// getBrand Controller
-exports.getBrand = function (req, res) {
+// getActiveBrand Controller
+exports.getActiveBrand = function (req, res) {
   var t = req.headers["authorization"];
   var tokenArray = t.split(" ");
   var token = tokenArray[1];
@@ -11,12 +11,74 @@ exports.getBrand = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      Brand.find({ isDeleted: false })
-        .then(function (result) {
-          res.status(200).json(result);
-        })
-        .catch(function (error) {
-          res.status(403).json(error);
+      var pageNumber = parseInt(req.query.pageNumber) || 1;
+      var pageSize = parseInt(req.query.pageSize) || 10;
+
+      console.log(pageNumber);
+      console.log(pageSize);
+
+      Brand.find({ isDeleted: false, isAdminCreated: true })
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize)
+        .exec(function (err, data) {
+          if (err) {
+            res.send(err);
+          } else {
+            Brand.count({ isDeleted: false, isAdminCreated: true }).exec(
+              function (err, count) {
+                if (err) {
+                  res.send(err);
+                } else {
+                  console.log(data);
+                  res.json({
+                    data: data,
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    totalCount: count,
+                  });
+                }
+              }
+            );
+          }
+        });
+    }
+  });
+};
+
+//getInActiveBrand
+exports.getInActiveBrand = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var pageNumber = parseInt(req.query.pageNumber) || 1;
+      var pageSize = parseInt(req.query.pageSize) || 10;
+
+      Brand.find({ isDeleted: false, isAdminCreated: false })
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize)
+        .exec(function (err, data) {
+          if (err) {
+            res.send(err);
+          } else {
+            Brand.count({ isDeleted: false, isAdminCreated: false }).exec(
+              function (err, count) {
+                if (err) {
+                  res.send(err);
+                } else {
+                  res.json({
+                    data: data,
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    totalCount: count,
+                  });
+                }
+              }
+            );
+          }
         });
     }
   });
@@ -31,8 +93,8 @@ exports.getBrandById = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      var id = req.params.id;
-      Brand.find({ idDeleted: false, brandId: id })
+      var brandName = req.params.id;
+      Brand.find({ idDeleted: false, name: brandName })
         .then(function (result) {
           res.status(200).json(result);
         })
@@ -163,6 +225,11 @@ exports.addBrandAdmin = function (req, res) {
         role: "brandAdmin",
         email: req.body.email,
         userName: req.body.userName,
+        name: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+        },
+        phoneNumber: req.body.phoneNumber,
         password: req.body.password,
         brand: {
           brandId: req.body.brandId,
@@ -172,14 +239,34 @@ exports.addBrandAdmin = function (req, res) {
           phoneNumber: req.body.brandPhoneNumber,
           address: req.body.brandAddress,
         },
-        isOnline: req.body.isOnline,
-        isDisabled: req.body.isDisabled,
-        isDeleted: req.body.isDeleted,
       };
       console.log(userData);
       var user = new User(userData);
       user
         .save()
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.searchBrand = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var brandName = req.params.id;
+      var regex = new RegExp(brandName, "i");
+      Brand.find({
+        name: regex,
+      })
         .then(function (result) {
           res.status(200).json(result);
         })

@@ -1,1 +1,235 @@
-<h1>Tickets Page</h1>
+<div ng-controller="brandTickets">
+  <div class="filers-option-div">
+    <div class="filers-option-div-in">
+      <p class="filter-option-text">Status:</p>
+      <div class="filers-option-div-in-in">
+        <select class="select-option-filter" ng-model="selectedStatus">
+          <option value="Created">Created</option>
+          <option value="Assigned">Assigned</option>
+          <option vlaue="Accepted">Accepted</option>
+          <option value="inProcess">inProcess</option>
+          <option value="resolved">resolved</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+    </div>
+    <div class="filers-option-div-in">
+      <p class="filter-option-text">Manager</p>
+      <div class="filers-option-div-in-in">
+        <input
+          type="text"
+          placeholder="Type Manager Name"
+          class="input-option-filter"
+          ng-model="searchManagerName"
+          ng-change="onManagerChange()"
+        />
+        <div class="filers-option-div-in-list" ng-show="managerListShow">
+          <table>
+            <tr class="list-manager-name" ng-repeat="item in currentManagers">
+              <td ng-click="selectManager(item)">{{item.userName}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="filers-option-div-in">
+      <p class="filter-option-text">Agent</p>
+      <div class="filers-option-div-in-in">
+        <input
+          type="text"
+          placeholder="Type Agent Name"
+          ng-model="searchAgentName"
+          ng-change="onAgentChange()"
+          class="input-option-filter"
+        />
+        <div class="filers-option-div-in-list" ng-show="agentListShow">
+          <table>
+            <tr
+              class="list-manager-name"
+              ng-repeat="item in searchAgentDetails"
+            >
+              <td ng-click="selectAgent(item)">{{item.userName}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <button class="filters-search-button" ng-click="searchHandler(1, 5)">
+      Search
+    </button>
+  </div>
+  <div class="filter-result-div">
+    <table>
+      <tr>
+        <th>Ticket Id</th>
+        <th>Ticket Status</th>
+        <th>Created At</th>
+        <th>Created By</th>
+        <th>Assigned To</th>
+        <th>Details</th>
+      </tr>
+      <tr ng-repeat="item in ticketResult">
+        <td>{{item.ticketId}}</td>
+        <td>{{item.status}}</td>
+        <td>{{item.createdBy.createdAt}}</td>
+        <td>{{item.createdBy.name}}</td>
+        <td>{{isAssigned(item.agent.name)}}</td>
+        <td>
+          <button
+            class="btn btn-success"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            ng-click="detailsUpdateForModal(item)"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+    </table>
+    <div class="paginations-button-div">
+      <button
+        ng-click="searchHandler(1, pageSize)"
+        class="btn-primary pagination-button-bg first-last-btn"
+      >
+        First
+      </button>
+      <button
+        ng-click="searchHandler(pageNumber - 1, pageSize)"
+        ng-disabled="pageNumber == 1"
+        class="btn-outline-primary pagination-button-bg nxt-prev-btn"
+      >
+        Previous
+      </button>
+      <button
+        ng-repeat="page in getPages()"
+        ng-click="searchHandler(page, pageSize)"
+        class="btn-outline-primary btw-btn"
+      >
+        {{page}}
+      </button>
+      <button
+        ng-click="nextButton(pageNumber)"
+        ng-disabled="pageNumber == lastPage"
+        class="btn-outline-primary pagination-button-bg nxt-prev-btn"
+      >
+        Next
+      </button>
+      <button
+        ng-click="searchHandler(lastPage, pageSize)"
+        class="btn-primary pagination-button-bg first-last-btn"
+      >
+        Last
+      </button>
+    </div>
+  </div>
+  <!-- Ticket Details Modal -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ticket Details</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="ticket-modal-details-body">
+            <p><strong>Subject: </strong>{{ticketDetails.subject}}</p>
+            <p><strong>Query: </strong>{{ticketDetails.query}}</p>
+          </div>
+          <div class="ticket-modal-details-comment-logs">
+            <div class="ticket-modal-details-logs">
+              <div
+                style="
+                  width: 100%;
+                  text-align: center;
+                  padding: 10px;
+                  background-color: rgba(50, 47, 255, 0.546);
+                  color: white;
+                  font-weight: bold;
+                "
+              >
+                <h6>Log History</h6>
+              </div>
+              <div class="modal-details-logs">
+                <ol>
+                  <li
+                    ng-repeat="item in logs"
+                    style="
+                      border: 1px solid rgb(179, 179, 179);
+                      background-color: white;
+                      border-radius: 5px;
+                      margin: 2px;
+                      padding-left: 10px;
+                    "
+                  >
+                    {{item.message}}
+                    <div
+                      style="
+                        display: flex;
+                        flex-direction: row-reverse;
+                        font-size: 10px;
+                        margin-top: 10px;
+                      "
+                    >
+                      {{item.time}}
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+            <div class="ticket-modal-details-comments">
+              <div
+                style="
+                  width: 100%;
+                  text-align: center;
+                  padding: 10px;
+                  background-color: rgba(50, 47, 255, 0.546);
+                  color: white;
+                  font-weight: bold;
+                "
+              >
+                <h6>Comments</h6>
+              </div>
+              <div class="modal-details-comments">
+                <div class="message-div" ng-repeat="item in ticketComments">
+                  <p class="identity">
+                    <img
+                      class="user-icon-comments"
+                      src="../../assets/user-icon.png"
+                      alt="usericon"
+                    /><strong>{{item.sentBy.userName}}</strong>
+                    ({{item.sentBy.type}})
+                  </p>
+                  <div class="message">
+                    <p class="comment-text">{{item.content}}</p>
+                  </div>
+                  <div class="date-and-time-div">
+                    <p class="date-and-time">{{item.time}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

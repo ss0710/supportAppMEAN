@@ -1,23 +1,4 @@
-<div class="manager-agent-outer-div" ng-controller="Tickets">
-  <!-- Filter ticket options -->
-  <div class="filter-tickets-option">
-    <p><strong>Filter Tickets By:</strong></p>
-    <button
-      type="button"
-      class="btn btn-outline-success filter-buttons"
-      ng-click="changeTicketType(1)"
-    >
-      Inprocess
-    </button>
-    <button
-      type="button"
-      class="btn btn-outline-success filter-buttons"
-      ng-click="changeTicketType(2)"
-    >
-      Resolved
-    </button>
-  </div>
-  <!-- Tickets -->
+<div class="manager-agent-outer-div" ng-controller="ClosedTickets">
   <div class="manager-agents-table">
     <div class="agents-tickets-container" ng-repeat="item in tickets">
       <div class="ticket-div">
@@ -75,137 +56,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal more option -->
-  <div
-    class="modal fade"
-    id="detailModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ticket</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="tickets-modal-inner-div">
-            <div class="tickets-details-div">
-              <p><strong>Ticket Id: </strong> {{ticketId}}</p>
-              <p><strong>Status:</strong> {{ticketStatus}}</p>
-              <p><strong>Assigned to:</strong> {{assignedTo}}</p>
-              <p><strong>Subject:</strong> {{tickedSubject}}</p>
-              <p><strong>Query:</strong> {{ticketQuery}}</p>
-              <p><strong>Created At:</strong> {{createdAt}}</p>
-            </div>
-            <div class="tickets-brand-details">
-              <p><strong>Created by:</strong> {{createdByUserName}}</p>
-              <p><strong>Brand Name:</strong> {{BrandName}}</p>
-              <p><strong>Brand Id:</strong> {{BrandId}}</p>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success">Assign</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal chat -->
-  <div
-    class="modal fade"
-    id="commentModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">comments</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="chat-div">
-            <div class="message-div" ng-repeat="item in ticketComments">
-              <p class="identity">
-                <img
-                  class="user-icon-comments"
-                  src="../../assets/user-icon.png"
-                  alt="usericon"
-                /><strong>{{item.sentBy.userName}}</strong>
-                ({{item.sentBy.type}})
-              </p>
-              <div class="message">
-                <p class="comment-text">{{item.content}}</p>
-              </div>
-              <div class="date-and-time-div">
-                <p class="date-and-time">{{item.time}}</p>
-              </div>
-            </div>
-          </div>
-          <div class="chat-form-div">
-            <form name="myForm1" novalidate>
-              <input
-                class="input-element"
-                type="text"
-                id="comment"
-                name="comment"
-                ng-model="comment"
-                required
-                placeholder="enter comment"
-              />
-              <br />
-              <label ng-show="myForm1.$submitted || myForm1.comment.$dirty">
-                <label
-                  ng-model="commentError1"
-                  class="error"
-                  ng-show="myForm1.comment.$error.required"
-                  >type something to add comment</label
-                >
-              </label>
-              <br />
-
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  ng-disabled="myForm1.$invalid"
-                  ng-click="addcommentHandler()"
-                >
-                  Add comment
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- Ticket Dashboard Modal -->
   <div
     class="modal fade"
@@ -242,8 +92,8 @@
                   <strong>Assigned To: </strong> {{ticketDetails.agent.name}}
                 </p>
                 <p><strong>Status: </strong> {{ticketDetails.status}}</p>
-                <p>Change status:</p>
-                <select ng-model="currentStatus">
+                <p><strong>Change status:</strong>{{ticketDetails.status}}</p>
+                <select ng-model="currentStatus" ng-disabled="true">
                   <option value="inProcess">In Process</option>
                   <option value="resolved">Resolved</option>
                   <option value="closed">Closed</option>
@@ -278,15 +128,8 @@
                   </ul>
                 </div>
                 <div class="attachmentinput-div-d">
-                  <input
-                    class="input-file-upload"
-                    type="file"
-                    file-model="formData.image"
-                  />
-                  <button
-                    class="attachment-upload-button"
-                    ng-click="addFile(ticketDetails.ticketId)"
-                  >
+                  <input class="input-file-upload" type="file" />
+                  <button class="attachment-upload-button" ng-disabled="true">
                     Upload
                   </button>
                 </div>
@@ -295,12 +138,12 @@
             <div class="agent-ticket-details-outerdiv-middle">
               <div class="agent-ticket-details-outerdiv-middle-upper">
                 <p><strong>Ticekt Id:</strong> {{ticketDetails.ticketId}}</p>
-                <p>
-                  <strong>Created At: </strong>
-                  {{ticketDetails.createdBy.createdAt}}
-                </p>
+                <p><strong>Created At: </strong> {{ticketDetails.createdAt}}</p>
                 <div class="agent-ticket-details-subject">
-                  <p><strong>Subject: </strong>{{ticketDetails.subject}}</p>
+                  <p>
+                    <strong>Subject: </strong>
+                    {{ticketDetails.createdBy.createdAt}}
+                  </p>
                 </div>
                 <div class="agent-ticket-details-query">
                   <p><strong>Query: </strong>{{ticketDetails.query}}</p>
@@ -343,10 +186,12 @@
                   type="text"
                   placeholder="type commet..."
                   ng-model="detailsComment"
+                  ng-disabled="true"
                 />
                 <button
                   class="add-comment-ticket-button"
                   ng-click="commentDashboardHandler()"
+                  ng-disabled="true"
                 >
                   Comment
                 </button>
@@ -365,40 +210,6 @@
           >
             Save changes
           </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- file modal -->
-  <div
-    class="modal fade"
-    id="fileModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">File</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="chat-div">
-            <img
-              src="{{fileDetails.link}}"
-              alt="file-img"
-              style="width: 100%; height: 80%"
-            />
-          </div>
         </div>
       </div>
     </div>

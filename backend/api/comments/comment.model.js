@@ -1,64 +1,35 @@
 var mongoose = require("mongoose");
 
 var commentSchema = new mongoose.Schema({
-  commentId: {
-    type: String,
-    unique: true,
-    trim: true,
+  brand: {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
   },
   ticketId: {
     type: String,
     required: true,
     trim: true,
   },
-  ticketSubject: {
-    type: String,
-  },
-  ticketQuery: {
-    type: String,
-  },
   content: {
     type: String,
   },
-  sentByUserId: {
-    type: String,
-    required: true,
-  },
-  sentByUserName: {
-    type: String,
-    required: true,
-  },
-  sentByUserType: {
-    type: String,
-    required: true,
-  },
-  brand: {
-    brandId: {
+  sentBy: {
+    userName: {
       type: String,
-      trim: true,
     },
     email: {
       type: String,
-      trim: true,
     },
-    name: {
+    type: {
       type: String,
-    },
-    category: {
-      type: String,
-      enum: [
-        "Food",
-        "Corporate",
-        "Banking",
-        "Aviation",
-        "Private",
-        "Sports",
-        "Transport",
-        "Others",
-      ],
+      enum: ["admin", "manager", "agent"],
     },
   },
-  dateAndTime: {
+  time: {
     type: Date,
     required: true,
   },

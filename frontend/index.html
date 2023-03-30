@@ -54,7 +54,6 @@
     ></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-
     <!-- CSS -->
     <style>
       body::-webkit-scrollbar {
@@ -77,6 +76,7 @@
   <body ng-app="myApp" ng-contoller="index">
     <div ui-view></div>
 
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="./controllers/app.js"></script>
 
     <script src="./directives/upload.directive.js"></script>
@@ -89,19 +89,38 @@
     <script src="./services/stats/stats.service.js"></script>
 
     <script src="./controllers/auth/login.js"></script>
-
     <script src="./controllers/superadmin/brand.js"></script>
-
     <script src="./controllers/superadmin/superadmin.js"></script>
+    <script src="./controllers/superadmin/stats.js"></script>
+    <script src="./controllers/superadmin/inactivebrands.js"></script>
+    <script src="./controllers/brandControllers/manager.js"></script>
     <script src="./controllers/brandControllers/brandAdmin.js"></script>
     <script src="./controllers/brandControllers/agent.js"></script>
     <script src="./controllers/brandControllers/stats.js"></script>
-    <script src="./controllers/brandControllers/manager.js"></script>
+    <script src="./controllers/brandControllers/brandTickets.js"></script>
     <script src="./controllers/managers/brandManager.js"></script>
     <script src="./controllers/managers/agents.js"></script>
+    <script src="./controllers/managers/ticketRequests.js"></script>
     <script src="./controllers/agents/brandAgent.js"></script>
     <script src="./controllers/agents/agentTickets.js"></script>
     <script src="./controllers/managers/ticket.js"></script>
+    <script src="./controllers/managers/closedTickets.js"></script>
     <script src="./controllers/brandControllers/activity.js"></script>
+    <script src="./controllers/agents/rejectedTicket.js"></script>
+    <script src="./controllers/agents/closedTicket.js"></script>
+    <script>
+      var socket = io("http://localhost:3000/");
+
+      // socket.on("connection");
+
+      // socket.on("message1", (data) => {
+      //   console.log("called");
+      //   document.querySelector("message").innerHTML = data;
+      // });
+
+      // const sendMessage = () => {
+      //   socket.emit("message", "Hey it worked");
+      // };
+    </script>
   </body>
 </html>

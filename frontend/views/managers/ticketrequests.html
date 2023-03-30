@@ -1,0 +1,322 @@
+<div
+  class="manager-agent-outer-div"
+  ng-controller="TicketRequests"
+  style="padding: 2%"
+>
+  <button
+    class="btn btn-outline-primary"
+    data-toggle="modal"
+    data-target="#addTicketModal"
+    style="margin-bottom: 10px"
+  >
+    Add Tickets
+  </button>
+
+  <table>
+    <tr>
+      <th>Ticket Id</th>
+      <th>Subject</th>
+      <th>Created At</th>
+      <th>Assign</th>
+      <th>Status</th>
+    </tr>
+    <tr ng-repeat="item in ticketsrequested">
+      <td>{{item.ticketId}}</td>
+      <td>{{item.subject}}</td>
+      <td>{{item.createdBy.createdAt}}</td>
+      <td>
+        <button
+          ng-if="item.status == Created"
+          class="btn btn-success"
+          data-toggle="modal"
+          data-target="#exampleModalCenter"
+          ng-click="loadAgents(item.ticketId, 1, 6)"
+        >
+          Assign
+        </button>
+        <button
+          ng-if="item.status == Assigned"
+          class="btn btn-success"
+          data-toggle="modal"
+          data-target="#exampleModalCenter"
+          ng-disabled="true"
+          ng-click="loadAgents(item.ticketId, 1, 6)"
+        >
+          Assigned
+        </button>
+        <button
+          ng-if="item.status == Rejected"
+          class="btn btn-success"
+          data-toggle="modal"
+          data-target="#exampleModalCenter"
+          ng-click="loadAgents(item.ticketId, 1, 6)"
+        >
+          Re-Assigned
+        </button>
+        <button
+          ng-if="item.status == Accepted"
+          class="btn btn-success"
+          data-toggle="modal"
+          data-target="#exampleModalCenter"
+          ng-disabled="true"
+          ng-click="loadAgents(item.ticketId, 1, 6)"
+        >
+          Assigned
+        </button>
+      </td>
+      <td>
+        <p
+          ng-if="item.status == Created"
+          style="
+            font-size: 1rem;
+            font-weight: bold;
+            color: rgb(60, 60, 255);
+            margin-top: 5px;
+          "
+        >
+          Not Assigned
+        </p>
+        <p
+          ng-if="item.status == Assigned"
+          style="
+            font-size: 1rem;
+            font-weight: bold;
+            color: rgb(35, 79, 212);
+            margin-top: 5px;
+          "
+        >
+          No Response
+        </p>
+        <p
+          ng-if="item.status == Accepted"
+          style="
+            font-size: 1rem;
+            font-weight: bold;
+            color: rgb(21, 155, 70);
+            margin-top: 5px;
+          "
+        >
+          Accepted
+        </p>
+        <p
+          ng-if="item.status == Rejected"
+          style="
+            font-size: 1rem;
+            font-weight: bold;
+            color: rgb(176, 46, 46);
+            margin-top: 5px;
+          "
+        >
+          Rejected
+        </p>
+      </td>
+    </tr>
+  </table>
+  <div class="paginations-button-div">
+    <button
+      ng-click="getCreatedTickets(1, pageSize)"
+      class="btn-primary pagination-button-bg first-last-btn"
+    >
+      First
+    </button>
+    <button
+      ng-click="getCreatedTickets(pageNumber - 1, pageSize)"
+      ng-disabled="pageNumber == 1"
+      class="btn-outline-primary pagination-button-bg nxt-prev-btn"
+    >
+      Previous
+    </button>
+    <button
+      ng-repeat="page in getPages()"
+      ng-click="getCreatedTickets(page, pageSize)"
+      class="btn-outline-primary btw-btn"
+    >
+      {{page}}
+    </button>
+    <button
+      ng-click="incrementByOne()"
+      ng-disabled="pageNumber == lastPage"
+      class="btn-outline-primary pagination-button-bg nxt-prev-btn"
+    >
+      Next
+    </button>
+    <button
+      ng-click="getCreatedTickets(lastPage, pageSize)"
+      class="btn-primary pagination-button-bg first-last-btn"
+    >
+      Last
+    </button>
+  </div>
+
+  <!-- Add Ticket Modal -->
+  <div
+    class="modal fade"
+    id="addTicketModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create Ticket</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Brand Name:</strong> {{brandName}}</p>
+          <p><strong>Creating By</strong> {{brandManagerName}}</p>
+
+          <form name="myForm2" novalidate>
+            <input
+              class="input-element"
+              type="text"
+              id="subject"
+              name="subject"
+              ng-model="subject"
+              required
+              placeholder="enter subject"
+            />
+            <br />
+            <label ng-show="myForm2.$submitted || myForm2.subject.$dirty">
+              <label
+                ng-model="commentError1"
+                class="error"
+                ng-show="myForm2.subject.$error.required"
+                >Subject is required</label
+              >
+            </label>
+            <br />
+            <input
+              class="input-element"
+              type="text"
+              id="query"
+              name="query"
+              ng-model="query"
+              required
+              placeholder="enter query"
+              style="width: 100%"
+            />
+            <br />
+            <label ng-show="myForm2.$submitted || myForm2.query.$dirty">
+              <label
+                ng-model="commentError1"
+                class="error"
+                ng-show="myForm2.query.$error.required"
+                >Query is required</label
+              >
+            </label>
+
+            <br />
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              ng-disabled="myForm2.$invalid"
+              ng-click="createTicketsHandler()"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Assign Ticket Modal  -->
+  <div
+    class="modal fade"
+    id="exampleModalCenter"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="height: 500px">
+          <input type="text" placeholder="search agent" />
+          <div>
+            <table>
+              <tr>
+                <th>Agent Name</th>
+                <th>Agent Email</th>
+                <th>Assign</th>
+              </tr>
+              <tr ng-repeat="item in agents">
+                <td>{{item.userName}}</td>
+                <td>{{item.email}}</td>
+                <td>
+                  <button
+                    class="btn-success"
+                    ng-click="assignTicketToAgent(item.userName, item.email)"
+                  >
+                    Assign
+                  </button>
+                </td>
+              </tr>
+            </table>
+            <div class="paginations-button-div">
+              <button
+                ng-click="loadAgents(ticketId, 1, pageSize)"
+                class="btn-primary pagination-button-bg first-last-btn"
+              >
+                First
+              </button>
+              <button
+                ng-click="loadAgents(ticketId, pageNumber - 1, pageSize)"
+                ng-disabled="pageNumber == 1"
+                class="btn-outline-primary pagination-button-bg nxt-prev-btn"
+              >
+                Previous
+              </button>
+              <button
+                ng-repeat="page in getPages()"
+                ng-click="loadAgents(ticketId, page, pageSize)"
+                class="btn-outline-primary btw-btn"
+              >
+                {{page}}
+              </button>
+              <button
+                ng-click="loadAgents(ticketId, pageNumber + 1, pageSize)"
+                ng-disabled="pageNumber == lastPage"
+                class="btn-outline-primary pagination-button-bg nxt-prev-btn"
+              >
+                Next
+              </button>
+              <button
+                ng-click="loadAgents(ticketId, lastPage, pageSize)"
+                class="btn-primary pagination-button-bg first-last-btn"
+              >
+                Last
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

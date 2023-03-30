@@ -1,118 +1,354 @@
-<div ng-controller="agentStats" class="admin-stats-page-div">
-  <div class="stats-count-div">
-    <div class="stats-count-div-box">Total Managers: {{managerCounts}}</div>
-    <div class="stats-count-div-box">Total Agents: {{agentCounts}}</div>
-  </div>
-  <div class="admin-stats-ticekt-div">
-    <div class="admin-stats-ticekt-div-left">
-      <canvas id="myChart"></canvas>
-    </div>
-    <div class="admin-stats-ticekt-div-right">
-      <div class="admin-stats-ticekt-div-right-left">
-        <p>Select Month</p>
-        <select
-          style="width: 100px; margin-bottom: 10px"
-          ng-model="monthNumber"
-        >
-          <option value="1">Jan</option>
-          <option value="2">Feb</option>
-          <option value="3">Mar</option>
-          <option value="4">Apr</option>
-          <option value="5">May</option>
-          <option value="6">Jun</option>
-          <option value="7">Jul</option>
-          <option value="8">Aug</option>
-          <option value="9">Sep</option>
-          <option value="10">Oct</option>
-          <option value="11">Nov</option>
-          <option value="12">Dec</option>
-        </select>
-        <button class="view-button" ng-click="onMonthChange(monthNumber)">
-          View
-        </button>
+<div ng-controller="agentStats">
+  <div>
+    <div class="admin-stats-page-div">
+      <div class="stats-count-div">
+        <div class="stats-count-div-box">Total Managers: {{managerCounts}}</div>
+        <div class="stats-count-div-box">Total Agents: {{agentCounts}}</div>
       </div>
-      <div
-        class="admin-stats-ticekt-div-right-right"
-        style="margin-bottom: 10px"
-      >
-        <div class="div-indicator">
-          <div class="box-colo-indicator" style="background-color: blue"></div>
-          Tickets Created
+      <div class="admin-stats-ticekt-div">
+        <div class="admin-stats-ticekt-div-left">
+          <canvas id="myChart"></canvas>
         </div>
-        <div class="div-indicator">
-          <div class="box-colo-indicator" style="background-color: green"></div>
-          Tickets Resolved
-        </div>
-        <div class="div-indicator">
-          <div class="box-colo-indicator" style="background-color: red"></div>
-          Tickets Closed
+        <div class="admin-stats-ticekt-div-right">
+          <div class="admin-stats-ticekt-div-right-left">
+            <p>Select Month</p>
+            <select
+              style="width: 100px; margin-bottom: 10px"
+              ng-model="monthNumber"
+            >
+              <option value="1">Jan</option>
+              <option value="2">Feb</option>
+              <option value="3">Mar</option>
+              <option value="4">Apr</option>
+              <option value="5">May</option>
+              <option value="6">Jun</option>
+              <option value="7">Jul</option>
+              <option value="8">Aug</option>
+              <option value="9">Sep</option>
+              <option value="10">Oct</option>
+              <option value="11">Nov</option>
+              <option value="12">Dec</option>
+            </select>
+            <button class="view-button" ng-click="onMonthChange(monthNumber)">
+              View
+            </button>
+          </div>
+          <div
+            class="admin-stats-ticekt-div-right-right"
+            style="margin-bottom: 10px"
+          >
+            <div class="div-indicator">
+              <div
+                class="box-colo-indicator"
+                style="background-color: blue"
+              ></div>
+              Tickets Created
+            </div>
+            <div class="div-indicator">
+              <div
+                class="box-colo-indicator"
+                style="background-color: green"
+              ></div>
+              Tickets Resolved
+            </div>
+            <div class="div-indicator">
+              <div
+                class="box-colo-indicator"
+                style="background-color: red"
+              ></div>
+              Tickets Closed
+            </div>
+          </div>
+          <p>Ticket success rate: {{successRate}}%</p>
         </div>
       </div>
-      <p>Ticket success rate: {{successRate}}%</p>
     </div>
-  </div>
-  <div class="manager-agent-table-div">
-    <div class="manager-table-div">
-      <div class="stats-manager-data" ng-repeat="item in managerDetails">
-        <div class="stats-manager-data-left">{{item.createdByUserName}}</div>
-        <div class="stats-manager-data-right">
-          <div class="stats-manager-data-box">
-            <div class="stats-manager-data-box-container">
-              <div class="stats-manager-data-box-left">
-                <div style="text-align: center">
-                  <p style="margin-bottom: 0">Tickets created</p>
-                  <p style="margin-bottom: 0">{{item.totalTicketsCreated}}</p>
+    <div class="manager-agent-table-div">
+      <div class="manager-table-div">
+        <div class="stats-manager-data" ng-repeat="item in managerDetails">
+          <div class="stats-manager-data-left">{{item._id}}</div>
+          <div class="stats-manager-data-right">
+            <div class="stats-manager-data-box">
+              <div class="stats-manager-data-box-container">
+                <div class="stats-manager-data-box-left">
+                  <div style="text-align: center">
+                    <p style="margin-bottom: 0">Tickets created</p>
+                    <p style="margin-bottom: 0">{{item.ticketsCreated}}</p>
+                  </div>
                 </div>
-              </div>
-              <div class="stats-manager-data-box-middle">
-                {{(item.totalTicketsResolved/item.totalTicketsCreated)*100}}%
-              </div>
-              <div class="stats-manager-data-box-right">
-                <div style="text-align: center">
-                  <p style="margin-bottom: 0">Tickets closed</p>
-                  <p style="margin-bottom: 0">{{item.totalTicketsResolved}}</p>
+                <div class="stats-manager-data-box-middle">
+                  {{calculateEfficiency(item.ticketsClosed,item.ticketsCreated)}}%
+                </div>
+                <div class="stats-manager-data-box-right">
+                  <div style="text-align: center">
+                    <p style="margin-bottom: 0">Tickets closed</p>
+                    <p style="margin-bottom: 0">{{item.ticketsClosed}}</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="agent-table-div"></div>
-  </div>
-  <div>
-    <div class="heat-map-div">
-      <div class="heat-map-div-left">
-        <div ng-repeat="item in activeArray">
-          <div
-            class="heat-map-box"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="{{item.demoData}}"
-          ></div>
+      <div class="agent-table-div">
+        <div class="select-user-div-new">
+          <div>
+            <p style="font-weight: bold; color: rgb(80, 80, 80)">
+              Search User To View Profile
+            </p>
+          </div>
+          <div style="display: flex">
+            <div class="type-search-user-div-new">
+              <input
+                class="user-search-input-tag"
+                type="text"
+                placeholder="type user name"
+                ng-model="searchUserName"
+                ng-change="onUserChangeHandler()"
+              />
+              <div class="user-list-div" ng-show="userListShow">
+                <table>
+                  <tr ng-repeat="item in currentUsers">
+                    <td
+                      ng-click="selectUserHandler(item)"
+                      style="cursor: pointer"
+                    >
+                      {{item.userName}}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <button
+                class="search-side-button"
+                ng-click="showActivityStat()"
+                data-toggle="modal"
+                data-target="#userProfileModal"
+              >
+                View
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="heat-map-div-right">
-        <select
-          style="width: 100px; margin-bottom: 10px"
-          ng-model="monthNumber1"
-        >
-          <option value="1">Jan</option>
-          <option value="2">Feb</option>
-          <option value="3">Mar</option>
-          <option value="4">Apr</option>
-          <option value="5">May</option>
-          <option value="6">Jun</option>
-          <option value="7">Jul</option>
-          <option value="8">Aug</option>
-          <option value="9">Sep</option>
-          <option value="10">Oct</option>
-          <option value="11">Nov</option>
-          <option value="12">Dec</option>
-        </select>
-        <button class="view-button" ng-click="onHeatMonthChange(monthNumber1)">
-          View
-        </button>
+    </div>
+    <div class="ticket-avg-stats-div">
+      <div class="ticket-avg-stats-div-left">
+        <p>Ticket Average Solving Time</p>
+        <p>{{avgSolvingTimeInString}} hrs</p>
+      </div>
+      <div class="ticket-avg-stats-div-middle">
+        <table>
+          <p>Top Performing Managers</p>
+          <tr>
+            <th>Name</th>
+            <th>Time</th>
+          </tr>
+          <tr ng-repeat="item in ticketStats[1]">
+            <td>{{item._id}}</td>
+            <td>{{msToTime(item.avgSolvingTime)}} hrs</td>
+          </tr>
+        </table>
+      </div>
+      <div class="ticket-avg-stats-div-right">
+        <p>Top Performing Agents</p>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Time</th>
+          </tr>
+          <tr ng-repeat="item in ticketStats[2]">
+            <td>{{item._id}}</td>
+            <td>{{msToTime(item.avgSolvingTime)}} hrs</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--User Profile Modal -->
+  <div
+    class="modal fade"
+    id="userProfileModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Profile</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="user-profile-outer-div">
+            <div class="user-profile-outer-div-up">
+              <div
+                class="user-profile-outer-div-up-box"
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  padding: 1%;
+                  border-right: 3px solid rgb(202, 202, 202);
+                "
+              >
+                <img
+                  src="{{modalUser.userData[0].profileImage}}"
+                  alt="profile-img"
+                  style="width: 150px; height: 150px; border-radius: 8px"
+                />
+              </div>
+              <div
+                class="user-profile-outer-div-up-box"
+                style="
+                  padding: 1%;
+                  border-right: 3px solid rgb(202, 202, 202);
+                  font-size: small;
+                "
+              >
+                <h6 style="font-size: small">
+                  <strong>User name: </strong>{{modalUser.userData[0].userName}}
+                </h6>
+                <h6 style="font-size: small">
+                  <strong>Name </strong>{{modalUser.userData[0].name.firstName}}
+                  {{modalUser.userData[0].name.lastName}}
+                </h6>
+                <h6 style="font-size: small">
+                  <strong>Email: </strong>{{modalUser.userData[0].email}}
+                </h6>
+              </div>
+              <div
+                class="user-profile-outer-div-up-box"
+                style="
+                  padding: 1%;
+                  border-right: 3px solid rgb(202, 202, 202);
+                  font-size: small;
+                "
+              >
+                <h6 style="font-size: small">
+                  <strong>Brand: </strong>{{modalUser.userData[0].brand.name}}
+                </h6>
+                <h6 style="font-size: small">
+                  <strong>Email: </strong>{{modalUser.userData[0].brand.email}}
+                </h6>
+                <h6 style="font-size: small">
+                  <strong>Phone number: </strong
+                  >{{modalUser.userData[0].brand.phoneNumber}}
+                </h6>
+                <h6 style="font-size: small">
+                  <strong>Category: </strong
+                  >{{modalUser.userData[0].brand.category}}
+                </h6>
+                <h6 style="font-size: small">
+                  <strong>Address: </strong
+                  >{{modalUser.userData[0].brand.address}}
+                </h6>
+              </div>
+              <div class="user-profile-outer-div-up-box" style="padding: 1%">
+                <h6 style="font-size: small">
+                  <strong>Tickets created: </strong
+                  >{{modalUser.ticketStats[0].ticketsCreated}}
+                </h6>
+                <h6 style="font-size: small">
+                  <strong>Tickets resolved: </strong
+                  >{{modalUser.ticketStats[0].ticketsClosed}}
+                </h6>
+              </div>
+            </div>
+            <div class="user-profile-outer-div-md">
+              <div class="user-profile-outer-div-md-count-div">
+                <div>
+                  <h6 style="font-size: small; color: rgb(110, 108, 108)">
+                    <strong
+                      style="
+                        font-weight: bold;
+                        color: rgb(77, 77, 77);
+                        font-size: 15px;
+                      "
+                      >{{totalActivities}}</strong
+                    >
+                    Total Activities This Year
+                  </h6>
+                </div>
+                <div>
+                  <h6 style="font-size: small; color: rgb(110, 108, 108)">
+                    Total Active Days:
+                    <strong
+                      style="
+                        font-weight: bold;
+                        color: rgb(77, 77, 77);
+                        font-size: 15px;
+                      "
+                      >{{totalActiveDays}}</strong
+                    >
+                  </h6>
+                </div>
+              </div>
+              <div class="user-profile-outer-div-md-heat-div">
+                <div
+                  class="user-profile-outer-div-md-heat-div-month-div"
+                  ng-repeat="item in activeArray"
+                >
+                  <div>
+                    <h6 style="font-weight: bold; color: rgb(120, 120, 120)">
+                      {{item.mohthName}}
+                    </h6>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap">
+                    <div
+                      ng-repeat="item2 in item.daysStats"
+                      style="
+                        margin: 0px 2px 0px 0px;
+                        padding: 0px;
+                        height: 15px;
+                        width: 15px;
+                      "
+                    >
+                      <div
+                        class="{{item2.className}}"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="{{item2.date}}, {{item2.activity}} Activities"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="button-year-div">
+                <button
+                  class="navigate-year-button"
+                  ng-click="previousNavigate()"
+                >
+                  {{prevString}}
+                </button>
+                <button class="navigate-year-button">{{currentYear}}</button>
+                <button
+                  class="navigate-year-button"
+                  ng-click="nextYearNavigate()"
+                >
+                  {{nextString}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+          </div>
+        </div>
       </div>
     </div>
   </div>

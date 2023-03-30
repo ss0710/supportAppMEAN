@@ -1,54 +1,27 @@
 ///<reference path="../app.js" />
-///<reference path="../../services/brands/brand.service.js" />
+///<reference path="../../services/brands/brand.service.js"/>
 
 app.controller("manager", [
   "$scope",
-  "$http",
   "$location",
   "brandService",
   "$timeout",
-  function ($scope, $http, $location, brandService, $timeout) {
+  function ($scope, $location, brandService, $timeout) {
+    $scope.disableString = "disable";
+    $scope.enableString = "enable";
+    $scope.pageNumber = 1;
+    $scope.pageSize = 5;
     $scope.emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     $scope.currentManagers = [];
-
-    var token = localStorage.getItem("token");
-    var config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json;odata=verbose",
-      },
-    };
-
-    console.log("manager controller");
-
-    //to get brandAdmin informations
-    $scope.brandAdminName,
-      $scope.brandAdminEmail,
-      $scope.brandId,
-      $scope.brandName,
-      $scope.brandEmail,
-      $scope.brandPhoneNumber,
-      $scope.brandCategory,
-      $scope.brandAddress;
-
-    //to get enable and disable manager information
-    $scope.updateManagerDetails;
-    $scope.disableString = "disable";
-    $scope.enableString = "enable";
 
     $scope.updateManagerDetailsHandler = function (item, process) {
       $scope.updateManagerDetails = item;
       $scope.process = process;
     };
 
-    $scope.pageNumber = 1;
-    $scope.pageSize = 5;
-    $scope.totalCount = 0;
-
-    $http
-      .get("http://localhost:3000/usertype", config)
-      .then(function (result) {
+    brandService.getUserType(function (result, error) {
+      if (result) {
         if (result.data.role != "brandAdmin") {
           $location.path("/noaccess");
         } else {
@@ -60,34 +33,12 @@ app.controller("manager", [
           $scope.brandPhoneNumber = result.data.brand.phoneNumber;
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
-
-          $http
-            .get(
-              "http://localhost:3000/getmanager?brandId=" +
-                $scope.brandId +
-                "&pageNumber=" +
-                $scope.pageNumber +
-                "&pageSize=" +
-                $scope.pageSize,
-              config
-            )
-            .then(function (result) {
-              console.log(result.data);
-              $scope.currentManagers = result.data.data;
-              $scope.pageNumber = result.data.pageNumber;
-              $scope.pageSize = result.data.pageSize;
-              $scope.totalCount = result.data.totalCount;
-
-              $scope.lastPageNumber($scope.totalCount, $scope.pageSize);
-            })
-            .catch(function (error) {
-              console.log(error.data);
-            });
+          $scope.getManagerData($scope.pageNumber, $scope.pageSize);
         }
-      })
-      .catch(function (error) {
+      } else {
         console.log(error);
-      });
+      }
+    });
 
     var timeout;
     $scope.onChangeHandler = function () {
@@ -95,45 +46,41 @@ app.controller("manager", [
         $timeout.cancel(timeout);
       }
       timeout = $timeout(function () {
-        $http
-          .get(
-            "http://localhost:3000/searchmanager?brandId=" +
-              $scope.brandId +
-              "&name=" +
-              $scope.searchManagerName,
-            config
-          )
-          .then(function (result) {
-            console.log(result.data);
-            $scope.currentManagers = result.data;
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      }, 800);
+        brandService.searchManager(
+          $scope.brandId,
+          $scope.searchManagerName,
+          function (result, error) {
+            if (result) {
+              console.log(result.data);
+              $scope.currentManagers = result.data;
+            } else {
+              console.log(error);
+            }
+          }
+        );
+      }, 500);
     };
 
     $scope.getManagerData = function (pageNumber, pageSize) {
-      $http
-        .get(
-          "http://localhost:3000/getmanager?brandId=" +
-            $scope.brandId +
-            "&pageNumber=" +
-            pageNumber +
-            "&pageSize=" +
-            pageSize,
-          config
-        )
-        .then(function (result) {
-          console.log(result.data);
-          $scope.currentManagers = result.data.data;
-          $scope.pageNumber = result.data.pageNumber;
-          $scope.pageSize = result.data.pageSize;
-          $scope.totalCount = result.data.totalCount;
-        })
-        .catch(function (error) {
-          console.log(error.data);
-        });
+      brandService.getManagers(
+        $scope.brandName,
+        pageNumber,
+        pageSize,
+        function (result, error) {
+          if (result) {
+            $scope.currentManagers = result.data.data;
+            $scope.pageNumber = result.data.pageNumber;
+            $scope.pageSize = result.data.pageSize;
+            $scope.totalCount = result.data.totalCount;
+            $scope.lastPage = brandService.LastPageNumber(
+              $scope.totalCount,
+              $scope.pageSize
+            );
+          } else {
+            console.log(error.data);
+          }
+        }
+      );
     };
 
     $scope.getPages = function () {
@@ -145,45 +92,34 @@ app.controller("manager", [
       return pages;
     };
 
-    $scope.lastPageNumber = function (totalCount, pageSize) {
-      if (totalCount % pageSize == 0) {
-        $scope.lastPage = totalCount / pageSize;
-      } else {
-        var r = totalCount / pageSize;
-        $scope.lastPage = Math.ceil(r - 0.1);
-      }
-    };
-
     //add brand Managers
     $scope.addBrandManager = function () {
-      var formData = new FormData();
-      formData.append("image", $scope.formData.image);
-      formData.append("email", $scope.managerEmail);
-      formData.append("userName", $scope.managerName);
-      formData.append("password", $scope.password);
-      formData.append("brandId", $scope.brandId);
-      formData.append("brandEmail", $scope.brandEmail);
-      formData.append("brandName", $scope.brandName);
-      formData.append("brandCategory", $scope.brandCategory);
-      formData.append("brandPhoneNumber", $scope.brandPhoneNumber);
-      formData.append("brandAddress", $scope.brandAddress);
-
-      $http({
-        method: "POST",
-        url: "http://localhost:3000/addmanager",
-        headers: {
-          "Content-Type": undefined,
-          Authorization: `Bearer ${token}`,
-        },
-        data: formData,
-      }).then(
-        function (response) {
-          // handle server response
-          alert("Successfully added Manager");
-        },
-        function (error) {
-          console.log(error.data);
-          alert(error.data);
+      brandService.addBrandManagers(
+        $scope.formData.image,
+        $scope.managerEmail,
+        $scope.managerName,
+        $scope.firstName,
+        $scope.lastName,
+        $scope.phoneNumber,
+        $scope.password,
+        $scope.brandId,
+        $scope.brandEmail,
+        $scope.brandName,
+        $scope.brandCategory,
+        $scope.brandPhoneNumber,
+        $scope.brandAddress,
+        function (result, error) {
+          if (result) {
+            alert("manager added succesfully");
+            console.log("runnint");
+            $(function () {
+              $("#addManagerModal").modal("hide");
+            });
+            $scope.currentManagers.unshift(result.data);
+            console.log($scope.currentManagers);
+          } else {
+            console.log(error);
+          }
         }
       );
     };
@@ -198,73 +134,64 @@ app.controller("manager", [
     //to disable brand
     $scope.disableManager = function (process) {
       if (process == $scope.disableString) {
-        $http
-          .put(
-            "http://localhost:3000/disablemanager/" +
-              $scope.updateManagerDetails._id,
-            {},
-            config
-          )
-          .then(function (result) {
-            alert("manager disabled");
-            $scope.currentManagers.forEach(function (elem) {
-              if (elem._id == $scope.updateManagerDetails._id) {
-                elem.isDisabled = true;
-              }
-            });
-            $(function () {
-              $("#disableModal").modal("hide");
-            });
-          })
-          .catch(function (error) {
-            console.log(error.data);
-          });
+        brandService.disableManagers(
+          $scope.updateManagerDetails._id,
+          function (result, error) {
+            if (result) {
+              alert("manager disabled");
+              $scope.currentManagers.forEach(function (elem) {
+                if (elem._id == $scope.updateManagerDetails._id) {
+                  elem.isDisabled = true;
+                }
+              });
+              $(function () {
+                $("#disableModal").modal("hide");
+              });
+            } else {
+              console.log(error.data);
+            }
+          }
+        );
       } else {
-        $http
-          .put(
-            "http://localhost:3000/permitmanager/" +
-              $scope.updateManagerDetails._id,
-            {},
-            config
-          )
-          .then(function (result) {
-            alert("manager disabled");
-            $scope.currentManagers.forEach(function (elem) {
-              if (elem._id == $scope.updateManagerDetails._id) {
-                elem.isDisabled = false;
-              }
-            });
-            $(function () {
-              $("#disableModal").modal("hide");
-            });
-          })
-          .catch(function (error) {
-            console.log(error.data);
-          });
+        brandService.permitManagers(
+          $scope.updateManagerDetails._id,
+          function (result, error) {
+            if (result) {
+              alert("manager disabled");
+              $scope.currentManagers.forEach(function (elem) {
+                if (elem._id == $scope.updateManagerDetails._id) {
+                  elem.isDisabled = false;
+                }
+              });
+              $(function () {
+                $("#disableModal").modal("hide");
+              });
+            } else {
+              console.log(error.data);
+            }
+          }
+        );
       }
     };
 
     $scope.deleteManager = function () {
-      $http
-        .put(
-          "http://localhost:3000/deletemanager/" +
-            $scope.updateManagerDetails._id,
-          {},
-          config
-        )
-        .then(function (result) {
-          alert("manager deleted");
-          var arr = $scope.currentManagers.filter(function (elem) {
-            return elem._id != $scope.updateManagerDetails._id;
-          });
-          $scope.currentManagers = arr;
-          $(function () {
-            $("#deleteModal").modal("hide");
-          });
-        })
-        .catch(function (error) {
-          console.log(error.data);
-        });
+      brandService.deleteManagers(
+        $scope.updateManagerDetails._id,
+        function (result, error) {
+          if (result) {
+            alert("manager deleted");
+            var arr = $scope.currentManagers.filter(function (elem) {
+              return elem._id != $scope.updateManagerDetails._id;
+            });
+            $scope.currentManagers = arr;
+            $(function () {
+              $("#deleteModal").modal("hide");
+            });
+          } else {
+            console.log(error.data);
+          }
+        }
+      );
     };
   },
 ]);

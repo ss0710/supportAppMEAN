@@ -6,23 +6,20 @@ var notificationSchema = new mongoose.Schema({
     enum: ["manager", "agent"],
     required: true,
   },
-  brandId: {
-    type: String,
-    required: true,
-  },
-  ticketId: {
-    type: String,
-    required: true,
+  brand: {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
   },
   message: {
     type: String,
     required: true,
   },
   creator: {
-    id: {
-      type: String,
-    },
-    name: {
+    userName: {
       type: String,
     },
     time: {
@@ -30,10 +27,7 @@ var notificationSchema = new mongoose.Schema({
     },
   },
   receiver: {
-    id: {
-      type: String,
-    },
-    name: {
+    userName: {
       type: String,
     },
   },

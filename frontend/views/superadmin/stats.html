@@ -1,1 +1,531 @@
-<h1>Stats</h1>
+<div ng-controller="superAdminStats">
+  <div class="stats-count-div">
+    <div
+      class="stats-count-div-box"
+      style="
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        height: 100px;
+        margin-top: 32px;
+      "
+    >
+      <p
+        style="
+          margin-bottom: 0px;
+          font-size: small;
+          font-weight: bold;
+          color: rgb(92, 92, 92);
+        "
+      >
+        CATEGORIES
+      </p>
+      <p style="font-size: large; font-weight: bold; color: rgb(50, 50, 50)">
+        {{statsDetails[0].length}}
+      </p>
+    </div>
+    <div
+      class="stats-count-div-box"
+      style="
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        height: 100px;
+        margin-top: 32px;
+      "
+    >
+      <p
+        style="
+          margin-bottom: 0px;
+          font-size: small;
+          font-weight: bold;
+          color: rgb(92, 92, 92);
+        "
+      >
+        BRANDS
+      </p>
+      <p style="font-size: large; font-weight: bold; color: rgb(50, 50, 50)">
+        {{totalBrands}}
+      </p>
+    </div>
+    <div
+      class="stats-count-div-box"
+      style="
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        height: 100px;
+        margin-top: 32px;
+      "
+    >
+      <p
+        style="
+          margin-bottom: 0px;
+          font-size: small;
+          font-weight: bold;
+          color: rgb(92, 92, 92);
+        "
+      >
+        EMPLOYEES
+      </p>
+      <p style="font-size: large; font-weight: bold; color: rgb(50, 50, 50)">
+        {{statsDetails[4]-1}}
+      </p>
+    </div>
+    <div
+      class="stats-count-div-box"
+      style="
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        height: 100px;
+        margin-top: 32px;
+      "
+    >
+      <p
+        style="
+          margin-bottom: 0px;
+          font-size: small;
+          font-weight: bold;
+          color: rgb(92, 92, 92);
+        "
+      >
+        Tickets
+      </p>
+      <p style="font-size: large; font-weight: bold; color: rgb(50, 50, 50)">
+        {{statsDetails[5]}}
+      </p>
+    </div>
+  </div>
+  <div class="superadmin-brand-div" style="display: flex">
+    <div style="width: 80%; display: flex; flex-direction: column">
+      <input
+        type="search"
+        placeholder="search brand"
+        ng-model="brandSearchName"
+        style="
+          height: 40px;
+          width: 99%;
+          border-radius: 8px;
+          border: 1px solid rgb(111, 111, 111);
+          padding-left: 10px;
+        "
+        ng-change="brandNameChangeHandler()"
+      />
+      <div
+        style="
+          width: 58.5%;
+          max-height: 300px;
+          overflow-y: scroll;
+          position: absolute;
+          background-color: white;
+          margin-top: 40px;
+          -webkit-box-shadow: -1px 12px 16px 6px rgba(179, 179, 179, 1);
+          -moz-box-shadow: -1px 12px 16px 6px rgba(179, 179, 179, 1);
+          box-shadow: -1px 12px 16px 6px rgba(179, 179, 179, 1);
+        "
+        ng-show="showBrandList"
+      >
+        <div
+          style="
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+          ng-show="brandList.length == 0"
+        >
+          <h6 style="font-weight: bold; color: rgb(106, 106, 106)">
+            No Brands Found With This Name
+          </h6>
+        </div>
+        <table>
+          <tr ng-repeat="item in brandList" style="cursor: pointer">
+            <td style="padding: 10px" ng-click="selectBrand(item)">
+              {{item.name}}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <button
+      style="height: 40px; width: 19%; border-radius: 8px; cursor: pointer"
+      data-toggle="modal"
+      data-target="#dashboardModal"
+      ng-disabled="isSearchAllowed"
+      ng-click="updateBrandForDashboard()"
+    >
+      View Details
+    </button>
+  </div>
+  <div class="superadmin-brand-div">
+    <div class="category-stats-div">
+      <div class="category-stats-div-left">
+        <canvas id="myChart"></canvas>
+      </div>
+      <div class="category-stats-div-right">
+        <p style="font-size: small; font-weight: bold; color: rgb(92, 92, 92)">
+          Category with most brands
+        </p>
+        <p style="font-size: large; font-weight: bold; color: rgb(50, 50, 50)">
+          {{categoryWithMostBrand}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="superadmin-brand-div">
+    <div class="employee-stats-div">
+      <div class="employee-stats-div-left">
+        <p style="font-size: small; font-weight: bold; color: rgb(92, 92, 92)">
+          Brand With Most Number Of Employees
+        </p>
+        <p style="font-size: large; font-weight: bold; color: rgb(50, 50, 50)">
+          {{statsDetails[2][0].brandName}}
+        </p>
+      </div>
+      <div class="employee-stats-div-right">
+        <canvas id="myChart1" style="width: 100%; max-width: 600px"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="superadmin-brand-div">
+    <div class="category-stats-div">
+      <div class="category-stats-div-left">
+        <canvas id="myChart2"></canvas>
+      </div>
+      <div class="category-stats-div-right">
+        <p style="font-size: small; font-weight: bold; color: rgb(92, 92, 92)">
+          Top Brands With Most Tickets Proccessed
+        </p>
+        <table>
+          <tr>
+            <th>Brand Name</th>
+            <th>Tickets Proccessed</th>
+          </tr>
+          <tr ng-repeat="item in statsDetails[3]">
+            <td>{{item._id}}</td>
+            <td>{{item.count}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="dashboardModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-llg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Brand Dashboard</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div style="height: 70vh">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                height: 20vh;
+              "
+            >
+              <div
+                style="
+                  width: 30%;
+                  border: 1px solid rgb(151, 151, 151);
+                  border-radius: 8px;
+                  -webkit-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  -moz-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  display: flex;
+                  flex-direction: column;
+                  padding: 0.3%;
+                "
+              >
+                <div>
+                  <h6
+                    style="
+                      width: 100%;
+                      text-align: center;
+                      font-weight: bold;
+                      color: rgb(91, 91, 91);
+                    "
+                  >
+                    BRAND ADMIN DETAILS
+                  </h6>
+                </div>
+                <p style="padding-left: 10px">
+                  <strong style="color: rgb(85, 85, 85)">Name: </strong
+                  >{{fetchedBrandDetails.admin[0].name.firstName}}
+                  {{fetchedBrandDetails.admin[0].name.lastName}}
+                </p>
+                <p style="padding-left: 10px">
+                  <strong style="color: rgb(85, 85, 85)">Email: </strong
+                  >{{fetchedBrandDetails.admin[0].email}}
+                </p>
+                <p style="padding-left: 10px">
+                  <strong style="color: rgb(85, 85, 85)">Phone Number: </strong>
+                  {{fetchedBrandDetails.admin[0].phoneNumber}}
+                </p>
+              </div>
+              <div
+                style="
+                  width: 15%;
+                  border: 1px solid rgb(151, 151, 151);
+                  border-radius: 8px;
+                  -webkit-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  -moz-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <h6
+                  style="
+                    width: 100%;
+                    text-align: center;
+                    font-weight: bold;
+                    color: rgb(91, 91, 91);
+                  "
+                >
+                  Manager Count
+                </h6>
+                <p
+                  style="
+                    font-size: 2rem;
+                    color: rgb(82, 82, 82);
+                    font-weight: bold;
+                  "
+                >
+                  {{fetchedBrandDetails.managerCount}}
+                </p>
+              </div>
+              <div
+                style="
+                  width: 15%;
+                  border: 1px solid rgb(151, 151, 151);
+                  border-radius: 8px;
+                  -webkit-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  -moz-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <h6
+                  style="
+                    width: 100%;
+                    text-align: center;
+                    font-weight: bold;
+                    color: rgb(91, 91, 91);
+                  "
+                >
+                  Agent Count
+                </h6>
+                <p
+                  style="
+                    font-size: 2rem;
+                    color: rgb(82, 82, 82);
+                    font-weight: bold;
+                  "
+                >
+                  {{fetchedBrandDetails.agentCount}}
+                </p>
+              </div>
+              <div
+                style="
+                  width: 15%;
+                  border: 1px solid rgb(151, 151, 151);
+                  border-radius: 8px;
+                  -webkit-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  -moz-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <h6
+                  style="
+                    width: 100%;
+                    text-align: center;
+                    font-weight: bold;
+                    color: rgb(91, 91, 91);
+                  "
+                >
+                  Ticket Count
+                </h6>
+                <p
+                  style="
+                    font-size: 2rem;
+                    color: rgb(82, 82, 82);
+                    font-weight: bold;
+                  "
+                >
+                  {{fetchedBrandDetails.ticketCount}}
+                </p>
+              </div>
+              <div
+                style="
+                  width: 15%;
+                  border: 1px solid rgb(151, 151, 151);
+                  border-radius: 8px;
+                  -webkit-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  -moz-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <h6
+                  style="
+                    width: 100%;
+                    text-align: center;
+                    font-weight: bold;
+                    color: rgb(91, 91, 91);
+                  "
+                >
+                  Files Count
+                </h6>
+                <p
+                  style="
+                    font-size: 2rem;
+                    color: rgb(82, 82, 82);
+                    font-weight: bold;
+                  "
+                >
+                  {{fetchedBrandDetails.fileCount}}
+                </p>
+              </div>
+            </div>
+            <div
+              style="
+                height: 50vh;
+                padding: 2% 0 2% 0;
+                display: flex;
+                justify-content: space-between;
+              "
+            >
+              <div
+                style="
+                  width: 32%;
+                  height: 47vh;
+                  border: 1px solid rgb(151, 151, 151);
+                  border-radius: 8px;
+                  -webkit-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  -moz-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                "
+              >
+                <div style="width: 100%; padding: 5px">
+                  <div
+                    style="
+                      border: 1px solid rgb(115, 115, 115);
+                      border-radius: 8px;
+                      display: flex;
+                    "
+                  >
+                    <div style="width: 40%">
+                      <img
+                        src="{{fetchedBrandDetails.brand[0].brandLogo}}"
+                        alt="brandLogo"
+                        style="width: 150px; height: 150px"
+                      />
+                    </div>
+                    <div
+                      style="
+                        width: 60%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
+                      <h6
+                        style="
+                          font-weight: bold;
+                          color: rgb(71, 71, 71);
+                          letter-spacing: 2px;
+                        "
+                      >
+                        {{fetchedBrandDetails.brand[0].name}}
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+                <div style="width: 100%; padding: 10px">
+                  <h6>
+                    <strong>Email: </strong
+                    >{{fetchedBrandDetails.brand[0].email}}
+                  </h6>
+                  <h6>
+                    <strong>Brand Id: </strong
+                    >{{fetchedBrandDetails.brand[0].brandId}}
+                  </h6>
+                  <h6>
+                    <strong>Category: </strong
+                    >{{fetchedBrandDetails.brand[0].category}}
+                  </h6>
+                  <h6>
+                    <strong>Phone Number: </strong
+                    >{{fetchedBrandDetails.brand[0].phoneNumber}}
+                  </h6>
+                  <h6>
+                    <strong>Address: </strong
+                    >{{fetchedBrandDetails.brand[0].address}}
+                  </h6>
+                  <h6>
+                    <strong>Company Size: </strong
+                    >{{fetchedBrandDetails.managerCount +
+                    fetchedBrandDetails.agentCount}} people
+                  </h6>
+                </div>
+              </div>
+              <div
+                style="
+                  width: 64%;
+                  height: 47vh;
+                  border: 1px solid rgb(151, 151, 151);
+                  border-radius: 8px;
+                  -webkit-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  -moz-box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  box-shadow: 10px 10px 17px -5px rgba(168, 168, 168, 1);
+                  padding: 20px;
+                "
+              >
+                <canvas id="line-chart1" style="max-height: 330px"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

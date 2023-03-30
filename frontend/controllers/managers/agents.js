@@ -4,10 +4,9 @@
 app.controller("ManagerAgents", [
   "$scope",
   "$http",
-  "$location",
   "managerService",
   "$timeout",
-  function ($scope, $http, $location, managerService, $timeout) {
+  function ($scope, $http, managerService, $timeout) {
     $scope.emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     $scope.agents = [];
@@ -20,19 +19,8 @@ app.controller("ManagerAgents", [
       },
     };
 
-    //to get brandmanager informations
-    $scope.brandManagerName,
-      $scope.brandManagerEmail,
-      $scope.brandId,
-      $scope.brandName,
-      $scope.brandEmail,
-      $scope.brandPhoneNumber,
-      $scope.brandCategory,
-      $scope.brandAddress;
-
     $scope.pageNumber = 1;
     $scope.pageSize = 5;
-    $scope.totalCount = 0;
 
     managerService.getUserType(function (result, error) {
       if (result) {
@@ -51,7 +39,7 @@ app.controller("ManagerAgents", [
           $scope.brandAddress = result.data.brand.address;
 
           managerService.getAgents(
-            $scope.brandId,
+            $scope.brandName,
             $scope.pageNumber,
             $scope.pageSize,
             function (result, error) {
@@ -135,7 +123,7 @@ app.controller("ManagerAgents", [
           .catch(function (error) {
             console.log(error);
           });
-      }, 800);
+      }, 500);
     };
 
     $scope.disableString = "disable";
@@ -261,6 +249,9 @@ app.controller("ManagerAgents", [
       formData.append("image", $scope.formData.image);
       formData.append("email", $scope.agentEmail);
       formData.append("userName", $scope.agentName);
+      formData.append("firstName", $scope.firstName);
+      formData.append("lastName", $scope.lastName);
+      formData.append("phoneNumber", $scope.phoneNumber);
       formData.append("password", $scope.password);
       formData.append("brandId", $scope.brandId);
       formData.append("brandEmail", $scope.brandEmail);
@@ -280,6 +271,10 @@ app.controller("ManagerAgents", [
         function (response) {
           // handle server response
           alert("Successfully added agent");
+          $scope.agents.unshift(response.data);
+          $(function () {
+            $("#addAgentModal").modal("hide");
+          });
         },
         function (error) {
           console.log(error.data);

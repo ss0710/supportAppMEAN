@@ -55,7 +55,7 @@ exports.getBrandAgents = function (req, res) {
     } else {
       var pageNumber = parseInt(req.query.pageNumber) || 1;
       var pageSize = parseInt(req.query.pageSize) || 10;
-      var brandId = req.query.brandId;
+      var brandName = req.query.brandName;
 
       // console.log("page number = " + pageNumber);
       // console.log("pageSize = " + pageSize);
@@ -64,7 +64,7 @@ exports.getBrandAgents = function (req, res) {
       User.find({
         isDeleted: false,
         role: "agent",
-        "brand.brandId": brandId,
+        "brand.name": brandName,
       })
         .skip((pageNumber - 1) * pageSize)
         .limit(pageSize)
@@ -75,7 +75,7 @@ exports.getBrandAgents = function (req, res) {
             User.count({
               isDeleted: false,
               role: "agent",
-              "brand.brandId": brandId,
+              "brand.name": brandName,
             }).exec(function (err, count) {
               if (err) {
                 res.send(err);
@@ -209,9 +209,6 @@ exports.updateAgentName = function (req, res) {
       var brandId = req.query.brandId;
       var userId = req.query.userId;
       var name = req.body.userName;
-      console.log(brandId);
-      console.log(userId);
-      console.log(name);
       mongoose.startSession().then(function (session) {
         session.startTransaction();
         Promise.all([
@@ -229,7 +226,6 @@ exports.updateAgentName = function (req, res) {
           ),
         ])
           .then(function (result) {
-            var response = { message: "Update successful" };
             res.status(200).json(result);
             session.commitTransaction();
             session.endSession();

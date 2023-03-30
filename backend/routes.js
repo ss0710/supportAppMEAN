@@ -6,6 +6,7 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 var Brand = require("./api/brands/brand.model");
 var User = require("./api/users/user.model");
+var File = require("./api/files/file.model");
 
 var fs = require("fs");
 var S3 = require("aws-sdk/clients/s3");
@@ -26,22 +27,26 @@ var commentController = require("./api/comments/comment.controller");
 var notificationController = require("./api/notifications/notification.controller");
 var logController = require("./api/logs/logs.controller");
 var statsController = require("./api/stats/stats.controller");
+var fileController = require("./api/files/file.controller");
 
 //auth routes
 router.post("/login", passport.authenticate("local"), loginController);
 
 //user routes
 router.post("/addbrandadmin", brandController.addBrandAdmin);
+router.get("/searchuser", userController.searchUserHandler);
 //api for user-type
 router.get("/usertype", userController.getUserType);
 
 //brand routes
-router.get("/getbrands", brandController.getBrand);
+router.get("/getactivebrands", brandController.getActiveBrand);
+router.get("/getinactivebrands", brandController.getInActiveBrand);
 router.get("/getbrandbyid/:id", brandController.getBrandById);
 router.put("/updatebrand", brandController.updateBrand);
 router.put("/disablebrand/:id", brandController.disableBrand);
 router.put("/enablebrand/:id", brandController.enableBrand);
 router.put("/deletebrand/:id", brandController.deleteBrand);
+router.get("/searchbrand/:id", brandController.searchBrand);
 
 var s3 = new S3({
   region,
@@ -94,11 +99,26 @@ router.post("/addbrand", upload.single("image"), function (req, res) {
         .save()
         .then(function (result) {
           console.log("saving data");
-          res.status(200).json(result);
+          res.status(201).json(result);
         })
         .catch(function (error) {
-          console.log("not able to save data");
-          res.status(403).json(error);
+          if (error.keyPattern) {
+            var err;
+            if (error.keyValue.name) {
+              err = {
+                msg: "already exist",
+                value: "name",
+              };
+            } else {
+              err = {
+                msg: "already exist",
+                value: "email",
+              };
+            }
+            res.status(409).json(err);
+          } else {
+            res.status(500).json(error);
+          }
         });
     } else {
       res.status(400).json(error);
@@ -122,6 +142,11 @@ router.post("/addmanager", upload.single("image"), function (req, res) {
         role: "manager",
         email: req.body.email,
         userName: req.body.userName,
+        name: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+        },
+        phoneNumber: req.body.phoneNumber,
         password: req.body.password,
         profileImage: result.Location,
         profileImageKey: result.key,
@@ -174,6 +199,11 @@ router.post("/addagents", upload.single("image"), function (req, res) {
         role: "agent",
         email: req.body.email,
         userName: req.body.userName,
+        name: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+        },
+        phoneNumber: req.body.phoneNumber,
         password: req.body.password,
         brandId: req.body.brandId,
         profileImage: result.Location,
@@ -212,18 +242,30 @@ router.post("/addagents", upload.single("image"), function (req, res) {
 router.post("/addticket", ticketController.addTicket);
 router.get("/getticketsbybrand/:id", ticketController.getTicketsByBrandId);
 router.get("/getticketsbyagent/:id", ticketController.getTicketsByAgentId);
+router.get(
+  "/getticketbybrandandmanager",
+  ticketController.getTicketsByBrandIdAndManagerId
+);
+router.get("/getagentclosedtickets", ticketController.getAgentClosedTickets);
+router.get("/agentrejectedtickets", ticketController.getRejectedTickets);
 router.put("/updateticket/:id", ticketController.updateTicket);
 router.put("/acceptTicket/:id", ticketController.acceptTicket);
 router.put("/inprocessticket/:id", ticketController.inProcessTicket);
-router.put("/resolveTicket/:id", ticketController.resolveTicket);
+router.put("/resolveTicket", ticketController.resolveTicket);
 router.put("/closeticket/:id", ticketController.closeTicket);
+router.put("/rejectticket/:id", ticketController.rejectTicket);
+router.put(
+  "/inprocessticketbyagent/:id",
+  ticketController.inProcessTicketByAgent
+);
+router.put("/resolveTicketbyagent", ticketController.resolveTicketByAgent);
+router.get("/filtertickets", ticketController.filterTickets);
 
 //comments routes
 router.post("/addcomment", commentController.addComment);
 router.get("/getcomments/:id", commentController.getComments);
 
 //notification routes
-router.post("/addnotification", notificationController.addNotification);
 router.get(
   "/getnotifications/:id",
   notificationController.getNotificationByBrandId
@@ -245,6 +287,7 @@ router.put(
   "/markallmanagernotseen",
   notificationController.markAllManagerNotSeen
 );
+router.put("/markallagentnotseen", notificationController.markAllAgentNotSeen);
 
 //log history routes
 router.post("/addlog", logController.addLogHistory);
@@ -254,5 +297,44 @@ router.get("/getlogsbyticket/:id", logController.getLogsByTicketId);
 router.get("/countManagerAgent/:id", userController.countMangerandAgent);
 router.get("/managerstats/:id", statsController.getManagerStats);
 router.get("/ticketactivity/:id", statsController.getTicketActivityDetails);
+router.get("/ticketstats/:id", statsController.getTicketStats);
+router.get("/brandstats", statsController.getBrandStats);
+router.get("/useractivity", statsController.userActivityStat);
+router.get("/userprofilestats", statsController.userProfileStats);
+router.get("/branddashboard/:id", statsController.brandDashboardDetails);
+
+//file routes
+router.get("/getticketfiles/:id", fileController.getFile);
+router.post("/addfile", upload.single("image"), function (req, res) {
+  uploadFile(req.file, function (result, error) {
+    if (result) {
+      var data = {
+        ticket: req.body.ticketId,
+        brand: {
+          name: req.body.brandName,
+        },
+        link: result.Location,
+        addedBy: {
+          name: req.body.userName,
+          type: req.body.type,
+          time: Date.now(),
+        },
+        isDeleted: false,
+      };
+      console.log(data);
+      var file = new File(data);
+      file
+        .save()
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    } else {
+      res.status(403).json(error);
+    }
+  });
+});
 
 module.exports = router;

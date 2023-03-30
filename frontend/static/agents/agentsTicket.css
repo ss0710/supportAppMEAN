@@ -181,6 +181,7 @@ box-shadow: 10px 10px 12px -7px rgba(153,153,153,1);
 }
 
 .agent-ticket-details-outerdiv-left-u {
+    border-left: 5px solid rgb(7, 192, 7);
     height:60vh;
     margin-bottom: 10px;
     background-color: white;
@@ -192,6 +193,7 @@ padding: 5px 5px 5px 8px;
 }
 
 .agent-ticket-details-outerdiv-left-d {
+    border-left: 5px solid rgb(7, 192, 7);
     height: 40vh;
     background-color: white;
     border-radius: 8px;
@@ -218,6 +220,7 @@ box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
 }
 
 .agent-ticket-details-outerdiv-right-body {
+    border-left: 5px solid rgb(4, 183, 4);
     height: 80vh;
     overflow-y: scroll;
     background-color: white;
@@ -250,7 +253,6 @@ box-shadow: 2px 5px 15px 1px rgba(145,145,145,1);
 }
 
 .attachmentinput-div-u {
-    height: 30vh;
     overflow-y: scroll;
     padding-left: 10px;
     padding-top: 8px;

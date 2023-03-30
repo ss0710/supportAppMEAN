@@ -18,6 +18,17 @@ var userSchema = new mongoose.Schema({
     trim: true,
     maxLength: 20,
   },
+  name: {
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+  },
+  phoneNumber: {
+    type: String,
+  },
   password: {
     type: String,
     required: true,
@@ -30,10 +41,6 @@ var userSchema = new mongoose.Schema({
     type: String,
   },
   brand: {
-    brandId: {
-      type: String,
-      trim: true,
-    },
     email: {
       type: String,
       trim: true,

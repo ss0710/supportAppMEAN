@@ -22,11 +22,11 @@ exports.countMangerandAgent = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      var brandId = req.params.id;
+      var brandName = req.params.id;
       User.aggregate([
         {
           $match: {
-            "brand.brandId": brandId,
+            "brand.name": brandName,
           },
         },
         {
@@ -38,6 +38,34 @@ exports.countMangerandAgent = function (req, res) {
           },
         },
       ])
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.searchUserHandler = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var brandName = req.query.brandName;
+      var userName = req.query.userName;
+      var regex = new RegExp(userName, "i");
+      console.log(brandName);
+      console.log(userName);
+      User.find({
+        $or: [{ role: "manager" }, { role: "agent" }],
+        "brand.name": brandName,
+        userName: regex,
+      })
         .then(function (result) {
           res.status(200).json(result);
         })

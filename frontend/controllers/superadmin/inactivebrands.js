@@ -1,7 +1,7 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/superadmin/superadmin.service.js"/>
 
-app.controller("SuperadminBrand", [
+app.controller("inActiveBrand", [
   "$scope",
   "superadminService",
   function ($scope, superadminService) {
@@ -9,41 +9,35 @@ app.controller("SuperadminBrand", [
     $scope.pageSize = 5;
     $scope.disableString = "disable";
     $scope.enableString = "enable";
+    $scope.currentBrandsWithNoAdmin = [];
+    $scope.currentBrandsWithNoAdmin = [];
     $scope.emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-    //Update Handler for Modal details
-    $scope.brandDataUpdatesForModal = function (item) {
-      $scope.brandDetails = item;
-    };
-
     //getting brands
-    superadminService.getActiveBrands(
+    superadminService.getInActiveBrands(
       $scope.pageNumber,
       $scope.pageSize,
       function (result, error) {
         if (result) {
-          $scope.currentBrandsWithAdmin = result.data.data;
+          $scope.currentBrandsWithNoAdmin = result.data.data;
           $scope.pageNumber = result.data.pageNumber;
           $scope.pageSize = result.data.pageSize;
           $scope.totalCount = result.data.totalCount;
-          $scope.lastPage = superadminService.LastPageNumber(
-            $scope.totalCount,
-            $scope.pageSize
-          );
+          $scope.lastPageNumber($scope.totalCount, $scope.pageSize);
         } else {
           console.log(error.data);
         }
       }
     );
 
-    $scope.getActiveBrands = function (pageNumber, pageSize) {
-      superadminService.getActiveBrands(
+    $scope.getInActiveBrands = function (pageNumber, pageSize) {
+      superadminService.getInActiveBrands(
         pageNumber,
         pageSize,
         function (result, error) {
           if (result) {
-            $scope.currentBrandsWithAdmin = result.data.data;
+            $scope.currentBrandsWithNoAdmin = result.data.data;
             $scope.pageNumber = result.data.pageNumber;
             $scope.pageSize = result.data.pageSize;
             $scope.totalCount = result.data.totalCount;
@@ -63,8 +57,65 @@ app.controller("SuperadminBrand", [
       return pages;
     };
 
+    $scope.lastPageNumber = function (totalCount, pageSize) {
+      if (totalCount % pageSize == 0) {
+        $scope.lastPage = totalCount / pageSize;
+      } else {
+        var r = totalCount / pageSize;
+        $scope.lastPage = Math.ceil(r - 0.1);
+      }
+    };
+
+    //add brand function
+    $scope.signupSubmit = function () {
+      superadminService.addBrand(
+        $scope.formData.image,
+        $scope.brand,
+        function (result, error) {
+          if (result) {
+            console.log(result.data);
+            alert("successfuly registered");
+            $(function () {
+              $("#addBrandModal").modal("hide");
+            });
+            $scope.currentBrandsWithNoAdmin.unshift(result.data);
+          } else {
+            alert(error);
+          }
+        }
+      );
+    };
+
+    //updating brand scopes
+    $scope.updateBrandScopes = function (brand) {
+      $scope.brandDetails = brand;
+    };
+
+    //add brand Admin
+    $scope.addBrandAdmin = function () {
+      superadminService.addBrandAdmin(
+        $scope.admin,
+        $scope.brandDetails,
+        function (result, error) {
+          if (result) {
+            superadminService.updateBrandAdmin(
+              $scope.brandDetails,
+              function (result, error) {
+                if (result) {
+                  alert("Successfully added admin");
+                } else {
+                  console.log(error);
+                }
+              }
+            );
+          } else {
+            console.log(error);
+          }
+        }
+      );
+    };
+
     $scope.updateAndDelete = function (brandId, brandName, process) {
-      console.log("clicked");
       $scope.brandIdToD = brandId;
       $scope.brandNameToD = brandName;
       $scope.process = process;
@@ -106,23 +157,26 @@ app.controller("SuperadminBrand", [
                 $("#disableModal").modal("hide");
               });
               //reflecting changes in frontend
-              $scope.currentBrandsWithAdmin.forEach(function (elem) {
-                if (elem.brandId == $scope.brandIdToD) {
-                  elem.isDisabled = true;
-                }
-              });
-              $scope.currentBrandsWithNoAdmin.forEach(function (elem) {
-                if (elem.brandId == $scope.brandIdToD) {
-                  elem.isDisabled = true;
-                }
-              });
+              if ($scope.currentBrandsWithAdmin) {
+                $scope.currentBrandsWithAdmin.forEach(function (elem) {
+                  if (elem.brandId == $scope.brandIdToD) {
+                    elem.isDisabled = true;
+                  }
+                });
+              }
+              if ($scope.currentBrandsWithNoAdmin) {
+                $scope.currentBrandsWithNoAdmin.forEach(function (elem) {
+                  if (elem.brandId == $scope.brandIdToD) {
+                    elem.isDisabled = true;
+                  }
+                });
+              }
             } else {
               console.log(error);
             }
           }
         );
       } else {
-        console.log("clicked enable fun");
         superadminService.enableBrand(
           $scope.brandIdToD,
           function (result, error) {
@@ -131,17 +185,22 @@ app.controller("SuperadminBrand", [
               $(function () {
                 $("#disableModal").modal("hide");
               });
+
               //reflecting changes in frontend
-              $scope.currentBrandsWithAdmin.forEach(function (elem) {
-                if (elem.brandId == $scope.brandIdToD) {
-                  elem.isDisabled = false;
-                }
-              });
-              $scope.currentBrandsWithNoAdmin.forEach(function (elem) {
-                if (elem.brandId == $scope.brandIdToD) {
-                  elem.isDisabled = false;
-                }
-              });
+              if ($scope.currentBrandsWithAdmin) {
+                $scope.currentBrandsWithAdmin.forEach(function (elem) {
+                  if (elem.brandId == $scope.brandIdToD) {
+                    elem.isDisabled = false;
+                  }
+                });
+              }
+              if ($scope.currentBrandsWithNoAdmin) {
+                $scope.currentBrandsWithNoAdmin.forEach(function (elem) {
+                  if (elem.brandId == $scope.brandIdToD) {
+                    elem.isDisabled = false;
+                  }
+                });
+              }
             } else {
               console.log(error);
             }

@@ -63,15 +63,6 @@ app.controller("brandAdmin", [
       }
     };
 
-    var token = localStorage.getItem("token");
-
-    var config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json;odata=verbose",
-      },
-    };
-
     //to get brandAdmin informations
     brandService.getUserType(function (result, error) {
       console.log("running brandAdmin.js getuserType");
@@ -79,30 +70,25 @@ app.controller("brandAdmin", [
         if (result.data.role != "brandAdmin") {
           $location.path("/noaccess");
         } else {
-          $scope.brandAdminName = result.data.userName;
-          $scope.brandAdminEmail = result.data.email;
-          $scope.brandId = result.data.brand.brandId;
-          $scope.brandName = result.data.brand.name;
-          $scope.brandEmail = result.data.brand.email;
-          $scope.brandPhoneNumber = result.data.brand.phoneNumber;
-          $scope.brandCategory = result.data.brand.category;
-          $scope.brandAddress = result.data.brand.address;
+          $scope.brandAdminDetails = result.data;
+          console.log("brandAdmin");
+          console.log($scope.brandAdminDetails);
         }
 
-        $http
-          .get("http://localhost:3000/getbrandbyid/" + $scope.brandId, config)
-          .then(function (result) {
-            $scope.brandlogo = result.data[0].brandLogo;
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        brandService.getBrandDetails(
+          $scope.brandAdminDetails.brand.name,
+          function (result, error) {
+            if (result) {
+              $scope.brandlogo = result.data[0].brandLogo;
+            } else {
+              console.log(error);
+            }
+          }
+        );
       } else {
         console.log(error);
       }
     });
-
-    console.log("name1 = " + $scope.brandAdminName);
 
     //logout function
     $scope.logout = function () {

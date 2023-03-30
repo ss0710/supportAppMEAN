@@ -56,25 +56,25 @@
         Agents
       </button>
       <button
+        ui-sref=".ticketrequests"
+        class="{{classname3}}"
+        ng-click="handleActiveButton(3)"
+      >
+        Ticket Requests
+      </button>
+      <button
         ui-sref=".managertickets"
         class="{{classname2}}"
         ng-click="handleActiveButton(2)"
       >
-        Tickets
+        Accepted Tickets
       </button>
       <button
-        ui-sref=".managercustomers"
-        class="{{classname3}}"
-        ng-click="handleActiveButton(3)"
-      >
-        Customers
-      </button>
-      <button
-        ui-sref=".managersettings"
+        ui-sref=".closedtickets"
         class="{{classname4}}"
         ng-click="handleActiveButton(4)"
       >
-        Settings
+        Closed Tickets
       </button>
     </div>
     <div class="component-right-div">
@@ -91,7 +91,7 @@
             <div class="manager-details">
               <h6><strong>Name :</strong> {{brandManagerName}}</h6>
               <h6><strong>Email :</strong> {{brandManagerEmail}}</h6>
-              <h6><strong>BrandId :</strong> {{brandId}}</h6>
+              <!-- <h6><strong>BrandId :</strong> {{brandId}}</h6> -->
             </div>
           </div>
         </div>
@@ -99,10 +99,10 @@
           <div class="manager-brand-details-inner-div">
             <h6><strong>BrandName: </strong>{{brandName}}</h6>
             <h6><strong>Email: </strong>{{brandEmail}}</h6>
-            <h6><strong>BrandId: </strong>{{brandId}}</h6>
+            <!-- <h6><strong>BrandId: </strong>{{brandId}}</h6> -->
             <h6><strong>Phone number: </strong>{{brandPhoneNumber}}</h6>
             <h6><strong>Brand Categoty: </strong>{{brandCategory}}</h6>
-            <h6><strong>Address: </strong>{{brandAddress}}</h6>
+            <!-- <h6><strong>Address: </strong>{{brandAddress}}</h6> -->
           </div>
         </div>
       </div>

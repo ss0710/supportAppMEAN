@@ -44,4 +44,22 @@ app.service("statsService", function ($http) {
         cb(null, error);
       });
   };
+
+  //search user
+  this.searchUsers = function (brandName, userName, cb) {
+    $http
+      .get(
+        "http://localhost:3000/searchuser?brandName=" +
+          brandName +
+          "&userName=" +
+          userName,
+        config
+      )
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
 });

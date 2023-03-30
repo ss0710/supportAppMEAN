@@ -6,11 +6,13 @@ var ticketSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  brandId: {
-    type: String,
-  },
-  brandName: {
-    type: String,
+  brand: {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
   },
   status: {
     type: String,
@@ -18,6 +20,7 @@ var ticketSchema = new mongoose.Schema({
       "Created",
       "Assigned",
       "Accepted",
+      "Rejected",
       "inProcess",
       "resolved",
       "Closed",
@@ -30,37 +33,36 @@ var ticketSchema = new mongoose.Schema({
   query: {
     type: String,
   },
-  createdAt: {
-    type: Date,
-    required: true,
+  createdBy: {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+    createdAt: {
+      type: Date,
+      required: true,
+    },
   },
-  createdByUserID: {
-    type: String,
+  resolvedBy: {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+    resolvedAt: {
+      type: Date,
+    },
   },
-  createdByUserName: {
-    type: String,
-  },
-  resolvedAt: {
-    type: Date,
-  },
-  resolvedByUserId: {
-    type: String,
-  },
-  resilvedByUserName: {
-    type: String,
-  },
-  agentUserId: {
-    type: String,
-  },
-  agentName: {
-    type: String,
-  },
-  customerId: {
-    type: String,
-  },
-  isDisable: {
-    type: Boolean,
-    default: false,
+  agent: {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
   },
   isDeleted: {
     type: Boolean,

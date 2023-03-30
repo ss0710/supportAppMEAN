@@ -1,9 +1,13 @@
 var mongoose = require("mongoose");
 
 var logSchema = new mongoose.Schema({
-  brandId: {
-    type: String,
-    required: true,
+  brand: {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
   },
   ticketId: {
     type: String,
@@ -23,16 +27,17 @@ var logSchema = new mongoose.Schema({
     ],
     required: true,
   },
+  creator: {
+    userName: {
+      type: String,
+    },
+    type: {
+      type: String,
+      enum: ["admin", "manager", "agent"],
+    },
+  },
   message: {
     type: String,
-  },
-  userId: {
-    type: String,
-    required: true,
-  },
-  userName: {
-    type: String,
-    required: true,
   },
   comment: {
     type: String,

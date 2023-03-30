@@ -65,3 +65,37 @@ table {
 .brand-modal-details-div-upper-right {
   padding: 2%;
 }
+
+.category-stats-div {
+  width: 100%;
+  display: flex;
+}
+
+.category-stats-div-left {
+  width: 60%;
+}
+
+.category-stats-div-right {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.employee-stats-div {
+  width: 100%;
+  display: flex;
+}
+
+.employee-stats-div-left {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.employee-stats-div-right {
+  width: 60%;
+}

@@ -27,6 +27,7 @@ exports.addBrandManager = function (req, res) {
         isDisabled: req.body.isDisabled,
         isDeleted: req.body.isDeleted,
       };
+      console.log(userData);
       var user = new User(userData);
       user
         .save()
@@ -51,12 +52,14 @@ exports.getBrandManager = function (req, res) {
     } else {
       var pageNumber = parseInt(req.query.pageNumber) || 1;
       var pageSize = parseInt(req.query.pageSize) || 10;
-      var brandId = req.query.brandId;
+      var brandName = req.query.brandName;
+
+      console.log(brandName);
 
       User.find({
         isDeleted: false,
         role: "manager",
-        "brand.brandId": brandId,
+        "brand.name": brandName,
       })
         .skip((pageNumber - 1) * pageSize)
         .limit(pageSize)
@@ -67,7 +70,7 @@ exports.getBrandManager = function (req, res) {
             User.count({
               isDeleted: false,
               role: "manager",
-              "brand.brandId": brandId,
+              "brand.name": brandName,
             }).exec(function (err, count) {
               if (err) {
                 res.send(err);

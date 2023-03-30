@@ -56,18 +56,18 @@
         Tickets
       </button>
       <button
-        ui-sref=".agentcustomers"
+        ui-sref=".rejectedtickets"
         class="{{classname2}}"
         ng-click="handleActiveButton(2)"
       >
-        Customers
+        Rejected Tickets
       </button>
       <button
-        ui-sref=".agentsettings"
+        ui-sref=".closedtickets"
         class="{{classname3}}"
         ng-click="handleActiveButton(3)"
       >
-        Settings
+        Closed Tickets
       </button>
     </div>
     <div class="component-right-div">
@@ -76,26 +76,40 @@
           <div class="agent-details-div">
             <div class="agent-photo">
               <img
-                src="{{agentProfile}}"
+                src="{{brandAgentDetails.profileImage}}"
                 alt="agent-photo-png"
                 class="agent-photo-png"
               />
             </div>
             <div class="agent-details">
-              <h6><strong>Name :</strong> {{brandAgentName}}</h6>
-              <h6><strong>Email :</strong> {{brandAgentEmail}}</h6>
-              <h6><strong>BrandId :</strong> {{brandId}}</h6>
+              <h6>
+                <strong>User name :</strong> {{brandAgentDetails.userName}}
+              </h6>
+              <h6>
+                <strong>Name :</strong> {{brandAgentDetails.name.firstName}}
+                {{brandAgentDetails.name.lastName}}
+              </h6>
+              <h6><strong>Email :</strong> {{brandAgentDetails.email}}</h6>
             </div>
           </div>
         </div>
         <div class="agent-brand-details">
           <div class="agent-brand-details-inner-div">
-            <h6><strong>BrandName: </strong>{{brandName}}</h6>
-            <h6><strong>Email: </strong>{{brandEmail}}</h6>
-            <h6><strong>BrandId: </strong>{{brandId}}</h6>
-            <h6><strong>Phone number: </strong>{{brandPhoneNumber}}</h6>
-            <h6><strong>Brand Categoty: </strong>{{brandCategory}}</h6>
-            <h6><strong>Address: </strong>{{brandAddress}}</h6>
+            <h6>
+              <strong>BrandName: </strong>{{brandAgentDetails.brand.name}}
+            </h6>
+            <h6><strong>Email: </strong>{{brandAgentDetails.brand.email}}</h6>
+            <h6>
+              <strong>Phone number: </strong
+              >{{brandAgentDetails.brand.phoneNumber}}
+            </h6>
+            <h6>
+              <strong>Brand Categoty: </strong
+              >{{brandAgentDetails.brand.category}}
+            </h6>
+            <h6>
+              <strong>Address: </strong>{{brandAgentDetails.brand.address}}
+            </h6>
           </div>
         </div>
       </div>
@@ -145,7 +159,11 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
-          <button type="button" class="btn btn-primary">
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="markAllNotSeen()"
+          >
             Mark All As Seen
           </button>
         </div>

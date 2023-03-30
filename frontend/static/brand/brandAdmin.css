@@ -40,3 +40,100 @@ box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
   width: 100%;
 }
 
+.filers-option-div {
+  display: flex;
+  margin: 0% 0% 2% 0%;
+  width: 100%;
+  justify-content: space-around;
+  background-color: rgb(227, 223, 223);
+  border: 1px solid rgb(147, 147, 147);
+  padding-top: 17px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.select-option-filter {
+  width: 200px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.filter-option-text {
+  font-size: 1.2rem;
+}
+
+.input-option-filter {
+  width: 200px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.filters-search-button {
+  width: 130px;
+  height: 33px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgb(24, 118, 241);
+  color: white;
+  border: 2px solid rgb(24, 118, 241);
+}
+
+.filers-option-div-in {
+  display: flex;
+}
+
+.filers-option-div-in-in {
+  display: flex;
+  flex-direction: column;
+}
+
+.filers-option-div-in-list {
+  max-height: 200px;
+  overflow-y: scroll;
+  position: absolute;
+  width: 200px;
+  margin-top: 30px;
+  border: 1px solid rgb(77, 77, 77);
+  border-radius: 8px;
+  -webkit-box-shadow: -1px 5px 28px -7px rgba(66,66,66,1);
+-moz-box-shadow: -1px 5px 28px -7px rgba(66,66,66,1);
+box-shadow: -1px 5px 28px -7px rgba(66,66,66,1);
+background-color: white;
+}
+
+.list-manager-name {
+  cursor: pointer;
+}
+
+.filter-result-div {
+  margin: 0 2% 2% 2%;
+}
+
+.ticket-modal-details-comment-logs {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ticket-modal-details-logs {
+  width: 48%;
+  background-color: rgb(235, 235, 235);
+}
+
+.ticket-modal-details-comments {
+  width: 48%;
+}
+
+.modal-details-logs {
+  width: 100%;
+  height: 300px;
+  background-color: rgb(235, 235, 235);
+  overflow-y: scroll;
+}
+
+.modal-details-comments {
+  width: 100%;
+  height: 300px;
+  background-color: rgb(235, 235, 235);
+  overflow-y: scroll;
+}

@@ -3,11 +3,10 @@
 
 app.controller("brandAgents", [
   "$scope",
-  "$http",
   "$location",
-  "brandService",
+  "agentService",
   "$timeout",
-  function ($scope, $http, $location, brandService, $timeout) {
+  function ($scope, $location, agentService, $timeout) {
     //Handling sidebar button css
     $scope.activeClassname =
       "btn btn-outline-primary brandAdmin-sidebar-buttons-active";
@@ -31,76 +30,52 @@ app.controller("brandAgents", [
       }
     };
 
-    var token = localStorage.getItem("token");
-
-    var config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json;odata=verbose",
-      },
-    };
-
     $scope.notificationLenght = 0;
-
     //to get brandmanager informations
-    $scope.brandAgentId;
-    $scope.brandAgentName,
-      $scope.brandAgentEmail,
-      $scope.brandId,
-      $scope.brandName,
-      $scope.brandEmail,
-      $scope.brandPhoneNumber,
-      $scope.brandCategory,
-      $scope.brandAddress;
-
-    brandService.getUserType(function (result, error) {
+    agentService.getUserType(function (result, error) {
       if (result) {
         if (result.data.role != "agent") {
           $location.path("/noaccess");
         } else {
-          $scope.brandAgentId = result.data._id;
-          $scope.brandAgentName = result.data.userName;
-          $scope.brandAgentEmail = result.data.email;
-          $scope.brandId = result.data.brand.brandId;
-          $scope.brandName = result.data.brand.name;
-          $scope.brandEmail = result.data.brand.email;
-          $scope.brandPhoneNumber = result.data.brand.phoneNumber;
-          $scope.brandCategory = result.data.brand.category;
-          $scope.brandAddress = result.data.brand.address;
-          $scope.agentProfile = result.data.profileImage;
+          $scope.brandAgentDetails = result.data;
+          console.log("brandagentdetails");
+          console.log($scope.brandAgentDetails);
 
-          $http
-            .get("http://localhost:3000/getbrandbyid/" + $scope.brandId, config)
-            .then(function (result) {
-              $scope.brandlogo = result.data[0].brandLogo;
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+          //get brand Information
+          agentService.getBrandByName(
+            $scope.brandAgentDetails.brand.name,
+            function (result, error) {
+              if (result) {
+                $scope.brandlogo = result.data[0].brandLogo;
+              } else {
+                console.log(error);
+              }
+            }
+          );
 
+          //get Agent notification
           $scope.agentNotification;
-          $http
-            .get(
-              "http://localhost:3000/agentnotification/" + $scope.brandAgentId,
-              config
-            )
-            .then(function (result) {
-              $scope.agentNotification = result.data;
-              $scope.notificationLenght = $scope.agentNotification.length;
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+          agentService.getAgentNotification(
+            $scope.brandAgentDetails.userName,
+            function (result, error) {
+              if (result) {
+                $scope.agentNotification = result.data;
+                $scope.notificationLenght = $scope.agentNotification.length;
+              } else {
+                console.log(error);
+              }
+            }
+          );
         }
       } else {
         console.log(error);
       }
     });
 
+    //mark one notification as seen
     $scope.markSeen = function (notId) {
-      $http
-        .put("http://localhost:3000/marknotseen/" + notId, {}, config)
-        .then(function (result) {
+      agentService.markNotificationSeen(notId, function (result, error) {
+        if (result) {
           console.log(result);
           $timeout(function () {
             var arr = $scope.agentNotification.filter(function (elem) {
@@ -109,12 +84,27 @@ app.controller("brandAgents", [
             $scope.agentNotification = arr;
             $scope.notificationLenght = $scope.agentNotification.length;
           }, 1000);
-        })
-        .catch(function (error) {
+        } else {
           console.log(error);
-        });
+        }
+      });
     };
 
+    //mark all notification as seen
+    $scope.markAllNotSeen = function () {
+      if ($scope.agentNotification.length != 0) {
+        agentService.markAllNotificationSeen(function (result, error) {
+          if (result) {
+            $scope.agentNotification = [];
+            $scope.notificationLenght = $scope.agentNotification.length;
+          } else {
+            console.log(error);
+          }
+        });
+      }
+    };
+
+    //logout function
     $scope.logout = function () {
       localStorage.removeItem("token");
       $location.path("/login");

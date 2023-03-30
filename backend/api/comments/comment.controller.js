@@ -10,24 +10,23 @@ exports.addComment = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
+      console.log("comment controller");
       var data = {
-        commentId: "comment" + Date.now(),
-        ticketId: req.body.ticketId,
-        ticketSubject: req.body.ticketSubject,
-        ticketQuery: req.body.ticketQuery,
-        content: req.body.content,
-        sentByUserId: req.body.sentByUserId,
-        sentByUserName: req.body.sentByUserName,
-        sentByUserType: req.body.sentByUserType,
         brand: {
-          brandId: req.body.brandId,
-          email: req.body.brandEmail,
           name: req.body.brandName,
-          category: req.body.brandCategory,
+          email: req.body.brandEmail,
         },
-        dateAndTime: Date.now(),
-        isDeleted: req.body.isDeleted,
+        ticketId: req.body.ticketId,
+        content: req.body.content,
+        sentBy: {
+          userName: req.body.sentByUserName,
+          email: req.body.sentByUserEmail,
+          type: req.body.sentByUserType,
+        },
+        time: Date.now(),
+        isDeleted: false,
       };
+      console.log(data);
       var comment = new Comment(data);
       comment
         .save()
