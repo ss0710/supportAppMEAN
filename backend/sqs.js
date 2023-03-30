@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { SQS } = require("aws-sdk");
 const { Consumer } = require("sqs-consumer");
 const { AbortController } = require("abort-controller");
@@ -7,8 +8,8 @@ const queueUrl =
 
 const sqs = new SQS({
   region: "ap-northeast-1",
-  accessKeyId: "AKIA4GWBPNQSKQKZUO5W",
-  secretAccessKey: "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",
+  accessKeyId: SQS_ACCESS_KEY,
+  secretAccessKey: SQS_SECRET_ACCESS_KEY,
 });
 
 function addTicket(message) {
