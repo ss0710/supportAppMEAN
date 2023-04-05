@@ -17,6 +17,6 @@ Overall, this project aims to provide a robust and scalable solution for managin
 1) Backend - NodeJS, ExpressJs 
 2) Database - MongoDB
 3) Fronted - AngularJS
-4) Services - AWS S3, AWS SQS
+4) Services - AWS S3, AWS SQS, SocketJS
 
 # Agent View
