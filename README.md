@@ -12,6 +12,9 @@ The project is a support app that provides a platform for brands to manage custo
 
 Overall, this project aims to provide a robust and scalable solution for managing customer support tickets for multiple brands in a single platform. The multitenant architecture ensures that each brand has its dedicated space while still sharing the same system infrastructure, resulting in cost-effective and efficient support management.
 
+# Multitenant Architecture
+![alt text](https://user-images.githubusercontent.com/63851816/230068579-7de35088-f32d-4548-8825-1318196c8e16.png)
+
 # Tech Stack
 
 1) Backend - NodeJS, ExpressJs 
