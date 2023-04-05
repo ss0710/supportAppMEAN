@@ -40,7 +40,22 @@ Manager can view, update, add, disable and delete Agents Profile.
 
 ![alt text](https://user-images.githubusercontent.com/63851816/230072878-f8619e03-a21e-4cfe-9c92-b425323fc03e.png)
 
-Manager can view ticket status assigned to agents. If tickets are rejected by agent then he can reassign the tikets to some other agent
+Manager can view ticket status assigned to agents. If tickets are rejected by agent then he can reassign the tikets to some other agent.Server side pagination has been done on each list to optimize data loading time.
 
 ![alt text](https://user-images.githubusercontent.com/63851816/230074450-36d67cd1-add3-4ab2-8653-a4e64f9c1912.png)
 
+# Brand Admin View
+
+Brand admin has the authority to view, update, delete, disable all the managers and agents of the brands. Brand Admin can view all the tickets status through dynamic filter options.
+
+![alt text](https://user-images.githubusercontent.com/63851816/230080131-a6a87cab-243e-4c4e-b1ed-fac98bffbdc1.png)
+
+Brand Admin can view the important data analytics and stats of Brand and Tickets like efficiency of each employee, average ticket solving time, Top perfoming employees.
+
+![alt text](https://user-images.githubusercontent.com/63851816/230080627-10811d29-b8aa-481d-95de-92f098cb4bfa.png)
+
+![alt text](https://user-images.githubusercontent.com/63851816/230080701-48b9f938-5ca2-4c55-b3b3-ced7b46ffee1.png)
+
+Brand Admin can view profile of each employee and there activity/contribution heat map.
+
+![alt text](https://user-images.githubusercontent.com/63851816/230081007-59a12bfb-9cc1-42a4-acfd-fa7de68ba5ec.png)
