@@ -11,3 +11,12 @@ The project is a support app that provides a platform for brands to manage custo
 3) The Brand Admins are responsible for creating Managers and Agents for their brand. They can also manage their brand's support settings, such as SLA policies, support channels, and automation rules. The Brand Admins can view all the tickets related to their brand, but they cannot assign tickets directly to the Agents.
 
 Overall, this project aims to provide a robust and scalable solution for managing customer support tickets for multiple brands in a single platform. The multitenant architecture ensures that each brand has its dedicated space while still sharing the same system infrastructure, resulting in cost-effective and efficient support management.
+
+# Tech Stack
+
+1) Backend - NodeJS, ExpressJs 
+2) Database - MongoDB
+3) Fronted - AngularJS
+4) Services - AWS S3, AWS SQS
+
+# Agent View
