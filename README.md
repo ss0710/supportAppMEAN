@@ -23,3 +23,9 @@ Overall, this project aims to provide a robust and scalable solution for managin
 4) Services - AWS S3, AWS SQS, SocketJS
 
 # Agent View
+Agent can view assigned tickets and may accept or reject the tikcets. Agents get notification for each updates on tickets assigned to him.
+![alt text](https://user-images.githubusercontent.com/63851816/230070039-ebfd4372-ff20-40ca-b304-294c6df41a75.png)
+
+Agent has access to ticket dashboard. Tickets dashboard includes status change option, attachments, ticket history and ticket comments.
+![alt text](https://user-images.githubusercontent.com/63851816/230070282-b3209140-4abe-4c0c-a55b-d897662365d2.png)
+
