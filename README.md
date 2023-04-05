@@ -24,8 +24,25 @@ Overall, this project aims to provide a robust and scalable solution for managin
 
 # Agent View
 Agent can view assigned tickets and may accept or reject the tikcets. Agents get notification for each updates on tickets assigned to him.
+
 ![alt text](https://user-images.githubusercontent.com/63851816/230070039-ebfd4372-ff20-40ca-b304-294c6df41a75.png)
 
 Agent has access to ticket dashboard. Tickets dashboard includes status change option, attachments, ticket history and ticket comments.
+
 ![alt text](https://user-images.githubusercontent.com/63851816/230070282-b3209140-4abe-4c0c-a55b-d897662365d2.png)
+
+# Manager View
+Managers and agents gets notification for each ticket updates
+
+![alt text](https://user-images.githubusercontent.com/63851816/230072644-0770e2e0-2afd-45df-8c79-3cb5a936f1d1.png)
+
+Manager can view, update, add, disable and delete Agents Profile.
+
+![alt text](https://user-images.githubusercontent.com/63851816/230072878-f8619e03-a21e-4cfe-9c92-b425323fc03e.png)
+
+Manager can view ticket status assigned to agents. If tickets are rejected by agent then he can reassign the tikets to some other agent.
+![alt text](https://user-images.githubusercontent.com/63851816/230074138-85eb367b-c592-405c-81d3-0e451dd16f70.png)
+
+
+
 
