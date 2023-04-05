@@ -40,9 +40,7 @@ Manager can view, update, add, disable and delete Agents Profile.
 
 ![alt text](https://user-images.githubusercontent.com/63851816/230072878-f8619e03-a21e-4cfe-9c92-b425323fc03e.png)
 
-Manager can view ticket status assigned to agents. If tickets are rejected by agent then he can reassign the tikets to some other agent.
-![alt text](https://user-images.githubusercontent.com/63851816/230074138-85eb367b-c592-405c-81d3-0e451dd16f70.png)
+Manager can view ticket status assigned to agents. If tickets are rejected by agent then he can reassign the tikets to some other agent
 
-
-
+![alt text](https://user-images.githubusercontent.com/63851816/230074450-36d67cd1-add3-4ab2-8653-a4e64f9c1912.png)
 
