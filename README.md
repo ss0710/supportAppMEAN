@@ -56,6 +56,18 @@ Brand Admin can view the important data analytics and stats of Brand and Tickets
 
 ![alt text](https://user-images.githubusercontent.com/63851816/230080701-48b9f938-5ca2-4c55-b3b3-ced7b46ffee1.png)
 
-Brand Admin can view profile of each employee and there activity/contribution heat map.
+Brand Admin can view profile of each employee and their activity/contribution heat map.
 
 ![alt text](https://user-images.githubusercontent.com/63851816/230081007-59a12bfb-9cc1-42a4-acfd-fa7de68ba5ec.png)
+
+# Superadmin View
+
+SuperAdmin adds brands and brand admins. Brand admins receive their login credentials as soon as their brands are registered.
+
+![alt text](https://user-images.githubusercontent.com/63851816/230286296-b09034aa-a6e5-4abd-bfe4-96823a52d431.png)
+
+The Superadmin has access to the statistical insights of all the registered brands. The Superadmin can view in-depth statistics of each individual brand and monitor their progress.
+
+![alt text](https://user-images.githubusercontent.com/63851816/230286711-3b4634f9-e716-4ad5-ae42-236002219953.png)
+![alt text](https://user-images.githubusercontent.com/63851816/230286783-d21cac27-96e1-4400-91c7-1908dc3f13ff.png)
+![alt text](https://user-images.githubusercontent.com/63851816/230286850-9290870c-e4c4-4f4a-b87b-488601d11c0d.png)
