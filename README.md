@@ -95,3 +95,5 @@ Frontend
 1) Auth Interceptor - An auth interceptor is a piece of middleware that intercepts HTTP requests and adds authentication information to them. It is used in support app to ensure that only authenticated users can access protected resources.
 
 2) Debouncing - Debouncing is a technique used in web development to optimize search functionality and improve user experience. It involves delaying the execution of a search query until the user has finished typing, rather than triggering a search query for every keystroke. Deboucning is used in every search feild in support App.
+
+3) Modularization - Code is divided into smaller, independent, and interchangeable modules or components.Each module performs a specific set of functions or tasks and can be developed, tested, and maintained independently.Modularization is used to improve the scalability, flexibility, maintainability, and reusability of the software.
