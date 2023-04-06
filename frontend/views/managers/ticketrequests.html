@@ -23,7 +23,7 @@
     <tr ng-repeat="item in ticketsrequested">
       <td>{{item.ticketId}}</td>
       <td>{{item.subject}}</td>
-      <td>{{item.createdBy.createdAt}}</td>
+      <td>{{item.createdBy.createdAt |date :"dd/MM/yyyy HH:mm:ss"}}</td>
       <td>
         <button
           ng-if="item.status == Created"
@@ -281,34 +281,34 @@
             </table>
             <div class="paginations-button-div">
               <button
-                ng-click="loadAgents(ticketId, 1, pageSize)"
+                ng-click="loadAgents(ticketId, 1, pageSize1)"
                 class="btn-primary pagination-button-bg first-last-btn"
               >
                 First
               </button>
               <button
-                ng-click="loadAgents(ticketId, pageNumber - 1, pageSize)"
-                ng-disabled="pageNumber == 1"
+                ng-click="loadAgents(ticketId, pageNumber1 - 1, pageSize1)"
+                ng-disabled="pageNumber1 == 1"
                 class="btn-outline-primary pagination-button-bg nxt-prev-btn"
               >
                 Previous
               </button>
               <button
-                ng-repeat="page in getPages()"
-                ng-click="loadAgents(ticketId, page, pageSize)"
+                ng-repeat="page in getPages1()"
+                ng-click="loadAgents(ticketId, page, pageSize1)"
                 class="btn-outline-primary btw-btn"
               >
                 {{page}}
               </button>
               <button
-                ng-click="loadAgents(ticketId, pageNumber + 1, pageSize)"
-                ng-disabled="pageNumber == lastPage"
+                ng-click="loadAgents(ticketId, pageNumber1 + 1, pageSize1)"
+                ng-disabled="pageNumber1 == lastPage1"
                 class="btn-outline-primary pagination-button-bg nxt-prev-btn"
               >
                 Next
               </button>
               <button
-                ng-click="loadAgents(ticketId, lastPage, pageSize)"
+                ng-click="loadAgents(ticketId, lastPage1, pageSize1)"
                 class="btn-primary pagination-button-bg first-last-btn"
               >
                 Last

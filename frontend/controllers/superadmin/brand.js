@@ -27,9 +27,12 @@ app.controller("SuperadminBrand", [
           $scope.pageNumber = result.data.pageNumber;
           $scope.pageSize = result.data.pageSize;
           $scope.totalCount = result.data.totalCount;
-          $scope.lastPage = superadminService.LastPageNumber(
+          superadminService.LastPageNumber(
             $scope.totalCount,
-            $scope.pageSize
+            $scope.pageSize,
+            function (result) {
+              $scope.lastPage = result;
+            }
           );
         } else {
           console.log(error.data);
@@ -72,7 +75,7 @@ app.controller("SuperadminBrand", [
 
     $scope.deleteBrand = function () {
       superadminService.deleteBrand(
-        $scope.brandIdToD,
+        $scope.brandNameToD,
         function (result, error) {
           if (result) {
             alert("succesfully deleted");
@@ -98,7 +101,7 @@ app.controller("SuperadminBrand", [
       if ($scope.process == "disable") {
         console.log("clicked disable fun");
         superadminService.disableBrand(
-          $scope.brandIdToD,
+          $scope.brandNameToD,
           function (result, error) {
             if (result) {
               alert("successfully marked as disable");
@@ -124,7 +127,7 @@ app.controller("SuperadminBrand", [
       } else {
         console.log("clicked enable fun");
         superadminService.enableBrand(
-          $scope.brandIdToD,
+          $scope.brandNameToD,
           function (result, error) {
             if (result) {
               alert("successfully marked as enable");

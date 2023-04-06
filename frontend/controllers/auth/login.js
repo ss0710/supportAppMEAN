@@ -1,5 +1,7 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/auth/auth.service.js" />
+///<reference path="../../services/socket/socket.service.js" />
+///<reference path="../../services/toast/toast.service.js" />
 
 app.controller("login", [
   "$scope",
@@ -7,7 +9,17 @@ app.controller("login", [
   "$location",
   "authService",
   "$window",
-  function ($scope, $http, $location, authService, $window) {
+  "socketService",
+  "toastService",
+  function (
+    $scope,
+    $http,
+    $location,
+    authService,
+    $window,
+    socketService,
+    toastService
+  ) {
     console.log("login controller");
     var token = localStorage.getItem("token");
 
@@ -22,6 +34,7 @@ app.controller("login", [
       $http
         .get("http://localhost:3000/usertype", config)
         .then(function (response) {
+          toastService.successMessage("Successfuly Logged In");
           if (response.data.role == "superAdmin") {
             $location.path("/admin");
           } else if (response.data.role == "brandAdmin") {
@@ -54,7 +67,11 @@ app.controller("login", [
                 localStorage.setItem("token", response.data.token);
                 window.location.reload();
               } else {
-                alert("Wrong username or password!");
+                if (error.status == 404) {
+                  toastService.errorMessage(error.data.error);
+                } else {
+                  toastService.errorMessage("Wrong username or password!");
+                }
               }
             }
           );

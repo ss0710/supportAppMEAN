@@ -30,17 +30,16 @@ app.controller("activity", [
           $scope.brandCategory = result.data.brand.category;
           $scope.brandAddress = result.data.brand.address;
 
-          $http
-            .get(
-              "http://localhost:3000/getnotifications/" + $scope.brandId,
-              config
-            )
-            .then(function (result) {
-              $scope.activities = result.data;
-            })
-            .then(function (error) {
-              console.log(error);
-            });
+          brandService.getActivityNotification(
+            $scope.brandId,
+            function (result, error) {
+              if (result) {
+                $scope.activities = result.data;
+              } else {
+                console.log(error);
+              }
+            }
+          );
         }
       })
       .catch(function (error) {

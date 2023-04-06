@@ -142,7 +142,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add Manager</h5>
           <button
             type="button"
             class="close"
@@ -160,10 +160,11 @@
               type="email"
               id="email"
               name="email"
-              ng-model="managerEmail"
+              ng-model="user.email"
               required
               ng-pattern="emailRegex"
               placeholder="Enter email"
+              style="width: 60%"
             />
             <br />
             <label ng-show="myForm.$submitted || myForm.email.$dirty">
@@ -187,9 +188,10 @@
               type="text"
               name="name"
               id="name"
-              ng-model="managerName"
+              ng-model="user.userName"
               required
               placeholder="Enter name"
+              style="width: 60%"
             />
             <br />
             <label ng-show="myForm.$submitted || myForm.name.$dirty">
@@ -207,9 +209,10 @@
               type="text"
               name="firstName"
               id="firstName"
-              ng-model="firstName"
+              ng-model="user.firstName"
               required
               placeholder="Enter first name"
+              style="width: 60%"
             />
             <br />
             <label ng-show="myForm.$submitted || myForm.firstName.$dirty">
@@ -227,9 +230,10 @@
               type="text"
               name="lastName"
               id="lastName"
-              ng-model="lastName"
+              ng-model="user.lastName"
               required
               placeholder="Enter last name"
+              style="width: 60%"
             />
             <br />
             <label ng-show="myForm.$submitted || myForm.lastName.$dirty">
@@ -266,11 +270,12 @@
               type="text"
               id="phoneNumber"
               name="phoneNumber"
-              ng-model="phoneNumber"
+              ng-model="user.phoneNumber"
               ng-minlength="10"
               ng-maxlength="10"
               required
               placeholder="Enter phone number"
+              style="width: 60%"
             />
             <br />
             <label ng-show="myForm.$submitted || myForm.phoneNumber.$dirty">
@@ -294,10 +299,11 @@
               type="password"
               id="password"
               name="password"
-              ng-model="password"
+              ng-model="user.password"
               ng-pattern="passwordRegex"
               required
-              placeholder="confirm passsword"
+              placeholder="enter passsword"
+              style="width: 60%"
             />
             <br />
             <label ng-show="myForm.$submitted || myForm.password.$dirty">
@@ -322,9 +328,18 @@
                 type="button"
                 class="btn btn-primary"
                 ng-disabled="myForm.$invalid"
+                ng-show="!buttonBool"
                 ng-click="addBrandManager()"
               >
                 Submit
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                ng-disabled="true"
+                ng-show="buttonBool"
+              >
+                Submitting
               </button>
             </div>
           </form>

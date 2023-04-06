@@ -3,10 +3,9 @@
 
 app.controller("brandAdminAgent", [
   "$scope",
-  "$http",
   "brandService",
   "$timeout",
-  function ($scope, $http, brandService, $timeout) {
+  function ($scope, brandService, $timeout) {
     $scope.pageNumber = 1;
     $scope.pageSize = 5;
     $scope.totalCount = 0;
@@ -42,7 +41,7 @@ app.controller("brandAdminAgent", [
 
     $scope.getAgentData = function (pageNumber, pageSize) {
       brandService.getBrandAgents(
-        $scope.brandAdminDetails.brand.brandId,
+        $scope.brandAdminDetails.brand.name,
         pageNumber,
         pageSize,
         function (result1, error) {

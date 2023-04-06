@@ -1,56 +1,27 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/managers/manager.service.js" />
+///<reference path="../../services/socket/socket.service.js" />
 
 app.controller("brandManager", [
   "$scope",
-  "$http",
   "$location",
   "managerService",
   "$timeout",
-  function ($scope, $http, $location, managerService, $timeout) {
-    //Handling sidebar button css
-    $scope.activeClassname =
-      "btn btn-outline-primary brandAdmin-sidebar-buttons-active";
-    $scope.classname = "btn btn-outline-primary brandAdmin-sidebar-buttons";
-    $scope.classname1 = $scope.activeClassname;
-    $scope.classname2 = $scope.classname;
-    $scope.classname3 = $scope.classname;
-    $scope.classname4 = $scope.classname;
-    $scope.handleActiveButton = function (id) {
-      if (id == 1) {
-        $scope.classname1 = $scope.activeClassname;
-        $scope.classname2 = $scope.classname;
-        $scope.classname3 = $scope.classname;
-        $scope.classname4 = $scope.classname;
-      } else if (id == 2) {
-        $scope.classname1 = $scope.classname;
-        $scope.classname2 = $scope.activeClassname;
-        $scope.classname3 = $scope.classname;
-        $scope.classname4 = $scope.classname;
-      } else if (id == 3) {
-        $scope.classname1 = $scope.classname;
-        $scope.classname2 = $scope.classname;
-        $scope.classname3 = $scope.activeClassname;
-        $scope.classname4 = $scope.classname;
-      } else if (id == 4) {
-        $scope.classname1 = $scope.classname;
-        $scope.classname2 = $scope.classname;
-        $scope.classname3 = $scope.classname;
-        $scope.classname4 = $scope.activeClassname;
-      }
-    };
-
-    var token = localStorage.getItem("token");
-
-    var config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json;odata=verbose",
-      },
-    };
-
+  "socketService",
+  function ($scope, $location, managerService, $timeout, socketService) {
     //toggle handler
     $scope.onlineStatus = "online";
+
+    var socket = socketService.getSocketInstance();
+    socket.on("notification", (data) => {
+      if (data.receiver.userName == $scope.managerDetails.userName) {
+        $scope.$apply(function () {
+          $scope.managerNotification.unshift(data);
+          $scope.notificationLenght = $scope.managerNotification.length;
+        });
+      }
+    });
+
     $scope.toggleHandler = function () {
       console.log($scope.onlineStatus);
       if ($scope.onlineStatus == "online") {
@@ -61,70 +32,46 @@ app.controller("brandManager", [
     };
 
     //to get brandmanager informations
-    $scope.brandManagerName,
-      $scope.brandManagerEmail,
-      $scope.brandId,
-      $scope.brandName,
-      $scope.brandEmail,
-      $scope.brandPhoneNumber,
-      $scope.brandCategory,
-      $scope.brandAddress;
-    $scope.brandlogo;
-
     managerService.getUserType(function (result, error) {
       if (result) {
         console.log(result.data);
         if (result.data.role != "manager") {
           $location.path("/noaccess");
         } else {
-          $scope.brandManagerName = result.data.userName;
-          $scope.brandManagerEmail = result.data.email;
-          $scope.brandId = result.data.brand.brandId;
-          $scope.brandName = result.data.brand.name;
-          $scope.brandEmail = result.data.brand.email;
-          $scope.brandPhoneNumber = result.data.brand.phoneNumber;
-          $scope.brandCategory = result.data.brand.category;
-          $scope.brandAddress = result.data.brand.address;
-          $scope.brandManagerProfile = result.data.profileImage;
-
-          $http
-            .get(
-              "http://localhost:3000/getbrandbyid/" + $scope.brandName,
-              config
-            )
-            .then(function (result) {
-              $scope.brandlogo = result.data[0].brandLogo;
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+          $scope.managerDetails = result.data;
+          managerService.getBrandById(
+            $scope.managerDetails.brand.name,
+            function (result, error) {
+              if (result) {
+                $scope.brandlogo = result.data[0].brandLogo;
+              } else {
+                console.log(error);
+              }
+            }
+          );
 
           $scope.managerNotification;
-          $http
-            .get(
-              "http://localhost:3000/managernotification/" +
-                $scope.brandManagerName,
-              config
-            )
-            .then(function (result) {
-              $scope.managerNotification = result.data;
-              $scope.notificationLenght = $scope.managerNotification.length;
-              console.log("manager notification array");
-              console.log($scope.managerNotification);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+          managerService.getManagerNotification(
+            $scope.managerDetails.userName,
+            function (result, error) {
+              if (result) {
+                $scope.managerNotification = result.data;
+                $scope.notificationLenght = $scope.managerNotification.length;
+              } else {
+                console.log(error);
+              }
+            }
+          );
         }
       } else {
         console.log(error);
       }
     });
 
+    //to mark one notification seen
     $scope.markSeen = function (notId) {
-      $http
-        .put("http://localhost:3000/marknotseen/" + notId, {}, config)
-        .then(function (result) {
+      managerService.markOneNotifSeen(notId, function (result, error) {
+        if (result) {
           console.log(result);
           $timeout(function () {
             var arr = $scope.managerNotification.filter(function (elem) {
@@ -133,27 +80,27 @@ app.controller("brandManager", [
             $scope.managerNotification = arr;
             $scope.notificationLenght = $scope.managerNotification.length;
           }, 1000);
-        })
-        .catch(function (error) {
+        } else {
           console.log(error);
-        });
+        }
+      });
     };
 
+    //to mark all notification seen
     $scope.markAllNotSeen = function () {
       if ($scope.managerNotification.length != 0) {
-        $http
-          .put("http://localhost:3000/markallmanagernotseen", {}, config)
-          .then(function (result) {
-            console.log(result);
+        managerService.markAllNotificationSeen(function (result, error) {
+          if (result) {
             $scope.managerNotification = [];
             $scope.notificationLenght = $scope.managerNotification.length;
-          })
-          .catch(function (error) {
+          } else {
             console.log(error);
-          });
+          }
+        });
       }
     };
 
+    //logout function
     $scope.logout = function () {
       localStorage.removeItem("token");
       $location.path("/login");

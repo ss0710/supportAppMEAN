@@ -1,18 +1,10 @@
 ///<reference path="../../controllers/app.js" />
 
 app.service("superadminService", function ($http) {
-  var token = localStorage.getItem("token");
-  var config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json;odata=verbose",
-    },
-  };
-
   //getting user type
   this.getUserType = function (cb) {
     $http
-      .get("http://localhost:3000/usertype", config)
+      .get("http://localhost:3000/usertype")
       .then(function (result) {
         cb(result, null);
       })
@@ -28,8 +20,7 @@ app.service("superadminService", function ($http) {
         "http://localhost:3000/getactivebrands?pageNumber=" +
           pageNumber +
           "&pageSize=" +
-          pageSize,
-        config
+          pageSize
       )
       .then(function (result) {
         cb(result, null);
@@ -46,8 +37,7 @@ app.service("superadminService", function ($http) {
         "http://localhost:3000/getinactivebrands?pageNumber=" +
           pageNumber +
           "&pageSize=" +
-          pageSize,
-        config
+          pageSize
       )
       .then(function (result) {
         cb(result, null);
@@ -58,6 +48,7 @@ app.service("superadminService", function ($http) {
   };
 
   //add brand
+  var token = localStorage.getItem("token");
   this.addBrand = function (image, brand, cb) {
     var formData = new FormData();
     formData.append("image", image);
@@ -110,12 +101,20 @@ app.service("superadminService", function ($http) {
       brandAddress: brandDetails.address,
     };
     $http
-      .post("http://localhost:3000/addbrandadmin", data, config)
+      .post("http://localhost:3000/addbrandadmin", data)
       .then(function (result) {
         cb(result, null);
       })
       .catch(function (error) {
-        cb(null, error);
+        if (error.data.keyPattern) {
+          if (error.data.keyPattern.email) {
+            cb(null, "email already exists");
+          } else if (error.data.keyPattern.userName) {
+            cb(null, "user name already exist");
+          }
+        } else {
+          cb(null, "something went wrong!!");
+        }
       });
   };
 
@@ -133,7 +132,7 @@ app.service("superadminService", function ($http) {
       isDeleted: false,
     };
     $http
-      .put("http://localhost:3000/updatebrand", updatedBrandData, config)
+      .put("http://localhost:3000/updatebrand", updatedBrandData)
       .then(function (result) {
         cb(result, null);
       })
@@ -145,7 +144,7 @@ app.service("superadminService", function ($http) {
   //deleteBrand
   this.deleteBrand = function (brandId, cb) {
     $http
-      .put("http://localhost:3000/deletebrand/" + brandId, {}, config)
+      .put("http://localhost:3000/deletebrand/" + brandId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -157,7 +156,7 @@ app.service("superadminService", function ($http) {
   //Disable Brand
   this.disableBrand = function (brandId, cb) {
     $http
-      .put("http://localhost:3000/disablebrand/" + brandId, {}, config)
+      .put("http://localhost:3000/disablebrand/" + brandId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -169,7 +168,7 @@ app.service("superadminService", function ($http) {
   //Enable Brand
   this.enableBrand = function (brandId, cb) {
     $http
-      .put("http://localhost:3000/enablebrand/" + brandId, {}, config)
+      .put("http://localhost:3000/enablebrand/" + brandId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -177,13 +176,12 @@ app.service("superadminService", function ($http) {
         cb(null, error);
       });
   };
+  this.LastPageNumber = function (totalCount, pageSize, cb) {
+    if (totalCount % pageSize == 0) {
+      cb(totalCount / pageSize);
+    } else {
+      var r = totalCount / pageSize;
+      cb(Math.ceil(r - 0.1));
+    }
+  };
 });
-
-this.LastPageNumber = function (totalCount, pageSize) {
-  if (totalCount % pageSize == 0) {
-    return totalCount / pageSize;
-  } else {
-    var r = totalCount / pageSize;
-    return Math.ceil(r - 0.1);
-  }
-};

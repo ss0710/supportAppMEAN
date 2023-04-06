@@ -8,13 +8,10 @@ var passportAuth = require("./api/passport/passport.controller");
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var bodyParser = require("body-parser");
+var SocketFile = require("./services/socket/socket");
 
 var PORT = process.env.PORT || 3000;
 var app = express();
-// const http = require("http").Server(app);
-// const io = require("socket.io")(http);
-
-//database connection
 connect();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
@@ -24,6 +21,7 @@ app.use(
     parameterLimit: 50000,
   })
 );
+
 app.use(express.json());
 app.use(cors());
 
@@ -45,37 +43,10 @@ passport.deserializeUser(function (user, done) {
 
 passport.use(new LocalStrategy(passportAuth.passportAuth));
 
-// app.get("/", function (req, res) {
-//   res.send("hello world");
-// });
-//routes
-app.use(Routes);
-
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-
-//   socket.on("disconnect", () => {
-//     console.log("user disconnected");
-//   });
-
-//   socket.on("chat message", (msg) => {
-//     console.log("message: " + msg);
-//     io.emit("chat message", msg);
-//   });
-// });
-
 var server = app.listen(PORT, function () {
   console.log(`Server is reunning on PORT ${PORT}`);
 });
 
-var io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+app.use(Routes);
 
-io.on("connection", function (socket) {
-  console.log("connection made");
-  console.log(socket.id);
-});
+SocketFile.socketConnection(server);

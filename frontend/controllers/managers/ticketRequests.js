@@ -15,12 +15,10 @@ app.controller("TicketRequests", [
     //getting managers details
     managerService.getUserType(function (result, error) {
       if (result) {
-        console.log(result.data);
         if (result.data.role != "manager") {
           $location.path("/noaccess");
         } else {
           $scope.brandManagerDetails = result.data;
-          console.log($scope.brandManagerDetails);
           $scope.getCreatedTickets(1, 5);
         }
       } else {
@@ -34,7 +32,6 @@ app.controller("TicketRequests", [
     };
 
     $scope.getCreatedTickets = function (pageNumber, pageSize) {
-      console.log(pageNumber);
       managerService.getTicketsByBrandIdAndManagerId(
         $scope.brandManagerDetails.brand.name,
         $scope.brandManagerDetails.userName,
@@ -43,12 +40,15 @@ app.controller("TicketRequests", [
         "Created",
         function (result, error) {
           if (result) {
-            console.log(result.data);
             $scope.ticketsrequested = result.data.data;
             $scope.pageNumber = result.data.pageNumber;
             $scope.pageSize = result.data.pageSize;
             $scope.totalCount = result.data.totalCount;
-            $scope.lastPageNumber($scope.totalCount, $scope.pageSize);
+            $scope.lastPage = $scope.lastPageNumber(
+              $scope.totalCount,
+              $scope.pageSize
+            );
+            console.log($scope.ticketsrequested);
           } else {
             console.log(error);
           }
@@ -67,18 +67,16 @@ app.controller("TicketRequests", [
 
     $scope.lastPageNumber = function (totalCount, pageSize) {
       if (totalCount % pageSize == 0) {
-        $scope.lastPage = totalCount / pageSize;
+        return totalCount / pageSize;
       } else {
         var r = totalCount / pageSize;
-        $scope.lastPage = Math.ceil(r - 0.1);
+        return Math.ceil(r - 0.1);
       }
     };
 
     //loading agents
     $scope.loadAgents = function (ticketId, pageNumber, pageSize) {
-      console.log("load agents called");
       $scope.ticketId = ticketId;
-
       managerService.getAgents(
         $scope.brandManagerDetails.brand.name,
         pageNumber,
@@ -87,12 +85,13 @@ app.controller("TicketRequests", [
           if (result) {
             $scope.globalAgents = result.data.data;
             $scope.agents = $scope.globalAgents;
-            console.log($scope.agents);
-            $scope.pageNumber = result.data.pageNumber;
-            $scope.pageSize = result.data.pageSize;
-            $scope.totalCount = result.data.totalCount;
-
-            $scope.lastPageNumber($scope.totalCount, $scope.pageSize);
+            $scope.pageNumber1 = result.data.pageNumber;
+            $scope.pageSize1 = result.data.pageSize;
+            $scope.totalCount1 = result.data.totalCount;
+            $scope.lastPage1 = $scope.lastPageNumber(
+              $scope.totalCount1,
+              $scope.pageSize1
+            );
           } else {
             console.log(error);
           }
@@ -100,37 +99,36 @@ app.controller("TicketRequests", [
       );
     };
 
+    $scope.getPages1 = function () {
+      var pages = [];
+      var pageCount = Math.ceil($scope.totalCount1 / $scope.pageSize1);
+      for (var i = 1; i <= pageCount; i++) {
+        pages.push(i);
+      }
+      return pages;
+    };
+
     //function to assign ticket
     $scope.assignTicketToAgent = function (agentName, agentEmail) {
-      var agentData = {
-        agentName: agentName,
-        agentEmail: agentEmail,
-        brandName: $scope.brandManagerDetails.brand.name,
-        brandEmail: $scope.brandManagerDetails.brand.email,
-        ticketId: $scope.ticketId,
-        brandManagerName: $scope.brandManagerDetails.userName,
-        brandManagerId: $scope.brandManagerDetails._id,
-        agentName: agentName,
-        userType: "manager",
-      };
-
-      console.log(agentData);
-
       managerService.assignTicketToAgentService(
         $scope.ticketId,
-        agentData,
+        agentName,
+        agentEmail,
+        $scope.brandManagerDetails,
         function (result, error) {
           if (result) {
             alert("Successfully assigned tickets");
             $(function () {
               $("#exampleModalCenter").modal("hide");
             });
+            console.log($scope.ticketsrequested);
             $scope.ticketsrequested.forEach(function (elem) {
               if (elem.ticketId == $scope.ticketId) {
                 elem.status = "Assigned";
               }
             });
-            console.log(result);
+            console.log($scope.ticketsrequested);
+            // console.log(result);
           } else {
             console.log(error);
           }
@@ -140,28 +138,23 @@ app.controller("TicketRequests", [
 
     //create tickets handler
     $scope.createTicketsHandler = function () {
-      var ticketData = {
-        brandName: $scope.brandManagerDetails.brand.name,
-        brandEmail: $scope.brandManagerDetails.brand.email,
-        subject: $scope.subject,
-        query: $scope.query,
-        createdByUserName: $scope.brandManagerDetails.userName,
-        createdByUserEmail: $scope.brandManagerDetails.email,
-        userType: "manager",
-      };
-      console.log(ticketData);
-      managerService.addTickets(ticketData, function (result, error) {
-        if (result) {
-          alert("Succefully Created Ticket");
-          console.log(result);
-          $scope.ticketsrequested.unshift(result.data.ticketResult);
-          $(function () {
-            $("#addTicketModal").modal("hide");
-          });
-        } else {
-          console.log(error.data);
+      managerService.addTickets(
+        $scope.subject,
+        $scope.query,
+        $scope.brandManagerDetails,
+        function (result, error) {
+          if (result) {
+            alert("Succefully Created Ticket");
+            console.log(result);
+            $scope.ticketsrequested.unshift(result.data.ticketResult);
+            $(function () {
+              $("#addTicketModal").modal("hide");
+            });
+          } else {
+            console.log(error.data);
+          }
         }
-      });
+      );
     };
   },
 ]);

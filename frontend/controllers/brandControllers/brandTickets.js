@@ -6,8 +6,7 @@ app.controller("brandTickets", [
   "$location",
   "brandService",
   "$timeout",
-  "$http",
-  function ($scope, $location, brandService, $timeout, $http) {
+  function ($scope, $location, brandService, $timeout) {
     $scope.pageNumber = 1;
     $scope.pageSize = 5;
     $scope.selectedStatus = "";
@@ -17,15 +16,6 @@ app.controller("brandTickets", [
     $scope.agentListShow = false;
     $scope.currentManagers = [];
     var timeout;
-
-    var token = localStorage.getItem("token");
-
-    var config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json;odata=verbose",
-      },
-    };
 
     $scope.updateManagerDetailsHandler = function (item, process) {
       $scope.updateManagerDetails = item;
@@ -74,21 +64,17 @@ app.controller("brandTickets", [
         $timeout.cancel(timeout1);
       }
       timeout1 = $timeout(function () {
-        $http
-          .get(
-            "http://localhost:3000/searchagent?brandId=" +
-              $scope.brandId +
-              "&name=" +
-              $scope.searchAgentName,
-            config
-          )
-          .then(function (result) {
-            console.log(result.data);
-            $scope.searchAgentDetails = result.data;
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        brandService.searchAgent(
+          $scope.brandId,
+          $scope.searchAgentName,
+          function (result, error) {
+            if (result) {
+              $scope.searchAgentDetails = result.data;
+            } else {
+              console.log(error);
+            }
+          }
+        );
       }, 500);
     };
 
@@ -108,36 +94,28 @@ app.controller("brandTickets", [
     };
 
     $scope.searchHandler = function (pageNumber, pageSize) {
-      $http
-        .get(
-          "http://localhost:3000/filtertickets?brandName=" +
-            $scope.adminDetails.brand.name +
-            "&status=" +
-            $scope.selectedStatus +
-            "&managername=" +
-            $scope.searchManagerName +
-            "&agentname=" +
-            $scope.searchAgentName +
-            "&pageNumber=" +
-            pageNumber +
-            "&pageSize=" +
-            pageSize,
-          config
-        )
-        .then(function (result) {
-          $scope.ticketResult = result.data.data;
-          $scope.pageNumber = result.data.pageNumber;
-          $scope.pageSize = result.data.pageSize;
-          $scope.totalCount = result.data.totalCount;
-          console.log($scope.ticketResult);
-          $scope.lastPage = brandService.LastPageNumber(
-            $scope.totalCount,
-            $scope.pageSize
-          );
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      brandService.filterTicketFunction(
+        $scope.adminDetails.brand.name,
+        $scope.selectedStatus,
+        $scope.searchManagerName,
+        $scope.searchAgentName,
+        pageNumber,
+        pageSize,
+        function (result, error) {
+          if (result) {
+            $scope.ticketResult = result.data.data;
+            $scope.pageNumber = result.data.pageNumber;
+            $scope.pageSize = result.data.pageSize;
+            $scope.totalCount = result.data.totalCount;
+            $scope.lastPage = brandService.LastPageNumber(
+              $scope.totalCount,
+              $scope.pageSize
+            );
+          } else {
+            console.log(error);
+          }
+        }
+      );
     };
 
     $scope.getPages = function () {
@@ -163,20 +141,16 @@ app.controller("brandTickets", [
         }
       );
 
-      $http
-        .get(
-          "http://localhost:3000/getlogsbyticket/" +
-            $scope.ticketDetails.ticketId,
-          config
-        )
-        .then(function (result) {
-          $scope.logs = result.data;
-          console.log("logs");
-          console.log($scope.logs);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      brandService.getLogsByTIckets(
+        $scope.ticketDetails.ticketId,
+        function (result, error) {
+          if (result) {
+            $scope.logs = result.data;
+          } else {
+            console.log(error);
+          }
+        }
+      );
     };
 
     $scope.isAssigned = function (agentName) {

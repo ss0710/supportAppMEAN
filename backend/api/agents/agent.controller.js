@@ -57,9 +57,9 @@ exports.getBrandAgents = function (req, res) {
       var pageSize = parseInt(req.query.pageSize) || 10;
       var brandName = req.query.brandName;
 
-      // console.log("page number = " + pageNumber);
-      // console.log("pageSize = " + pageSize);
-      // console.log("brandId = " + brandId);
+      console.log("page number = " + pageNumber);
+      console.log("pageSize = " + pageSize);
+      console.log("brandName = " + brandName);
 
       User.find({
         isDeleted: false,

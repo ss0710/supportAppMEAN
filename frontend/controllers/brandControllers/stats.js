@@ -3,11 +3,10 @@
 
 app.controller("agentStats", [
   "$scope",
-  "$http",
   "$location",
   "statsService",
   "$timeout",
-  function ($scope, $http, $location, statsService, $timeout) {
+  function ($scope, $location, statsService, $timeout) {
     var token = localStorage.getItem("token");
     $scope.userListShow = false;
     $scope.prevString = "<<";
@@ -61,35 +60,31 @@ app.controller("agentStats", [
           }
         );
 
-        $http
-          .get(
-            "http://localhost:3000/ticketactivity/" +
-              $scope.brandAdminDetails.brand.name,
-            config
-          )
-          .then(function (result) {
-            $scope.ticketsActivity = result.data;
-            $scope.onMonthChange(3);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        statsService.getTicketActivity(
+          $scope.brandAdminDetails.brand.name,
+          function (result, error) {
+            if (result) {
+              $scope.ticketsActivity = result.data;
+              $scope.onMonthChange(3);
+            } else {
+              console.log(error);
+            }
+          }
+        );
 
-        $http
-          .get(
-            "http://localhost:3000/ticketstats/" +
-              $scope.brandAdminDetails.brand.name,
-            config
-          )
-          .then(function (result) {
-            $scope.ticketStats = result.data;
-            $scope.avgSolvingTimeInString = $scope.msToTime(
-              $scope.ticketStats[0][0].averageSolvingTime
-            );
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        statsService.getTicketStats(
+          $scope.brandAdminDetails.brand.name,
+          function (result, error) {
+            if (result) {
+              $scope.ticketStats = result.data;
+              $scope.avgSolvingTimeInString = $scope.msToTime(
+                $scope.ticketStats[0][0].averageSolvingTime
+              );
+            } else {
+              console.log(error);
+            }
+          }
+        );
       } else {
         console.log(error);
       }
@@ -204,10 +199,6 @@ app.controller("agentStats", [
     var currentYear = currentDate.getFullYear();
     var formattedYear = currentYear.toString().substring(2, 4);
     $scope.currentYear = "20" + formattedYear;
-
-    console.log("current Year");
-    console.log($scope.currentYear);
-
     $scope.userActArr = [];
 
     $scope.generateHeatMap = function () {
@@ -291,7 +282,6 @@ app.controller("agentStats", [
           $scope.searchUserName,
           function (result, error) {
             if (result) {
-              console.log(result.data);
               $scope.currentUsers = result.data;
             } else {
               console.log(error);
@@ -302,40 +292,32 @@ app.controller("agentStats", [
     };
 
     $scope.showActivityStat = function () {
-      $http
-        .get(
-          "http://localhost:3000/useractivity?brandName=" +
-            $scope.brandAdminDetails.brand.name +
-            "&userName=" +
-            $scope.searchUserName,
-          config
-        )
-        .then(function (result) {
-          $scope.userActArr = result.data;
-          console.log("User Acticity");
-          console.log($scope.userActArr);
-          $scope.generateHeatMap();
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      statsService.getUserActivityStats(
+        $scope.brandAdminDetails.brand.name,
+        $scope.searchUserName,
+        function (result, error) {
+          if (result) {
+            $scope.userActArr = result.data;
+            $scope.generateHeatMap();
+          } else {
+            console.log(error);
+          }
+        }
+      );
 
-      $http
-        .get(
-          "http://localhost:3000/userprofilestats?brandName=" +
-            $scope.brandAdminDetails.brand.name +
-            "&userName=" +
-            $scope.searchUserName,
-          config
-        )
-        .then(function (result) {
-          $scope.modalUser = result.data;
-          console.log("modal User");
-          console.log($scope.modalUser);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      statsService.getProfileStats(
+        $scope.brandAdminDetails.brand.name,
+        $scope.searchUserName,
+        function (result, error) {
+          if (result) {
+            $scope.modalUser = result.data;
+            console.log("modal User");
+            console.log($scope.modalUser);
+          } else {
+            console.log(error);
+          }
+        }
+      );
     };
   },
 ]);

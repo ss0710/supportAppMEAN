@@ -1,13 +1,13 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/superadmin/superadmin.service.js"/>
+///<reference path="../../services/stats/stats.service.js"/>
 
 app.controller("superAdminStats", [
   "$scope",
-  "$http",
-  "$location",
   "superadminService",
   "$timeout",
-  function ($scope, $http, $location, superadminService, $timeout) {
+  "statsService",
+  function ($scope, superadminService, $timeout, statsService) {
     $scope.checking = "checking";
 
     var token = localStorage.getItem("token");
@@ -18,19 +18,18 @@ app.controller("superAdminStats", [
       },
     };
 
-    $http
-      .get("http://localhost:3000/brandstats", config)
-      .then(function (result) {
+    statsService.getBrandStatsAdmin(function (result, error) {
+      if (result) {
         $scope.statsDetails = result.data;
         console.log($scope.statsDetails);
         $scope.categoryWithMostBrand = $scope.statsDetails[1][0]._id;
         $scope.formCategoryData($scope.statsDetails);
         $scope.formEmployeeData($scope.statsDetails);
         $scope.formBrandTicketData($scope.statsDetails[3]);
-      })
-      .catch(function (error) {
+      } else {
         console.log(error);
-      });
+      }
+    });
 
     $scope.formEmployeeData = function (statsDetails) {
       var Colors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
@@ -161,18 +160,17 @@ app.controller("superAdminStats", [
         $timeout.cancel(timeout);
       }
       timeout = $timeout(function () {
-        $http
-          .get(
-            "http://localhost:3000/searchbrand/" + $scope.brandSearchName,
-            config
-          )
-          .then(function (result) {
-            console.log(result.data);
-            $scope.brandList = result.data;
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        statsService.searchBrandfromAdmin(
+          $scope.brandSearchName,
+          function (result, error) {
+            if (result) {
+              console.log(result.data);
+              $scope.brandList = result.data;
+            } else {
+              console.log(error);
+            }
+          }
+        );
       }, 500);
     };
 
@@ -184,35 +182,30 @@ app.controller("superAdminStats", [
     };
 
     $scope.updateBrandForDashboard = function () {
-      console.log($scope.currentDashboardBrand.name);
-      $http
-        .get(
-          "http://localhost:3000/branddashboard/" +
-            $scope.currentDashboardBrand.name,
-          config
-        )
-        .then(function (result) {
-          $scope.fetchedBrandDetails = result.data;
-          console.log($scope.fetchedBrandDetails);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      statsService.getBrandDashboard(
+        $scope.currentDashboardBrand.name,
+        function (result, error) {
+          if (result) {
+            $scope.fetchedBrandDetails = result.data;
+            console.log($scope.fetchedBrandDetails);
+          } else {
+            console.log(error);
+          }
+        }
+      );
 
-      $http
-        .get(
-          "http://localhost:3000/ticketactivity/" +
-            $scope.currentDashboardBrand.name,
-          config
-        )
-        .then(function (result) {
-          $scope.ticketsActivity = result.data;
-          console.log($scope.ticketsActivity);
-          $scope.formDashboardProgressGraph();
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      statsService.adminTicketActiviyStats(
+        $scope.currentDashboardBrand.name,
+        function (result, error) {
+          if (result) {
+            $scope.ticketsActivity = result.data;
+            console.log($scope.ticketsActivity);
+            $scope.formDashboardProgressGraph();
+          } else {
+            console.log(error);
+          }
+        }
+      );
     };
 
     $scope.formDashboardProgressGraph = function () {

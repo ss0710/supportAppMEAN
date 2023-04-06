@@ -32,6 +32,13 @@
           ng-model="userName"
           required
           placeholder="Enter User Name"
+          style="
+            width: 50%;
+            border-radius: 5px;
+            color: rgb(70, 70, 70);
+            padding-left: 5px;
+            border: 2px solid rgba(56, 29, 56, 0.74);
+          "
         />
         <br />
         <label ng-show="myForm.$submitted || myForm.userName.$dirty">
@@ -52,6 +59,13 @@
           ng-model="password"
           required
           placeholder="Enter passsword"
+          style="
+            width: 50%;
+            border-radius: 5px;
+            padding-left: 5px;
+            color: rgb(70, 70, 70);
+            border: 2px solid rgba(56, 29, 56, 0.74);
+          "
         />
         <br />
         <label ng-show="myForm.$submitted || myForm.password.$dirty">

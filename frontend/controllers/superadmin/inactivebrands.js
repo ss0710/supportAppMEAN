@@ -1,14 +1,17 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/superadmin/superadmin.service.js"/>
+///<reference path="../../services/toast/toast.service.js"/>
 
 app.controller("inActiveBrand", [
   "$scope",
   "superadminService",
-  function ($scope, superadminService) {
+  "toastService",
+  function ($scope, superadminService, toastService) {
     $scope.pageNumber = 1;
     $scope.pageSize = 5;
     $scope.disableString = "disable";
     $scope.enableString = "enable";
+    $scope.submitString = true;
     $scope.currentBrandsWithNoAdmin = [];
     $scope.currentBrandsWithNoAdmin = [];
     $scope.emailRegex =
@@ -67,23 +70,35 @@ app.controller("inActiveBrand", [
     };
 
     //add brand function
+    $scope.formData = {
+      image: null,
+    };
     $scope.signupSubmit = function () {
-      superadminService.addBrand(
-        $scope.formData.image,
-        $scope.brand,
-        function (result, error) {
-          if (result) {
-            console.log(result.data);
-            alert("successfuly registered");
-            $(function () {
-              $("#addBrandModal").modal("hide");
-            });
-            $scope.currentBrandsWithNoAdmin.unshift(result.data);
-          } else {
-            alert(error);
+      if ($scope.formData.image == null) {
+        toastService.errorMessage("Select Brand Logo");
+      } else {
+        $scope.submitString = false;
+        superadminService.addBrand(
+          $scope.formData.image,
+          $scope.brand,
+          function (result, error) {
+            if (result) {
+              $scope.submitString = true;
+              console.log(result.data);
+              $(function () {
+                $("#addBrandModal").modal("hide");
+              });
+              toastService.successMessage("successfuly registered");
+              $scope.currentBrandsWithNoAdmin.unshift(result.data);
+              $scope.brand = {};
+              $scope.myForm1.$setPristine();
+            } else {
+              $scope.submitString = true;
+              toastService.errorMessage(error);
+            }
           }
-        }
-      );
+        );
+      }
     };
 
     //updating brand scopes
@@ -93,6 +108,7 @@ app.controller("inActiveBrand", [
 
     //add brand Admin
     $scope.addBrandAdmin = function () {
+      $scope.submitString = false;
       superadminService.addBrandAdmin(
         $scope.admin,
         $scope.brandDetails,
@@ -102,14 +118,27 @@ app.controller("inActiveBrand", [
               $scope.brandDetails,
               function (result, error) {
                 if (result) {
-                  alert("Successfully added admin");
+                  $scope.submitString = true;
+                  toastService.successMessage("Successfully added admin");
+                  $(function () {
+                    $("#addBrandAdminModal").modal("hide");
+                  });
                 } else {
-                  console.log(error);
+                  $scope.submitString = true;
+                  toastService.errorMessage(
+                    "Cannot Process Requet!! Try after some time"
+                  );
+                  $(function () {
+                    $("#addBrandAdminModal").modal("hide");
+                  });
                 }
               }
             );
+            $scope.admin = {};
+            $scope.myForm.$setPristine();
           } else {
-            console.log(error);
+            $scope.submitString = true;
+            toastService.errorMessage(error);
           }
         }
       );
@@ -123,7 +152,7 @@ app.controller("inActiveBrand", [
 
     $scope.deleteBrand = function () {
       superadminService.deleteBrand(
-        $scope.brandIdToD,
+        $scope.brandNameToD,
         function (result, error) {
           if (result) {
             alert("succesfully deleted");
@@ -149,7 +178,7 @@ app.controller("inActiveBrand", [
       if ($scope.process == "disable") {
         console.log("clicked disable fun");
         superadminService.disableBrand(
-          $scope.brandIdToD,
+          $scope.brandNameToD,
           function (result, error) {
             if (result) {
               alert("successfully marked as disable");
@@ -178,7 +207,7 @@ app.controller("inActiveBrand", [
         );
       } else {
         superadminService.enableBrand(
-          $scope.brandIdToD,
+          $scope.brandNameToD,
           function (result, error) {
             if (result) {
               alert("successfully marked as enable");

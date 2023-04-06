@@ -1,5 +1,6 @@
 var jwt = require("jsonwebtoken");
 var Notification = require("./notification.model");
+var SocketFile = require("../../services/socket/socket");
 
 exports.addNotification = function (
   type,
@@ -28,6 +29,7 @@ exports.addNotification = function (
   notification
     .save()
     .then(function (result) {
+      SocketFile.getIoInstance().sockets.emit("notification", result);
       console.log("notification succefully created");
     })
     .catch(function (error) {

@@ -1,15 +1,31 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/agents/agent.service.js" />
+///<reference path="../../services/socket/socket.service.js" />
 
 app.controller("agentTickets", [
   "$scope",
-  "$http",
   "$location",
   "agentService",
-  function ($scope, $http, $location, agentService) {
+  "socketService",
+  "$anchorScroll",
+  function ($scope, $location, agentService, socketService, $anchorScroll) {
     $scope.tickets = [];
     $scope.ticketComments = [];
     $scope.ticketStatusChangeDetails;
+    $scope.listenTicketId = null;
+
+    var socket = socketService.getSocketInstance();
+    socket.on("comment", (data) => {
+      console.log("receving comment through socketio");
+      console.log(data.ticketId);
+      console.log($scope.listenTicketId.ticketId);
+      if (data.ticketId == $scope.listenTicketId.ticketId) {
+        $scope.$apply(function () {
+          $scope.ticketComments.push(data);
+          console.log($scope.ticketComments);
+        });
+      }
+    });
 
     agentService.getUserType(function (result, error) {
       if (result) {
@@ -79,10 +95,13 @@ app.controller("agentTickets", [
       $scope.ticketQuery = query;
       $scope.createdAt = createdAt;
       $scope.createdByUserName = CreatedBy;
+      console.log("line number 92 called");
     };
 
     //to update global ticket details
     $scope.updateTicketDetails = function (id, subject, query) {
+      console.log("line number 97 called");
+      $anchorScroll("chat-div-comment");
       $scope.ticketId = id;
       $scope.ticketSubject = subject;
       $scope.ticketQuery = query;
@@ -102,7 +121,6 @@ app.controller("agentTickets", [
         }
       );
     };
-
     //to comment
     $scope.addcommentHandler = function (throughCommentModal, ticketId) {
       if (throughCommentModal) {
@@ -192,9 +210,11 @@ app.controller("agentTickets", [
     };
 
     $scope.ticketEditModal = function (ticketDetails) {
+      console.log("line number 207 called");
       $scope.ticketStatusChangeDetails = ticketDetails;
       $scope.ticketDetails = ticketDetails;
       //getting comments
+      $scope.listenTicketId = $scope.ticketDetails;
       agentService.getCommentsByTicketId(
         $scope.ticketDetails.ticketId,
         function (result, error) {

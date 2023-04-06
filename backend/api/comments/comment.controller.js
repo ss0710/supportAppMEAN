@@ -1,5 +1,6 @@
 var Comment = require("./comment.model");
 var jwt = require("jsonwebtoken");
+var SocketFile = require("../../services/socket/socket");
 
 //adding comment
 exports.addComment = function (req, res) {
@@ -10,7 +11,6 @@ exports.addComment = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      console.log("comment controller");
       var data = {
         brand: {
           name: req.body.brandName,
@@ -26,11 +26,11 @@ exports.addComment = function (req, res) {
         time: Date.now(),
         isDeleted: false,
       };
-      console.log(data);
       var comment = new Comment(data);
       comment
         .save()
         .then(function (result) {
+          SocketFile.getIoInstance().sockets.emit("comment", result);
           res.status(200).json(result);
         })
         .catch(function (error) {

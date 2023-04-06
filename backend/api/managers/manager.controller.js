@@ -180,7 +180,7 @@ exports.searchBrandManager = function (req, res) {
       var regex = new RegExp(name, "i");
 
       User.find({
-        "brand.brandId": brandId,
+        "brand.name": brandId,
         userName: { $regex: regex },
         role: "manager",
       })

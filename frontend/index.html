@@ -36,6 +36,20 @@
       rel="stylesheet"
     />
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <!-- Toaster -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link
+      href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+      rel="stylesheet"
+    />
+
     <!-- Bootstrap JS -->
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -53,7 +67,6 @@
       crossorigin="anonymous"
     ></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <!-- CSS -->
     <style>
       body::-webkit-scrollbar {
@@ -81,12 +94,14 @@
 
     <script src="./directives/upload.directive.js"></script>
 
+    <script src="./services/toast/toast.service.js"></script>
     <script src="./services/auth/auth.service.js"></script>
     <script src="./services/superadmin/superadmin.service.js"></script>
     <script src="./services/brands/brand.service.js"></script>
     <script src="./services/managers/manager.service.js"></script>
     <script src="./services/agents/agent.service.js"></script>
     <script src="./services/stats/stats.service.js"></script>
+    <script src="./services/socket/socket.service.js"></script>
 
     <script src="./controllers/auth/login.js"></script>
     <script src="./controllers/superadmin/brand.js"></script>
@@ -109,13 +124,12 @@
     <script src="./controllers/agents/rejectedTicket.js"></script>
     <script src="./controllers/agents/closedTicket.js"></script>
     <script>
-      var socket = io("http://localhost:3000/");
+      // var socket = io("http://localhost:3000/");
 
       // socket.on("connection");
 
       // socket.on("message1", (data) => {
-      //   console.log("called");
-      //   document.querySelector("message").innerHTML = data;
+      //   console.log(data);
       // });
 
       // const sendMessage = () => {

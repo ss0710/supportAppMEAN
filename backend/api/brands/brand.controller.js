@@ -1,5 +1,6 @@
 var Brand = require("./brand.model");
 var User = require("../users/user.model");
+var mongoose = require("mongoose");
 var jwt = require("jsonwebtoken");
 
 // getActiveBrand Controller
@@ -127,14 +128,26 @@ exports.deleteBrand = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      var id = req.params.id;
-      Brand.updateOne({ brandId: id }, { isDeleted: true })
-        .then(function (result) {
-          res.status(200).json(result);
-        })
-        .catch(function (error) {
-          res.status(403).json(error);
-        });
+      var brandName = req.params.id;
+      mongoose.startSession().then(function (session) {
+        session.startTransaction();
+        Promise.all([
+          Brand.updateOne({ name: brandName }, { isDeleted: true }),
+          User.updateMany({ "brand.name": brandName }, { isDeleted: true }),
+        ])
+          .then(function (result) {
+            res.status(200).json(result);
+            session.commitTransaction();
+            session.endSession();
+          })
+          .catch(function (error) {
+            session.abortTransaction();
+            console.error("Transaction aborted. Error:", error);
+            const response = { message: "Delete failed" };
+            res.status(500).send(response);
+            session.endSession();
+          });
+      });
     }
   });
 };
@@ -148,14 +161,26 @@ exports.disableBrand = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      var id = req.params.id;
-      Brand.updateOne({ brandId: id }, { isDisabled: true })
-        .then(function (result) {
-          res.status(200).json(result);
-        })
-        .catch(function (error) {
-          res.status(403).json(error);
-        });
+      var brandName = req.params.id;
+      mongoose.startSession().then(function (session) {
+        session.startTransaction();
+        Promise.all([
+          Brand.updateOne({ name: brandName }, { isDisabled: true }),
+          User.updateMany({ "brand.name": brandName }, { isDisabled: true }),
+        ])
+          .then(function (result) {
+            res.status(200).json(result);
+            session.commitTransaction();
+            session.endSession();
+          })
+          .catch(function (error) {
+            session.abortTransaction();
+            console.error("Transaction aborted. Error:", error);
+            const response = { message: "Delete failed" };
+            res.status(500).send(response);
+            session.endSession();
+          });
+      });
     }
   });
 };
@@ -169,14 +194,26 @@ exports.enableBrand = function (req, res) {
     if (err) {
       res.sendStatus(403).json({ error: "not authenticated user" });
     } else {
-      var id = req.params.id;
-      Brand.updateOne({ brandId: id }, { isDisabled: false })
-        .then(function (result) {
-          res.status(200).json(result);
-        })
-        .catch(function (error) {
-          res.status(403).json(error);
-        });
+      var brandName = req.params.id;
+      mongoose.startSession().then(function (session) {
+        session.startTransaction();
+        Promise.all([
+          Brand.updateOne({ name: brandName }, { isDisabled: false }),
+          User.updateMany({ "brand.name": brandName }, { isDisabled: false }),
+        ])
+          .then(function (result) {
+            res.status(200).json(result);
+            session.commitTransaction();
+            session.endSession();
+          })
+          .catch(function (error) {
+            session.abortTransaction();
+            console.error("Transaction aborted. Error:", error);
+            const response = { message: "Delete failed" };
+            res.status(500).send(response);
+            session.endSession();
+          });
+      });
     }
   });
 };

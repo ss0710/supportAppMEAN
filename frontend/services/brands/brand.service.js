@@ -2,18 +2,12 @@
 
 app.service("brandService", function ($http) {
   var token = localStorage.getItem("token");
-  var config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json;odata=verbose",
-    },
-  };
 
   //to get user type
   this.getUserType = function (cb) {
     console.log("get user type running");
     $http
-      .get("http://localhost:3000/usertype", config)
+      .get("http://localhost:3000/usertype")
       .then(function (result) {
         cb(result, null);
       })
@@ -25,7 +19,7 @@ app.service("brandService", function ($http) {
   //getting comments
   this.getComments = function (ticketId, cb) {
     $http
-      .get(`http://localhost:3000/getcomments/${ticketId}`, config)
+      .get(`http://localhost:3000/getcomments/${ticketId}`)
       .then(function (result) {
         cb(result, null);
       })
@@ -37,7 +31,7 @@ app.service("brandService", function ($http) {
   //get Brand Details
   this.getBrandDetails = function (brandName, cb) {
     $http
-      .get("http://localhost:3000/getbrandbyid/" + brandName, config)
+      .get("http://localhost:3000/getbrandbyid/" + brandName)
       .then(function (result) {
         cb(result, null);
       })
@@ -49,7 +43,7 @@ app.service("brandService", function ($http) {
   //to get managers
   this.getManager = function (cb) {
     $http
-      .get("http://localhost:3000/getmanager", config)
+      .get("http://localhost:3000/getmanager")
       .then(function (result) {
         cb(result, null);
       })
@@ -61,7 +55,7 @@ app.service("brandService", function ($http) {
   //to add brand managers
   this.addManager = function (data, cb) {
     $http
-      .post("http://localhost:3000/addmanager", data, config)
+      .post("http://localhost:3000/addmanager", data)
       .then(function (result) {
         cb(result, null);
       })
@@ -80,8 +74,7 @@ app.service("brandService", function ($http) {
           "&pageNumber=" +
           pageNumber +
           "&pageSize=" +
-          pageSize,
-        config
+          pageSize
       )
       .then(function (result) {
         cb(result, null);
@@ -99,8 +92,7 @@ app.service("brandService", function ($http) {
           "&pageNumber=" +
           pageNumber +
           "&pageSize=" +
-          pageSize,
-        config
+          pageSize
       )
       .then(function (result) {
         console.log(result.data);
@@ -126,9 +118,51 @@ app.service("brandService", function ($http) {
         "http://localhost:3000/searchagent?brandId=" +
           brandId +
           "&name=" +
-          searchAgentName,
-        config
+          searchAgentName
       )
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
+  this.filterTicketFunction = function (
+    brandName,
+    selectedStatus,
+    managerName,
+    agentName,
+    pageNumber,
+    pageSize,
+    cb
+  ) {
+    $http
+      .get(
+        "http://localhost:3000/filtertickets?brandName=" +
+          brandName +
+          "&status=" +
+          selectedStatus +
+          "&managername=" +
+          managerName +
+          "&agentname=" +
+          agentName +
+          "&pageNumber=" +
+          pageNumber +
+          "&pageSize=" +
+          pageSize
+      )
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
+  this.getLogsByTIckets = function (ticketId, cb) {
+    $http
+      .get("http://localhost:3000/getlogsbyticket/" + ticketId)
       .then(function (result) {
         cb(result, null);
       })
@@ -139,7 +173,7 @@ app.service("brandService", function ($http) {
 
   this.disableAgents = function (agentId, cb) {
     $http
-      .put("http://localhost:3000/disableagent/" + agentId, {}, config)
+      .put("http://localhost:3000/disableagent/" + agentId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -150,7 +184,7 @@ app.service("brandService", function ($http) {
 
   this.enableAgents = function (agentId, cb) {
     $http
-      .put("http://localhost:3000/disableagent/" + agentId, {}, config)
+      .put("http://localhost:3000/disableagent/" + agentId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -161,7 +195,7 @@ app.service("brandService", function ($http) {
 
   this.deleteAgents = function (agentId, cb) {
     $http
-      .put("http://localhost:3000/disableagent/" + agentId, {}, config)
+      .put("http://localhost:3000/disableagent/" + agentId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -176,8 +210,7 @@ app.service("brandService", function ($http) {
         "http://localhost:3000/searchmanager?brandId=" +
           brandId +
           "&name=" +
-          managerName,
-        config
+          managerName
       )
       .then(function (result) {
         cb(result, null);
@@ -198,12 +231,7 @@ app.service("brandService", function ($http) {
 
   this.addBrandManagers = function (
     image,
-    managerEmail,
-    managerName,
-    firstName,
-    lastName,
-    phoneNumber,
-    password,
+    user,
     brandId,
     brandEmail,
     brandName,
@@ -214,12 +242,12 @@ app.service("brandService", function ($http) {
   ) {
     var formData = new FormData();
     formData.append("image", image);
-    formData.append("email", managerEmail);
-    formData.append("userName", managerName);
-    formData.append("firstName", firstName);
-    formData.append("lastName", lastName);
-    formData.append("phoneNumber", phoneNumber);
-    formData.append("password", password);
+    formData.append("email", user.email);
+    formData.append("userName", user.userName);
+    formData.append("firstName", user.firstName);
+    formData.append("lastName", user.lastName);
+    formData.append("phoneNumber", user.phoneNumber);
+    formData.append("password", user.password);
     formData.append("brandId", brandId);
     formData.append("brandEmail", brandEmail);
     formData.append("brandName", brandName);
@@ -241,14 +269,23 @@ app.service("brandService", function ($http) {
         cb(response, null);
       },
       function (error) {
-        cb(null, error);
+        if (error.data.keyPattern) {
+          if (error.data.keyPattern.email) {
+            cb(null, "Email already exists");
+          }
+          if (error.data.keyPattern.userName) {
+            cb(null, "User name already exists");
+          }
+        } else {
+          cb(null, "Something went Wrong");
+        }
       }
     );
   };
 
   this.disableManagers = function (managerId, cb) {
     $http
-      .put("http://localhost:3000/disablemanager/" + managerId, {}, config)
+      .put("http://localhost:3000/disablemanager/" + managerId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -259,7 +296,7 @@ app.service("brandService", function ($http) {
 
   this.permitManagers = function (managerId, cb) {
     $http
-      .put("http://localhost:3000/permitmanager/" + managerId, {}, config)
+      .put("http://localhost:3000/permitmanager/" + managerId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -270,11 +307,22 @@ app.service("brandService", function ($http) {
 
   this.deleteManagers = function (managerId, cb) {
     $http
-      .put("http://localhost:3000/deletemanager/" + managerId, {}, config)
+      .put("http://localhost:3000/deletemanager/" + managerId, {})
       .then(function (result) {
         cb(result, null);
       })
       .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
+  this.getActivityNotification = function (brandId, cb) {
+    $http
+      .get("http://localhost:3000/getnotifications/" + brandId)
+      .then(function (result) {
+        cb(result, null);
+      })
+      .then(function (error) {
         cb(null, error);
       });
   };

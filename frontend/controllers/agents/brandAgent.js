@@ -1,36 +1,26 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/agents/agent.service.js" />
+///<reference path="../../services/socket/socket.service.js" />
 
 app.controller("brandAgents", [
   "$scope",
   "$location",
   "agentService",
   "$timeout",
-  function ($scope, $location, agentService, $timeout) {
-    //Handling sidebar button css
-    $scope.activeClassname =
-      "btn btn-outline-primary brandAdmin-sidebar-buttons-active";
-    $scope.classname = "btn btn-outline-primary brandAdmin-sidebar-buttons";
-    $scope.classname1 = $scope.activeClassname;
-    $scope.classname2 = $scope.classname;
-    $scope.classname3 = $scope.classname;
-    $scope.handleActiveButton = function (id) {
-      if (id == 1) {
-        $scope.classname1 = $scope.activeClassname;
-        $scope.classname2 = $scope.classname;
-        $scope.classname3 = $scope.classname;
-      } else if (id == 2) {
-        $scope.classname1 = $scope.classname;
-        $scope.classname2 = $scope.activeClassname;
-        $scope.classname3 = $scope.classname;
-      } else if (id == 3) {
-        $scope.classname1 = $scope.classname;
-        $scope.classname2 = $scope.classname;
-        $scope.classname3 = $scope.activeClassname;
-      }
-    };
-
+  "socketService",
+  function ($scope, $location, agentService, $timeout, socketService) {
     $scope.notificationLenght = 0;
+
+    var socket = socketService.getSocketInstance();
+    socket.on("notification", (data) => {
+      if (data.receiver.userName == $scope.brandAgentDetails.userName) {
+        $scope.$apply(function () {
+          $scope.agentNotification.unshift(data);
+          $scope.notificationLenght = $scope.agentNotification.length;
+        });
+      }
+    });
+
     //to get brandmanager informations
     agentService.getUserType(function (result, error) {
       if (result) {

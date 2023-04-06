@@ -40,9 +40,47 @@
               />
             </td>
             <td>{{item.userName}}</td>
-            <td><button>Details</button></td>
-            <td><button>Disable</button></td>
-            <td><button>Delete</button></td>
+            <td>
+              <button
+                class="btn btn-outline-success"
+                data-toggle="modal"
+                data-target="#AgentDetailsModal"
+                ng-click="AgentDetailsUpdate(item, disableString)"
+              >
+                Details
+              </button>
+            </td>
+            <td>
+              <button
+                ng-if="!item.isDisabled"
+                class="btn btn-warning"
+                data-toggle="modal"
+                data-target="#disableModal"
+                ng-click="AgentDetailsUpdate(item, disableString)"
+              >
+                Disable
+              </button>
+              <button
+                ng-if="item.isDisabled"
+                type="button"
+                class="btn btn-primary"
+                ng-click="AgentDetailsUpdate(item, enableString)"
+                data-toggle="modal"
+                data-target="#disableModal"
+              >
+                Activate
+              </button>
+            </td>
+            <td>
+              <button
+                class="btn btn-danger"
+                data-toggle="modal"
+                data-target="#deleteModal"
+                ng-click="AgentDetailsUpdate(item, disableString)"
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         </table>
       </div>
@@ -171,7 +209,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add Agent</h5>
           <button
             type="button"
             class="close"
@@ -189,7 +227,7 @@
               type="email"
               id="email"
               name="email"
-              ng-model="agentEmail"
+              ng-model="user.email"
               required
               ng-pattern="emailRegex"
               placeholder="Enter email"
@@ -216,7 +254,7 @@
               type="text"
               name="name"
               id="name"
-              ng-model="agentName"
+              ng-model="user.userName"
               required
               placeholder="Enter name"
             />
@@ -236,7 +274,7 @@
               type="text"
               name="firstName"
               id="firstName"
-              ng-model="firstName"
+              ng-model="user.firstName"
               required
               placeholder="Enter first name"
             />
@@ -256,7 +294,7 @@
               type="text"
               name="lastName"
               id="lastName"
-              ng-model="lastName"
+              ng-model="user.lastName"
               required
               placeholder="Enter last name"
             />
@@ -295,7 +333,7 @@
               type="text"
               id="phoneNumber"
               name="phoneNumber"
-              ng-model="phoneNumber"
+              ng-model="user.phoneNumber"
               ng-minlength="10"
               ng-maxlength="10"
               required
@@ -323,7 +361,7 @@
               type="password"
               id="password"
               name="password"
-              ng-model="password"
+              ng-model="user.password"
               ng-pattern="passwordRegex"
               required
               placeholder="confirm passsword"
@@ -351,9 +389,18 @@
                 type="button"
                 class="btn btn-primary"
                 ng-disabled="myForm.$invalid"
+                ng-show="!buttonBool"
                 ng-click="addBrandAgent()"
               >
                 Submit
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                ng-disabled="true"
+                ng-show="buttonBool"
+              >
+                Submitting
               </button>
             </div>
           </form>
@@ -556,21 +603,20 @@
               />
               <button>Update Email</button>
             </div> -->
-            <div>
-              <input
-                type="text"
-                placeholder="enter name"
-                ng-model="updatedName"
-              />
-              <button ng-click="updateAgentName()">{{updateText}}</button>
-            </div>
+          <div>
+            <input
+              type="text"
+              placeholder="enter name"
+              ng-model="updatedName"
+            />
+            <button ng-click="updateAgentName()">{{updateText}}</button>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>

@@ -1,23 +1,26 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/managers/manager.service.js" />
+///<reference path="../../services/socket/socket.service.js" />
 
 app.controller("Tickets", [
   "$scope",
-  "$http",
   "$location",
   "managerService",
-  function ($scope, $http, $location, managerService) {
+  "socketService",
+  function ($scope, $location, managerService, socketService) {
     $scope.Created = "Created";
     $scope.Resolved = "resolved";
+    $scope.listenTicketId = null;
 
-    //getting token from local storage
-    var token = localStorage.getItem("token");
-    var config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json;odata=verbose",
-      },
-    };
+    var socket = socketService.getSocketInstance();
+    socket.on("comment", (data) => {
+      if (data.ticketId == $scope.listenTicketId) {
+        $scope.$apply(function () {
+          $scope.ticketComments.push(data);
+          console.log($scope.ticketComments);
+        });
+      }
+    });
 
     //getting managers details
     managerService.getUserType(function (result, error) {
@@ -94,6 +97,158 @@ app.controller("Tickets", [
       }
     };
 
+    //to comment
+    $scope.addcommentHandler = function () {
+      managerService.addComments(
+        $scope.ticketId,
+        $scope.comment,
+        $scope.brandManagerDetails,
+        function (result, error) {
+          if (result) {
+            alert("comment added successfully");
+          } else {
+            console.log(error);
+          }
+        }
+      );
+    };
+
+    //update details for modal
+    $scope.updateTicketDetailsDashboard = function (ticketDetails) {
+      $scope.listenTicketId = ticketDetails.ticketId;
+      $scope.ticketDetails = ticketDetails;
+      managerService.getComments(
+        $scope.ticketDetails.ticketId,
+        function (result, error) {
+          if (result) {
+            console.log(result.data);
+            $scope.ticketComments = result.data;
+            $scope.ticketComments.sort(function (a, b) {
+              return a.dateAndTime - b.dateAndTime;
+            });
+          } else {
+            console.log(error);
+          }
+        }
+      );
+
+      //gettings logs
+      managerService.getLogs(
+        $scope.ticketDetails.ticketId,
+        function (result, error) {
+          if (result) {
+            $scope.logs = result.data;
+          } else {
+            console.log(error);
+          }
+        }
+      );
+
+      //gettings files
+      managerService.getFiles(
+        $scope.ticketDetails.ticketId,
+        function (result, error) {
+          if (result) {
+            $scope.files = result.data;
+          } else {
+            console.log(error);
+          }
+        }
+      );
+    };
+
+    $scope.commentDashboardHandler = function () {
+      managerService.addComments(
+        $scope.ticketDetails.ticketId,
+        $scope.detailsComment,
+        $scope.brandManagerDetails,
+        function (result, error) {
+          if (result) {
+            alert("comment added successfully");
+          } else {
+            console.log(error);
+          }
+        }
+      );
+    };
+
+    $scope.statusChangeHandler = function () {
+      if ($scope.currentStatus == "inProcess") {
+        managerService.inProcessTicketFunction(
+          $scope.ticketDetails.ticketId,
+          function (result, error) {
+            if (result) {
+              alert("status changed successfully");
+              console.log(result);
+            } else {
+              console.log(error.data);
+            }
+          }
+        );
+      } else if ($scope.currentStatus == "resolved") {
+        managerService.resolveTicketFunction(
+          $scope.ticketDetails.ticketId,
+          $scope.brandManagerDetails.userName,
+          $scope.brandManagerDetails.email,
+          function (result, error) {
+            if (result) {
+              alert("Ticket resolved");
+            } else {
+              console.log(error.data);
+            }
+          }
+        );
+      } else if ($scope.currentStatus == "closed") {
+        managerService.closeTicketFunction(
+          $scope.ticketDetails.ticketId,
+          function (result, error) {
+            if (result) {
+              alert("Ticket closed");
+            } else {
+              console.log(error.data);
+            }
+          }
+        );
+      }
+    };
+
+    $scope.addFile = function (ticketId) {
+      managerService.addFilesToTicket(
+        $scope.formData.image,
+        ticketId,
+        $scope.brandManagerDetails,
+        function (result, error) {
+          if (result) {
+            alert("Successfully  uploaded");
+          } else {
+            alert(error.data);
+          }
+        }
+      );
+    };
+
+    $scope.updateForFileModal = function (fileDetails) {
+      $scope.fileDetails = fileDetails;
+    };
+
+    $scope.updateTicketDetailsForModal = function (
+      ticketId,
+      status,
+      agentName,
+      subject,
+      query,
+      createdAt,
+      createdByUserName
+    ) {
+      $scope.ticketId = ticketId;
+      $scope.ticketStatus = status;
+      $scope.assignedTo = agentName;
+      $scope.tickedSubject = subject;
+      $scope.ticketQuery = query;
+      $scope.createdAt = createdAt;
+      $scope.createdByUserName = createdByUserName;
+    };
+
     //to get tickets comments
     $scope.ticketComments = [];
     $scope.getTicketComments = function (
@@ -116,9 +271,8 @@ app.controller("Tickets", [
       $scope.ticketQuery = query;
       $scope.createdAt = createdAt;
       $scope.createdByUserName = createdByUserName;
-      // $scope.brandManagerDetails.brand.name = brandName;
       $scope.brandManagerDetails.brand.brandId = brandId;
-      //getting comments
+      $scope.listenTicketId = $scope.ticketId;
       managerService.getComments($scope.ticketId, function (result, error) {
         if (result) {
           console.log(result.data);
@@ -130,222 +284,6 @@ app.controller("Tickets", [
           console.log(error);
         }
       });
-    };
-
-    $scope.updateTicketDetailsForModal = function (
-      ticketId,
-      status,
-      agentName,
-      subject,
-      query,
-      createdAt,
-      createdByUserName
-    ) {
-      $scope.ticketId = ticketId;
-      $scope.ticketStatus = status;
-      $scope.assignedTo = agentName;
-      $scope.tickedSubject = subject;
-      $scope.ticketQuery = query;
-      $scope.createdAt = createdAt;
-      $scope.createdByUserName = createdByUserName;
-    };
-
-    //to comment
-    $scope.addcommentHandler = function () {
-      console.log("comment Handler called this");
-      var commentData = {
-        ticketId: $scope.ticketId,
-        content: $scope.comment,
-        sentByUserEmail: $scope.brandManagerDetails.email,
-        sentByUserName: $scope.brandManagerDetails.userName,
-        sentByUserType: "manager",
-        brandEmail: $scope.brandManagerDetails.brand.email,
-        brandName: $scope.brandManagerDetails.brand.name,
-        brandCategory: $scope.brandManagerDetails.brand.category,
-        isDeleted: "false",
-      };
-
-      console.log($scope.brandManagerDetails.brand.name);
-      console.log(commentData);
-
-      managerService.addComments(commentData, function (result, error) {
-        if (result) {
-          alert("comment added successfully");
-        } else {
-          console.log(error);
-        }
-      });
-    };
-
-    //update details for modal
-    $scope.updateTicketDetailsDashboard = function (ticketDetails) {
-      $scope.ticketDetails = ticketDetails;
-      managerService.getComments(
-        $scope.ticketDetails.ticketId,
-        function (result, error) {
-          if (result) {
-            console.log(result.data);
-            $scope.ticketComments = result.data;
-            $scope.ticketComments.sort(function (a, b) {
-              return a.dateAndTime - b.dateAndTime;
-            });
-          } else {
-            console.log(error);
-          }
-        }
-      );
-
-      //gettings logs
-      $http
-        .get(
-          "http://localhost:3000/getlogsbyticket/" +
-            $scope.ticketDetails.ticketId,
-          config
-        )
-        .then(function (result) {
-          $scope.logs = result.data;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-      //gettings files
-      $http
-        .get(
-          "http://localhost:3000/getticketfiles/" +
-            $scope.ticketDetails.ticketId,
-          config
-        )
-        .then(function (result) {
-          $scope.files = result.data;
-        })
-        .catch(function (error) {
-          console.log("loading file error");
-          console.log(error);
-        });
-    };
-
-    $scope.commentDashboardHandler = function () {
-      console.log("dashboard comment called");
-      var commentData = {
-        ticketId: $scope.ticketDetails.ticketId,
-        content: $scope.detailsComment,
-        sentByUserEmail: $scope.brandManagerDetails.email,
-        sentByUserName: $scope.brandManagerDetails.userName,
-        sentByUserType: "manager",
-        brandEmail: $scope.brandManagerDetails.brand.email,
-        brandName: $scope.brandManagerDetails.brand.name,
-        brandCategory: $scope.brandManagerDetails.brand.category,
-        isDeleted: "false",
-      };
-
-      managerService.addComments(commentData, function (result, error) {
-        if (result) {
-          alert("comment added successfully");
-        } else {
-          console.log(error);
-        }
-      });
-    };
-
-    $scope.statusChangeHandler = function () {
-      if ($scope.currentStatus == "inProcess") {
-        $http
-          .put(
-            "http://localhost:3000/inprocessticket/" +
-              $scope.ticketDetails.ticketId,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/json;odata=verbose",
-              },
-            }
-          )
-          .then(function (result) {
-            alert("status changed successfully");
-            console.log(result);
-          })
-          .catch(function (error) {
-            console.log(error.data);
-          });
-      } else if ($scope.currentStatus == "resolved") {
-        console.log("resolved called");
-        $http
-          .put(
-            "http://localhost:3000/resolveTicket?ticketId=" +
-              $scope.ticketDetails.ticketId +
-              "&name=" +
-              $scope.brandManagerDetails.userName +
-              "&email=" +
-              $scope.brandManagerDetails.email,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/json;odata=verbose",
-              },
-            }
-          )
-          .then(function (result) {
-            alert("Ticket resolved");
-          })
-          .catch(function (error) {
-            console.log(error.data);
-          });
-      } else if ($scope.currentStatus == "closed") {
-        $http
-          .put(
-            "http://localhost:3000/closeticket/" +
-              $scope.ticketDetails.ticketId,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/json;odata=verbose",
-              },
-            }
-          )
-          .then(function (result) {
-            alert("Ticket closed");
-          })
-          .catch(function (error) {
-            console.log(error.data);
-          });
-      }
-    };
-
-    $scope.addFile = function (ticketId) {
-      console.log("function called");
-      var formData = new FormData();
-      formData.append("image", $scope.formData.image);
-      formData.append("ticketId", ticketId);
-      formData.append("brandName", $scope.brandManagerDetails.brand.name);
-      formData.append("userName", $scope.brandManagerDetails.userName);
-      formData.append("type", "manager");
-
-      $http({
-        method: "POST",
-        url: "http://localhost:3000/addfile",
-        headers: {
-          "Content-Type": undefined,
-          Authorization: `Bearer ${token}`,
-        },
-        data: formData,
-      }).then(
-        function (response) {
-          // handle server response
-          alert("Successfully  uploaded");
-        },
-        function (error) {
-          console.log(error.data);
-          alert(error.data);
-        }
-      );
-    };
-
-    $scope.updateForFileModal = function (fileDetails) {
-      $scope.fileDetails = fileDetails;
     };
   },
 ]);

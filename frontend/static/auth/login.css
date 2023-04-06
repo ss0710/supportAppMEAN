@@ -11,7 +11,7 @@ label {
 
 .signup-main-div {
     width: 100%;
-    height: 100vh;
+    height: 92vh;
     background-image: linear-gradient(to right bottom, #f0f2f3, #dcddde, #c8c8c9, #b4b4b4, #a0a0a0);
     display: flex;
     justify-content: center;
@@ -19,7 +19,7 @@ label {
 }
 
 .signup-inner-div {
-    height: 92vh;
+    height: 80vh;
     background-color: white;
     display: flex;
     width: 70%;
@@ -30,7 +30,7 @@ label {
 }
 
 .signup-img {
-    height: -webkit-fill-available;
+    height: 500px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
@@ -74,15 +74,13 @@ label {
 }
 
 .signup-button {
-    width: 62%;
-    height: 40px;
-    border-radius: 10px;
-    padding: 1%;
+    width: 50%;
+    height: 30px;
+    border-radius: 5px;
     border: none;
     background-color: rgba(56, 29, 56, 0.74);
     cursor: pointer;
     color: white;
-    font-weight: bold;
     margin-top: 5px;
 }
 

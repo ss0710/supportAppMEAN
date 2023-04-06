@@ -226,7 +226,9 @@
               <p><strong>Assigned to:</strong> {{assignedTo}}</p>
               <p><strong>Subject:</strong> {{tickedSubject}}</p>
               <p><strong>Query:</strong> {{ticketQuery}}</p>
-              <p><strong>Created At:</strong> {{createdAt}}</p>
+              <p>
+                <strong>Created At:</strong> {{createdAt |date :"dd/MM/yyyy"}}
+              </p>
             </div>
             <div class="tickets-brand-details">
               <p><strong>Created by:</strong> {{createdByUserName}}</p>
@@ -266,7 +268,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="chat-div">
+          <div class="chat-div" id="chat-div-comment">
             <div class="message-div" ng-repeat="item in ticketComments">
               <p class="identity">
                 <img

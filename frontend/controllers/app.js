@@ -1,9 +1,28 @@
+///<reference path="../services/socket/socket.service.js" />
 var app = angular.module("myApp", ["ui.router"]);
+
+app.controller("index", function ($scope) {
+  console.log("app controller called");
+});
+
+app.factory("MyInterceptor", function () {
+  return {
+    request: function (config) {
+      config.headers = config.headers || {};
+      var token = localStorage.getItem("token");
+      config.headers["Authorization"] = "Bearer " + token;
+      config.headers["Accept"] = "application/json;odata=verbose";
+      return config;
+    },
+  };
+});
 
 app.config([
   "$stateProvider",
   "$urlRouterProvider",
-  function ($stateProvider, $urlRouterProvider) {
+  "$httpProvider",
+  function ($stateProvider, $urlRouterProvider, httpProvider) {
+    httpProvider.interceptors.push("MyInterceptor");
     $urlRouterProvider.when("/admin", "/admin/superadminbrands");
     $urlRouterProvider.when("/brandadmin", "/brandadmin/managers");
     $urlRouterProvider.when("/brandmanager", "/brandmanager/manageragents");
@@ -104,7 +123,3 @@ app.config([
     $urlRouterProvider.otherwise("/login");
   },
 ]);
-
-app.controller("index", function ($scope) {
-  $scope.socket = io("http://localhost:3000");
-});

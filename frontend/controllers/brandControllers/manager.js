@@ -1,12 +1,14 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/brands/brand.service.js"/>
+///<reference path="../../services/toast/toast.service.js"/>
 
 app.controller("manager", [
   "$scope",
   "$location",
   "brandService",
   "$timeout",
-  function ($scope, $location, brandService, $timeout) {
+  "toastService",
+  function ($scope, $location, brandService, $timeout, toastService) {
     $scope.disableString = "disable";
     $scope.enableString = "enable";
     $scope.pageNumber = 1;
@@ -47,7 +49,7 @@ app.controller("manager", [
       }
       timeout = $timeout(function () {
         brandService.searchManager(
-          $scope.brandId,
+          $scope.brandName,
           $scope.searchManagerName,
           function (result, error) {
             if (result) {
@@ -93,35 +95,42 @@ app.controller("manager", [
     };
 
     //add brand Managers
+    $scope.formData = {
+      image: null,
+    };
+    $scope.buttonBool = false;
     $scope.addBrandManager = function () {
-      brandService.addBrandManagers(
-        $scope.formData.image,
-        $scope.managerEmail,
-        $scope.managerName,
-        $scope.firstName,
-        $scope.lastName,
-        $scope.phoneNumber,
-        $scope.password,
-        $scope.brandId,
-        $scope.brandEmail,
-        $scope.brandName,
-        $scope.brandCategory,
-        $scope.brandPhoneNumber,
-        $scope.brandAddress,
-        function (result, error) {
-          if (result) {
-            alert("manager added succesfully");
-            console.log("runnint");
-            $(function () {
-              $("#addManagerModal").modal("hide");
-            });
-            $scope.currentManagers.unshift(result.data);
-            console.log($scope.currentManagers);
-          } else {
-            console.log(error);
+      if ($scope.formData.image == null) {
+        toastService.errorMessage("Select profile photo");
+      } else {
+        $scope.buttonBool = true;
+        brandService.addBrandManagers(
+          $scope.formData.image,
+          $scope.user,
+          $scope.brandId,
+          $scope.brandEmail,
+          $scope.brandName,
+          $scope.brandCategory,
+          $scope.brandPhoneNumber,
+          $scope.brandAddress,
+          function (result, error) {
+            if (result) {
+              $scope.user = {};
+              $scope.buttonBool = false;
+              toastService.successMessage("manager added succesfully");
+              console.log("runnint");
+              $(function () {
+                $("#addManagerModal").modal("hide");
+              });
+              $scope.currentManagers.unshift(result.data);
+              console.log($scope.currentManagers);
+            } else {
+              $scope.buttonBool = false;
+              toastService.errorMessage(error);
+            }
           }
-        }
-      );
+        );
+      }
     };
 
     $scope.ManagerDetail;

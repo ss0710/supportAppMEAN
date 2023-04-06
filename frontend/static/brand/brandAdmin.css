@@ -15,6 +15,8 @@ box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
   border: none;
   margin-bottom: 10px;
   background-color: rgb(228, 228, 228);
+  color: blue;
+  cursor: pointer;
 }
 
 .brandAdmin-sidebar-buttons:hover {
@@ -28,6 +30,15 @@ box-shadow: -4px 3px 28px -2px rgba(201,201,201,1);
 }
 
 .brandAdmin-sidebar-buttons-active {
+  width: 100%;
+  height: 40px;
+  border: none;
+  margin-bottom: 10px;
+  background-color: rgb(59, 108, 254);
+  color: white;
+}
+
+.brandAdmin-sidebar-buttons-active:hover {
   width: 100%;
   height: 40px;
   border: none;

@@ -144,6 +144,7 @@
                 required
                 ng-pattern="emailRegex"
                 placeholder="Enter email"
+                style="width: 70%"
               />
               <br />
               <label ng-show="myForm1.$submitted || myForm1.email.$dirty">
@@ -170,6 +171,7 @@
                 ng-model="brand.name"
                 required
                 placeholder="Enter name"
+                style="width: 70%"
               />
               <br />
               <label ng-show="myForm1.$submitted || myForm1.name.$dirty">
@@ -189,6 +191,7 @@
                 id="category"
                 ng-model="brand.category"
                 ng-required="true"
+                style="width: 36%"
               >
                 <option value="Food">Food</option>
                 <option value="Corporate">Corporate</option>
@@ -239,6 +242,7 @@
                 ng-maxlength="10"
                 required
                 placeholder="Enter phone number"
+                style="width: 70%"
               />
               <br />
               <label ng-show="myForm1.$submitted || myForm1.phoneNumber.$dirty">
@@ -265,6 +269,7 @@
                 ng-model="brand.address"
                 required
                 placeholder="Enter address"
+                style="width: 70%"
               />
               <br />
               <label ng-show="myForm1.$submitted || myForm1.address.$dirty">
@@ -284,9 +289,19 @@
                   type="button"
                   class="btn btn-primary"
                   ng-disabled="myForm1.$invalid"
+                  ng-show="submitString"
                   ng-click="signupSubmit()"
                 >
                   Submit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-disabled="true"
+                  ng-show="!submitString"
+                  ng-click="signupSubmit()"
+                >
+                  Submitting
                 </button>
               </div>
             </form>
@@ -328,6 +343,7 @@
                 required
                 ng-pattern="emailRegex"
                 placeholder="Enter email"
+                style="width: 60%"
               />
               <br />
               <label ng-show="myForm.$submitted || myForm.email.$dirty">
@@ -354,6 +370,7 @@
                 ng-model="admin.name"
                 required
                 placeholder="Enter user name"
+                style="width: 60%"
               />
               <br />
               <label ng-show="myForm.$submitted || myForm.name.$dirty">
@@ -374,6 +391,7 @@
                 ng-model="admin.firstName"
                 required
                 placeholder="Enter first name"
+                style="width: 60%"
               />
               <br />
               <label ng-show="myForm.$submitted || myForm.firstName.$dirty">
@@ -394,6 +412,7 @@
                 ng-model="admin.lastName"
                 required
                 placeholder="Enter last name"
+                style="width: 60%"
               />
               <br />
               <label ng-show="myForm.$submitted || myForm.lastName.$dirty">
@@ -412,8 +431,11 @@
                 name="phoneNumber1"
                 id="phoneNumber1"
                 ng-model="admin.phoneNumber1"
+                ng-minlength="10"
+                ng-maxlength="10"
                 required
                 placeholder="Enter Phone Number"
+                style="width: 60%"
               />
               <br />
               <label ng-show="myForm.$submitted || myForm.phoneNumber1.$dirty">
@@ -424,6 +446,12 @@
                   >Phone Number is required</span
                 ><br />
               </label>
+              <label
+                ng-model="phoneNumber1Error"
+                class="error"
+                ng-show="((myForm.phoneNumber1.$error.minlength || myForm.phoneNumber1.$error.maxlength) && myForm.phoneNumber1.$dirty)"
+                >Phone Number should be of 10 digits</label
+              >
               <br />
 
               <input
@@ -435,6 +463,7 @@
                 ng-pattern="passwordRegex"
                 required
                 placeholder="Enter passsword"
+                style="width: 60%"
               />
               <br />
               <label ng-show="myForm.$submitted || myForm.password.$dirty">
@@ -455,13 +484,31 @@
                 >
                   Close
                 </button>
-                <button
+                <!-- <button
                   type="button"
                   class="btn btn-primary"
                   ng-disabled="myForm.$invalid"
                   ng-click="addBrandAdmin()"
                 >
                   Submit
+                </button> -->
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-disabled="myForm.$invalid"
+                  ng-show="submitString"
+                  ng-click="addBrandAdmin()"
+                >
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-disabled="true"
+                  ng-show="!submitString"
+                  ng-click="addBrandAdmin()"
+                >
+                  Submitting
                 </button>
               </div>
             </form>

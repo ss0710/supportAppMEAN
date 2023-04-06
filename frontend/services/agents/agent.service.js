@@ -2,17 +2,11 @@
 
 app.service("agentService", function ($http) {
   var token = localStorage.getItem("token");
-  var config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json;odata=verbose",
-    },
-  };
 
   //getting user type
   this.getUserType = function (cb) {
     $http
-      .get("http://localhost:3000/usertype", config)
+      .get("http://localhost:3000/usertype")
       .then(function (result) {
         cb(result, null);
       })
@@ -24,7 +18,7 @@ app.service("agentService", function ($http) {
   //get Brand by Name
   this.getBrandByName = function (brandName, cb) {
     $http
-      .get("http://localhost:3000/getbrandbyid/" + brandName, config)
+      .get("http://localhost:3000/getbrandbyid/" + brandName)
       .then(function (result) {
         cb(result, null);
       })
@@ -36,7 +30,7 @@ app.service("agentService", function ($http) {
   //get Agent notification
   this.getAgentNotification = function (brandAgentName, cb) {
     $http
-      .get("http://localhost:3000/agentnotification/" + brandAgentName, config)
+      .get("http://localhost:3000/agentnotification/" + brandAgentName)
       .then(function (result) {
         cb(result, null);
       })
@@ -48,7 +42,7 @@ app.service("agentService", function ($http) {
   //mark one notification as seen
   this.markNotificationSeen = function (notId, cb) {
     $http
-      .put("http://localhost:3000/marknotseen/" + notId, {}, config)
+      .put("http://localhost:3000/marknotseen/" + notId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -60,7 +54,7 @@ app.service("agentService", function ($http) {
   //mark all notifiaction as seen
   this.markAllNotificationSeen = function () {
     $http
-      .put("http://localhost:3000/markallagentnotseen", {}, config)
+      .put("http://localhost:3000/markallagentnotseen", {})
       .then(function (result) {
         cb(result, null);
       })
@@ -72,7 +66,7 @@ app.service("agentService", function ($http) {
   //getting comments by ticketId
   this.getCommentsByTicketId = function (ticketId, cb) {
     $http
-      .get(`http://localhost:3000/getcomments/${ticketId}`, config)
+      .get(`http://localhost:3000/getcomments/${ticketId}`)
       .then(function (result) {
         cb(result, null);
       })
@@ -84,7 +78,7 @@ app.service("agentService", function ($http) {
   //getting ticket logs
   this.getTicketLogs = function (ticketId, cb) {
     $http
-      .get("http://localhost:3000/getlogsbyticket/" + ticketId, config)
+      .get("http://localhost:3000/getlogsbyticket/" + ticketId)
       .then(function (result) {
         cb(result, null);
       })
@@ -96,7 +90,7 @@ app.service("agentService", function ($http) {
   //getting ticket files
   this.getTicketFiles = function (ticketId, cb) {
     $http
-      .get("http://localhost:3000/getticketfiles/" + ticketId, config)
+      .get("http://localhost:3000/getticketfiles/" + ticketId)
       .then(function (result) {
         cb(result, null);
       })
@@ -128,7 +122,7 @@ app.service("agentService", function ($http) {
       brandCategory: brandCategory,
     };
     $http
-      .post("http://localhost:3000/addcomment", commentData, config)
+      .post("http://localhost:3000/addcomment", commentData)
       .then(function (result) {
         cb(result, null);
       })
@@ -192,7 +186,7 @@ app.service("agentService", function ($http) {
   //get ticket by agent
   this.getAgentTickets = function (brandAgentName, cb) {
     $http
-      .get(`http://localhost:3000/getticketsbyagent/${brandAgentName}`, config)
+      .get(`http://localhost:3000/getticketsbyagent/${brandAgentName}`)
       .then(function (result) {
         cb(result, null);
       })
@@ -204,11 +198,7 @@ app.service("agentService", function ($http) {
   //In Process Ticket by Id
   this.inProcessTicketById = function (ticketId, cb) {
     $http
-      .put(
-        "http://localhost:3000/inprocessticketbyagent/" + ticketId,
-        {},
-        config
-      )
+      .put("http://localhost:3000/inprocessticketbyagent/" + ticketId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -254,7 +244,7 @@ app.service("agentService", function ($http) {
   //reject ticket
   this.rejectTickets = function (ticketId, cb) {
     $http
-      .put("http://localhost:3000/rejectticket/" + ticketId, {}, config)
+      .put("http://localhost:3000/rejectticket/" + ticketId, {})
       .then(function (result) {
         cb(result, null);
       })
@@ -272,8 +262,7 @@ app.service("agentService", function ($http) {
         "http://localhost:3000/getagentclosedtickets?brandName=" +
           brandName +
           "&agentName=" +
-          agentName,
-        config
+          agentName
       )
       .then(function (result) {
         cb(result, null);
@@ -292,8 +281,7 @@ app.service("agentService", function ($http) {
         "http://localhost:3000/agentrejectedtickets?brandName=" +
           brandName +
           "&agentName=" +
-          agentName,
-        config
+          agentName
       )
       .then(function (result) {
         cb(result, null);
