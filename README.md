@@ -20,7 +20,7 @@ Overall, this project aims to provide a robust and scalable solution for managin
 1) Backend - NodeJS, ExpressJs 
 2) Database - MongoDB
 3) Fronted - AngularJS
-4) Services - AWS S3, AWS SQS, SocketJS
+4) Services - AWS S3, AWS SQS, SocketJS, Nodemailer, passportJS
 
 # Agent View
 Agent can view assigned tickets and may accept or reject the tikcets. Agents get notification for each updates on tickets assigned to him.
@@ -88,3 +88,10 @@ Backend
 
 6) Bulk Update - Bulk update refers to the process of updating multiple documents at once in a database, rather than updating them one by one. This can be done to optimize performance and reduce the amount of time it takes to update a large number of documents. bulkWrite() is being used for bulk updates.
 
+7) Aggregations - Aggregations in MongoDB are a way to process data and return computed results based on some criteria. They allow you to perform advanced analytics and data processing on large datasets. Aggregations has been used for in-depth statistics which helps brand owners to optimize their company's processes.
+
+Frontend
+
+1) Auth Interceptor - An auth interceptor is a piece of middleware that intercepts HTTP requests and adds authentication information to them. It is used in support app to ensure that only authenticated users can access protected resources.
+
+2) Debouncing - Debouncing is a technique used in web development to optimize search functionality and improve user experience. It involves delaying the execution of a search query until the user has finished typing, rather than triggering a search query for every keystroke. Deboucning is used in every search feild in support App.
