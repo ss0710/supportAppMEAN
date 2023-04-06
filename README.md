@@ -71,3 +71,20 @@ The Superadmin has access to the statistical insights of all the registered bran
 ![alt text](https://user-images.githubusercontent.com/63851816/230286711-3b4634f9-e716-4ad5-ae42-236002219953.png)
 ![alt text](https://user-images.githubusercontent.com/63851816/230286783-d21cac27-96e1-4400-91c7-1908dc3f13ff.png)
 ![alt text](https://user-images.githubusercontent.com/63851816/230286850-9290870c-e4c4-4f4a-b87b-488601d11c0d.png)
+
+# Conceptual Framework
+
+Backend
+
+1) Server side pagination - Server-side pagination refers to the practice of breaking down a large set of data into smaller chunks that can be loaded and displayed on a web page incrementally, rather than all at once. This approach offers several benefits such as Improved performance, Reduced server load, More efficient memory usage, Easier maintenance.
+
+2) PassportJS - PassportJS is a popular authentication middleware for Node.js. It provides a simple, modular and flexible way to add authentication to web applications and APIs.
+
+3) AWS S3 - Amazon S3 (Simple Storage Service) is a cloud-based object storage service provided by Amazon Web Services (AWS). It is designed to store and retrieve any amount of data from anywhere on the web. Application's photos and files are stores on aws s3 bucket.
+
+4) AWS SQS - Amazon SQS (Simple Queue Service) is a fully managed message queuing service provided by Amazon Web Services (AWS). It enables decoupling of the components of a cloud application or service by providing a reliable, highly scalable, and flexible messaging system that can handle the exchange of messages between different components of an application or between different applications. Tickets which are being created in the support app are sent to amazon sqs and then it is read from sqs and saved in database. 
+
+5) MongoDb Transactions - MongoDB transactions allow you to perform multiple operations as a single logical unit of work, ensuring that either all of the operations are applied, or none of them are. Update operations and many other queries are written using MongoDB Transactions.
+
+6) Bulk Update - Bulk update refers to the process of updating multiple documents at once in a database, rather than updating them one by one. This can be done to optimize performance and reduce the amount of time it takes to update a large number of documents. bulkWrite() is being used for bulk updates.
+
