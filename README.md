@@ -1,7 +1,10 @@
 # supportApp
+![alt text](https://user-images.githubusercontent.com/63851816/233346179-b4e1a7c5-9c00-4206-bebb-1b2c32cfa0f3.png)
 ![alt text](https://user-images.githubusercontent.com/63851816/230056946-410f6c08-8148-4a2c-b039-d433efdf0d1f.png)
 
+
 # Overview
+
 The project is a support app that provides a platform for brands to manage customer support tickets efficiently.
 
 1) The app is built on a multitenant architecture, which includes a hierarchy of users consisting of Superadmin, Brands, Brand Admin, Managers, and Agents. The Superadmin has the highest level of access and control over the entire system, while the Brands have their dedicated space to manage their support tickets.
