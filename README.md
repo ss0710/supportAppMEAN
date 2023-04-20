@@ -2,7 +2,6 @@
 ![alt text](https://user-images.githubusercontent.com/63851816/233346179-b4e1a7c5-9c00-4206-bebb-1b2c32cfa0f3.png)
 ![alt text](https://user-images.githubusercontent.com/63851816/230056946-410f6c08-8148-4a2c-b039-d433efdf0d1f.png)
 
-
 # Overview
 
 The project is a support app that provides a platform for brands to manage customer support tickets efficiently.
@@ -63,7 +62,16 @@ Brand Admin can view profile of each employee and their activity/contribution he
 
 ![alt text](https://user-images.githubusercontent.com/63851816/230081007-59a12bfb-9cc1-42a4-acfd-fa7de68ba5ec.png)
 
+# Customer View
+
+Customer can login and raise query in thier particular brand. Raised query will be assigned to agent for solving by manager.
+
+![alt text](https://user-images.githubusercontent.com/63851816/233351257-dd5bd750-cc5d-4a00-845f-806d56eaad9f.png)
+
+![alt text](https://user-images.githubusercontent.com/63851816/233351384-245e7b29-4e28-4251-91ab-94d88a10a848.png)
+
 # Superadmin View
+
 
 SuperAdmin adds brands and brand admins. Brand admins receive their login credentials as soon as their brands are registered.
 
