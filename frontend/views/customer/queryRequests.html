@@ -1,0 +1,78 @@
+<div ng-controller="customerQueryRequests" style="padding: 2%">
+  <button
+    class="btn btn-outline-primary"
+    style="margin-bottom: 20px"
+    data-toggle="modal"
+    data-target="#queryModal"
+  >
+    Ask Query
+  </button>
+  <table>
+    <tr>
+      <th>Subject</th>
+      <th>Created At</th>
+      <th>Details</th>
+      <th>Status</th>
+      <!-- <th>Chat</th> -->
+    </tr>
+    <tr ng-repeat="item in queriesList">
+      <td>{{item.subject}}</td>
+      <td>{{item.customer.createdAt}}</td>
+      <td><button class="btn btn-success">Details</button></td>
+      <td>{{getStatus(item.status)}}</td>
+      <!-- <td><button class="btn btn-primary">Chat</button></td> -->
+    </tr>
+  </table>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="queryModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Submit Your Query</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="text"
+            placeholder="Enter Topic..."
+            ng-model="query.subject"
+            style="width: 100%; margin-bottom: 20px; padding-left: 5px"
+          />
+          <br />
+          <textarea
+            type="text"
+            placeholder="Describe your query in brief..."
+            ng-model="query.query"
+            style="width: 100%; height: 300px; padding-left: 5px"
+          ></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="addQueryHandler()"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

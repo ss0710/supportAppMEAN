@@ -1,0 +1,153 @@
+<div class="superadmin-brand-div" ng-controller="registrationRequest">
+  <h4>Registration Requests</h4>
+  <table>
+    <tr>
+      <th>Brand Name</th>
+      <th>Category</th>
+      <th>Details</th>
+      <th>Approve</th>
+      <th>Cancel</th>
+    </tr>
+    <tr ng-repeat="item in brandRequests">
+      <td>{{item.name}}</td>
+      <td>{{item.category}}</td>
+      <td>
+        <button
+          class="btn btn-outline-success"
+          data-toggle="modal"
+          data-target="#detailsModal"
+          ng-click="updateBrandDetailsForModal(item)"
+        >
+          Details
+        </button>
+      </td>
+      <td>
+        <button
+          class="btn btn-primary"
+          ng-click="actionModalFunction(item, Approve)"
+          data-toggle="modal"
+          data-target="#actionModal"
+        >
+          Approve
+        </button>
+      </td>
+      <td>
+        <button
+          class="btn btn-warning"
+          ng-click="actionModalFunction(item, Cancel)"
+          data-toggle="modal"
+          data-target="#actionModal"
+        >
+          Cancel
+        </button>
+      </td>
+    </tr>
+  </table>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="detailsModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Brand Details</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="brand-modal-details-div">
+            <div class="brand-modal-details-div-upper">
+              <div class="brand-modal-details-div-upper-left">
+                <div class="brand-modal-details-div-upper-left-logo">
+                  <img
+                    class="photo-of-brand"
+                    src="{{brandDetails.brandLogo}}"
+                    alt="brand-logo"
+                  />
+                </div>
+              </div>
+              <div class="brand-modal-details-div-upper-right">
+                <h6><strong>Name: </strong>{{brandDetails.name}}</h6>
+                <h6><strong>Id: </strong>{{brandDetails.brandId}}</h6>
+                <h6><strong>Email: </strong>{{brandDetails.email}}</h6>
+                <h6><strong>Category: </strong>{{brandDetails.category}}</h6>
+                <h6>
+                  <strong>Phone Number: </strong>{{brandDetails.phoneNumber}}
+                </h6>
+                <h6><strong>Address: </strong>{{brandDetails.address}}</h6>
+              </div>
+            </div>
+            <div class="brand-modal-details-div-lower">
+              <div class="brand-modal-details-div-lower-heading">
+                <!-- <h3>Admin Details</h3> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Action Modal -->
+  <div
+    class="modal fade"
+    id="actionModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            {{action}} registration request
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <h4>
+              {{action}} <strong>{{brandDetails.name}}</strong> registration
+              request
+            </h4>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="approveBrand()"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

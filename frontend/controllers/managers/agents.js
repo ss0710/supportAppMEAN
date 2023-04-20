@@ -1,13 +1,15 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/managers/manager.service.js" />
 ///<reference path="../../services/toast/toast.service.js" />
+///<reference path="../../factory/user/user.js" />
 
 app.controller("ManagerAgents", [
   "$scope",
   "managerService",
   "$timeout",
   "toastService",
-  function ($scope, managerService, $timeout, toastService) {
+  "UserFactory",
+  function ($scope, managerService, $timeout, toastService, UserFactory) {
     $scope.emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     $scope.agents = [];
@@ -222,7 +224,7 @@ app.controller("ManagerAgents", [
         toastService.errorMessage("Select Profile Image");
       } else {
         $scope.buttonBool = true;
-        managerService.addBrandAgents(
+        UserFactory.addBrandAgentFactory(
           $scope.user,
           $scope.formData.image,
           $scope.BrandMnagerDetails,

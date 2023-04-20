@@ -120,6 +120,30 @@ app.service("managerService", function ($http) {
       });
   };
 
+  //getting customer quries
+  this.getCustomerQueries = function (brandName, cb) {
+    $http
+      .get(`http://localhost:3000/customerqueriesbybrand/${brandName}`)
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
+  //assign query to agents
+  this.assignCustomerQueryToAgents = function (data, cb) {
+    $http
+      .put("http://localhost:3000/assigncustomerqueries", data)
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
   //add comments
   this.addComments = function (ticketId, comment, brandManagerDetails, cb) {
     var commentData = {
@@ -144,16 +168,7 @@ app.service("managerService", function ($http) {
   };
 
   //to add ticket
-  this.addTickets = function (subject, query, brandManagerDetails, cb) {
-    var ticketData = {
-      brandName: brandManagerDetails.brand.name,
-      brandEmail: brandManagerDetails.brand.email,
-      subject: subject,
-      query: query,
-      createdByUserName: brandManagerDetails.userName,
-      createdByUserEmail: brandManagerDetails.email,
-      userType: "manager",
-    };
+  this.addTickets = function (ticketData, cb) {
     $http
       .post("http://localhost:3000/addticket", ticketData)
       .then(function (result) {
@@ -303,14 +318,7 @@ app.service("managerService", function ($http) {
   };
 
   //to add file
-  this.addFilesToTicket = function (image, ticketId, managerDetails, cb) {
-    var formData = new FormData();
-    formData.append("image", image);
-    formData.append("ticketId", ticketId);
-    formData.append("brandName", managerDetails.brand.name);
-    formData.append("userName", managerDetails.userName);
-    formData.append("type", "manager");
-
+  this.addFilesToTicket = function (formData, cb) {
     $http({
       method: "POST",
       url: "http://localhost:3000/addfile",
@@ -395,21 +403,7 @@ app.service("managerService", function ($http) {
       });
   };
 
-  this.addBrandAgents = function (agent, image, brand, cb) {
-    var formData = new FormData();
-    formData.append("image", image);
-    formData.append("email", agent.email);
-    formData.append("userName", agent.userName);
-    formData.append("firstName", agent.firstName);
-    formData.append("lastName", agent.lastName);
-    formData.append("phoneNumber", agent.phoneNumber);
-    formData.append("password", agent.password);
-    formData.append("brandId", brand.brand.brandId);
-    formData.append("brandEmail", brand.brand.email);
-    formData.append("brandName", brand.brand.name);
-    formData.append("brandCategory", brand.brand.category);
-    formData.append("brandPhoneNumber", brand.brand.phoneNumber);
-    formData.append("brandAddress", brand.brand.address);
+  this.addBrandAgents = function (formData, cb) {
     $http({
       method: "POST",
       url: "http://localhost:3000/addagents",

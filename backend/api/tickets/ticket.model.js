@@ -42,7 +42,6 @@ var ticketSchema = new mongoose.Schema({
     },
     createdAt: {
       type: Date,
-      required: true,
     },
   },
   resolvedBy: {
@@ -62,6 +61,17 @@ var ticketSchema = new mongoose.Schema({
     },
     email: {
       type: String,
+    },
+  },
+  customer: {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+    createdAt: {
+      type: Date,
     },
   },
   isDeleted: {

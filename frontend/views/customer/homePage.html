@@ -1,0 +1,48 @@
+<div class="brandAdmin-outer-div" ng-controller="customerHomePage">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand navbar-logo" href="#">
+      <img
+        src="https://w7.pngwing.com/pngs/4/758/png-transparent-computer-icons-social-media-facebook-technical-support-blue-team-logo-thumbnail.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      TechSupport
+    </a>
+    <div class="toggle-div-options">
+      <button
+        class="btn-outline-primary manager-logout-button"
+        ng-click="logout()"
+        style="margin-top: -15px"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
+  <div class="component-body">
+    <!-- SIDEBAAR -->
+    <div class="component-left-div">
+      <button
+        ui-sref=".queryrequest"
+        class="btn btn-outline-primary brandAdmin-sidebar-buttons"
+        ui-sref-active="btn btn-outline-primary brandAdmin-sidebar-buttons-active"
+        ng-click="handleActiveButton(1)"
+      >
+        Query Requests
+      </button>
+      <button
+        ui-sref=".solvedqueries"
+        class="btn btn-outline-primary brandAdmin-sidebar-buttons"
+        ui-sref-active="btn btn-outline-primary brandAdmin-sidebar-buttons-active"
+        ng-click="handleActiveButton(2)"
+      >
+        Previous Queries
+      </button>
+    </div>
+    <div class="component-right-div">
+      <div class="agent-tickets-table-div" ui-view></div>
+    </div>
+  </div>
+</div>

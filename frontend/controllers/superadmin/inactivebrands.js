@@ -1,12 +1,14 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/superadmin/superadmin.service.js"/>
 ///<reference path="../../services/toast/toast.service.js"/>
+///<reference path="../../factory/brand/brand.js"/>
 
 app.controller("inActiveBrand", [
   "$scope",
   "superadminService",
   "toastService",
-  function ($scope, superadminService, toastService) {
+  "brandFactory",
+  function ($scope, superadminService, toastService, brandFactory) {
     $scope.pageNumber = 1;
     $scope.pageSize = 5;
     $scope.disableString = "disable";
@@ -78,7 +80,7 @@ app.controller("inActiveBrand", [
         toastService.errorMessage("Select Brand Logo");
       } else {
         $scope.submitString = false;
-        superadminService.addBrand(
+        brandFactory.addBrandFactory(
           $scope.formData.image,
           $scope.brand,
           function (result, error) {
@@ -109,7 +111,7 @@ app.controller("inActiveBrand", [
     //add brand Admin
     $scope.addBrandAdmin = function () {
       $scope.submitString = false;
-      superadminService.addBrandAdmin(
+      brandFactory.addBrandAdminFactory(
         $scope.admin,
         $scope.brandDetails,
         function (result, error) {

@@ -52,6 +52,10 @@ var brandSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isApproved: {
+    type: Boolean,
+    default: false,
+  },
   isFirstLogin: {
     type: Boolean,
     default: true,

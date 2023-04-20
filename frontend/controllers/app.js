@@ -27,11 +27,24 @@ app.config([
     $urlRouterProvider.when("/brandadmin", "/brandadmin/managers");
     $urlRouterProvider.when("/brandmanager", "/brandmanager/manageragents");
     $urlRouterProvider.when("/brandagent", "/brandagent/agenttickets");
+    $urlRouterProvider.when("/customer", "/customer/queryrequest");
 
     $stateProvider
+      .state("home", {
+        url: "/home",
+        templateUrl: "./views/home/home.html",
+      })
       .state("login", {
         url: "/login",
         templateUrl: "./views/auth/login.html",
+      })
+      .state("customerlogin", {
+        url: "/customerlogin",
+        templateUrl: "./views/customer/login.html",
+      })
+      .state("customersignup", {
+        url: "/customersignup",
+        templateUrl: "./views/customer/signup.html",
       })
       .state("admin", {
         url: "/admin",
@@ -49,9 +62,29 @@ app.config([
         url: "/inactivebrands",
         templateUrl: "./views/superadmin/inActiveBrands.html",
       })
+      .state("admin.registrationrequest", {
+        url: "/registrationrequest",
+        templateUrl: "./views/superadmin/registrationRequest.html",
+      })
+      .state("customer", {
+        url: "/customer",
+        templateUrl: "./views/customer/homePage.html",
+      })
+      .state("customer.queryrequest", {
+        url: "/queryrequest",
+        templateUrl: "./views/customer/queryRequests.html",
+      })
+      .state("customer.solvedqueries", {
+        url: "/solvedqueries",
+        templateUrl: "./views/customer/solvedQueries.html",
+      })
       .state("brandmanager", {
         url: "/brandmanager",
         templateUrl: "./views/managers/brandManager.html",
+      })
+      .state("brandmanager.customerqueries", {
+        url: "/customerqueries",
+        templateUrl: "./views/managers/customerQueries.html",
       })
       .state("brandmanager.manageragents", {
         url: "/manageragents",
@@ -120,6 +153,6 @@ app.config([
         templateUrl: "./views/unAuthorisedAccess.html",
       });
 
-    $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/home");
   },
 ]);

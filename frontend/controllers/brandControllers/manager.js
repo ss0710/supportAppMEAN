@@ -1,6 +1,7 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/brands/brand.service.js"/>
 ///<reference path="../../services/toast/toast.service.js"/>
+///<reference path="../../factory/user/user.js"/>
 
 app.controller("manager", [
   "$scope",
@@ -8,7 +9,15 @@ app.controller("manager", [
   "brandService",
   "$timeout",
   "toastService",
-  function ($scope, $location, brandService, $timeout, toastService) {
+  "UserFactory",
+  function (
+    $scope,
+    $location,
+    brandService,
+    $timeout,
+    toastService,
+    UserFactory
+  ) {
     $scope.disableString = "disable";
     $scope.enableString = "enable";
     $scope.pageNumber = 1;
@@ -104,7 +113,7 @@ app.controller("manager", [
         toastService.errorMessage("Select profile photo");
       } else {
         $scope.buttonBool = true;
-        brandService.addBrandManagers(
+        UserFactory.addBrandManagerFactory(
           $scope.formData.image,
           $scope.user,
           $scope.brandId,

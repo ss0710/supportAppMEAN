@@ -229,32 +229,7 @@ app.service("brandService", function ($http) {
     }
   };
 
-  this.addBrandManagers = function (
-    image,
-    user,
-    brandId,
-    brandEmail,
-    brandName,
-    brandCategory,
-    brandPhoneNumber,
-    brandAddress,
-    cb
-  ) {
-    var formData = new FormData();
-    formData.append("image", image);
-    formData.append("email", user.email);
-    formData.append("userName", user.userName);
-    formData.append("firstName", user.firstName);
-    formData.append("lastName", user.lastName);
-    formData.append("phoneNumber", user.phoneNumber);
-    formData.append("password", user.password);
-    formData.append("brandId", brandId);
-    formData.append("brandEmail", brandEmail);
-    formData.append("brandName", brandName);
-    formData.append("brandCategory", brandCategory);
-    formData.append("brandPhoneNumber", brandPhoneNumber);
-    formData.append("brandAddress", brandAddress);
-
+  this.addBrandManagers = function (formData, cb) {
     $http({
       method: "POST",
       url: "http://localhost:3000/addmanager",

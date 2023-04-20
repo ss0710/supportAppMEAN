@@ -75,3 +75,36 @@ exports.searchUserHandler = function (req, res) {
     }
   });
 };
+
+exports.addCustomer = function (req, res) {
+  var userData = {
+    role: "customer",
+    email: req.body.email,
+    userName: req.body.userName,
+    name: {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+    },
+    phoneNumber: req.body.phoneNumber,
+    password: req.body.password,
+    profileImage: "",
+    profileImageKey: "",
+    brand: {
+      email: req.body.brand.email,
+      name: req.body.brand.name,
+      category: req.body.brand.category,
+      phoneNumber: req.body.brand.phoneNumber,
+      address: req.body.brand.address,
+    },
+  };
+  console.log(userData);
+  var user = new User(userData);
+  user
+    .save()
+    .then(function (result) {
+      res.status(200).json(result);
+    })
+    .catch(function (error) {
+      res.status(409).json(error);
+    });
+};

@@ -46,6 +46,11 @@ exports.addTicket = function (req, res) {
           name: "",
           email: "",
         },
+        customer: {
+          name: "",
+          email: "",
+          createdAt: null,
+        },
       };
 
       const params = {
@@ -93,6 +98,189 @@ exports.addTicket = function (req, res) {
         })
         .catch(function (error) {
           console.log(error);
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.addCustomerQuery = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var ticketId = "ticket" + Date.now();
+      var ticketData = {
+        ticketId: ticketId,
+        brand: {
+          name: req.body.brandName,
+          email: req.body.brandEmail,
+        },
+        status: "Created",
+        subject: req.body.subject,
+        query: req.body.query,
+        createdBy: {
+          name: "",
+          email: "",
+          createdAt: null,
+        },
+        resolvedBy: {
+          name: "",
+          email: "",
+          resolvedAt: null,
+        },
+        agent: {
+          name: "",
+          email: "",
+        },
+        customer: {
+          name: req.body.customerName,
+          email: req.body.customerEmail,
+          createdAt: Date.now(),
+        },
+      };
+
+      console.log("add query api");
+      console.log(ticketData);
+
+      var ticket = new Ticket(ticketData);
+      ticket
+        .save()
+        .then(function (ticketResult) {
+          //now saving data in notification
+          NotificationController.addNotification(
+            "manager",
+            req.body.brandName,
+            req.body.brandEmail,
+            req.body.customerName,
+            req.body.customerName + " raised a query " + ticketId,
+            ""
+          );
+          //saving log
+          LogController.addLogHistory(
+            req.body.brandName,
+            req.body.brandEmail,
+            ticketId,
+            "create",
+            req.body.customerName,
+            "manager",
+            req.body.customerName + " raised the query"
+          );
+
+          res.status(200).json({
+            ticketResult: ticketResult,
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.getrequestedQueries = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var customerName = req.params.id;
+      Ticket.find({
+        "customer.createdAt": { $ne: null },
+        status: { $ne: "Closed" },
+        "customer.name": customerName,
+      })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.getSolvedQueries = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var customerName = req.params.id;
+      Ticket.find({
+        "customer.createdAt": { $ne: null },
+        status: "Closed",
+        "customer.name": customerName,
+      })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.getCustomersQueries = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var brandName = req.params.id;
+      Ticket.find({
+        "customer.createdAt": { $ne: null },
+        status: "Created",
+        "brand.name": brandName,
+      })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+exports.assignCustomersQueries = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var data = req.body;
+      Ticket.updateOne(
+        {
+          "brand.name": data.brandName,
+          "customer.name": data.customerName,
+        },
+        {
+          "createdBy.name": data.managerName,
+          "createdBy.email": data.managerEmail,
+          "createdBy.createdAt": Date.now(),
+          "agent.name": data.agentName,
+          "agent.email": data.agentEmail,
+          status: "Assigned",
+        }
+      )
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
           res.status(403).json(error);
         });
     }

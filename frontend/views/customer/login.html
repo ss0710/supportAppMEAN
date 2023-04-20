@@ -1,0 +1,97 @@
+<div ng-controller="customerLogin">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand navbar-logo" href="#">
+      <img
+        src="https://w7.pngwing.com/pngs/4/758/png-transparent-computer-icons-social-media-facebook-technical-support-blue-team-logo-thumbnail.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      TechSupport
+    </a>
+  </nav>
+  <div class="signup-main-div">
+    <div class="signup-inner-div">
+      <div class="signup-inner-div-left">
+        <img
+          class="signup-img"
+          src="../../assets/support3.png"
+          alt="signup-page-png"
+        />
+      </div>
+      <div class="signup-inner-div-right">
+        <p class="sign-up-text">Log In</p>
+        <form name="myForm" novalidate>
+          <!-- USER NAME -->
+          <input
+            class="input-field1"
+            type="text"
+            name="userName"
+            id="userName"
+            ng-model="userName"
+            required
+            placeholder="Enter User Name"
+            style="
+              width: 50%;
+              border-radius: 5px;
+              color: rgb(70, 70, 70);
+              padding-left: 5px;
+              border: 2px solid rgba(56, 29, 56, 0.74);
+            "
+          />
+          <br />
+          <label ng-show="myForm.$submitted || myForm.userName.$dirty">
+            <span
+              ng-model="UserNameError"
+              class="error"
+              ng-show="myForm.userName.$error.required"
+              >User Name is required</span
+            ><br />
+          </label>
+          <br />
+
+          <input
+            class="input-field1"
+            type="password"
+            id="password"
+            name="password"
+            ng-model="password"
+            required
+            placeholder="Enter passsword"
+            style="
+              width: 50%;
+              border-radius: 5px;
+              padding-left: 5px;
+              color: rgb(70, 70, 70);
+              border: 2px solid rgba(56, 29, 56, 0.74);
+            "
+          />
+          <br />
+          <label ng-show="myForm.$submitted || myForm.password.$dirty">
+            <span
+              ng-model="passwordError"
+              class="error"
+              ng-show="myForm.password.$error.required"
+              >Password is required</span
+            ><br />
+          </label>
+          <br />
+
+          <button class="signup-button" type="submit" ng-click="loginHandler()">
+            Submit
+          </button>
+          <h6 style="margin-top: 20px; color: rgba(78, 78, 78, 0.898)">
+            Create your account!!
+            <a
+              style="color: rgba(78, 78, 255, 0.91); cursor: pointer"
+              ui-sref="customersignup"
+              >Signup</a
+            >
+          </h6>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

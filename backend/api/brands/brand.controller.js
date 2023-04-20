@@ -58,7 +58,7 @@ exports.getInActiveBrand = function (req, res) {
       var pageNumber = parseInt(req.query.pageNumber) || 1;
       var pageSize = parseInt(req.query.pageSize) || 10;
 
-      Brand.find({ isDeleted: false, isAdminCreated: false })
+      Brand.find({ isDeleted: false, isAdminCreated: false, isApproved: true })
         .skip((pageNumber - 1) * pageSize)
         .limit(pageSize)
         .exec(function (err, data) {
@@ -80,6 +80,87 @@ exports.getInActiveBrand = function (req, res) {
               }
             );
           }
+        });
+    }
+  });
+};
+
+//get registration request brands
+exports.getRegistrationRequests = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var pageNumber = parseInt(req.query.pageNumber) || 1;
+      var pageSize = parseInt(req.query.pageSize) || 10;
+
+      Brand.find({ isDeleted: false, isAdminCreated: false, isApproved: false })
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize)
+        .exec(function (err, data) {
+          if (err) {
+            res.send(err);
+          } else {
+            Brand.count({ isDeleted: false, isAdminCreated: false }).exec(
+              function (err, count) {
+                if (err) {
+                  res.send(err);
+                } else {
+                  res.json({
+                    data: data,
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    totalCount: count,
+                  });
+                }
+              }
+            );
+          }
+        });
+    }
+  });
+};
+
+//approve brands
+exports.approveBrands = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var brandName = req.params.id;
+      Brand.updateOne({ name: brandName }, { isApproved: true })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
+        });
+    }
+  });
+};
+
+//cancel registration request
+exports.cancelRegistrationRequest = function (req, res) {
+  var t = req.headers["authorization"];
+  var tokenArray = t.split(" ");
+  var token = tokenArray[1];
+  jwt.verify(token, "privatekey", (err, authorizedData) => {
+    if (err) {
+      res.sendStatus(403).json({ error: "not authenticated user" });
+    } else {
+      var brandName = req.params.id;
+      Brand.updateOne({ name: brandName }, { isDeleted: true })
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        .catch(function (error) {
+          res.status(403).json(error);
         });
     }
   });
@@ -292,24 +373,15 @@ exports.addBrandAdmin = function (req, res) {
 };
 
 exports.searchBrand = function (req, res) {
-  var t = req.headers["authorization"];
-  var tokenArray = t.split(" ");
-  var token = tokenArray[1];
-  jwt.verify(token, "privatekey", (err, authorizedData) => {
-    if (err) {
-      res.sendStatus(403).json({ error: "not authenticated user" });
-    } else {
-      var brandName = req.params.id;
-      var regex = new RegExp(brandName, "i");
-      Brand.find({
-        name: regex,
-      })
-        .then(function (result) {
-          res.status(200).json(result);
-        })
-        .catch(function (error) {
-          res.status(403).json(error);
-        });
-    }
-  });
+  var brandName = req.params.id;
+  var regex = new RegExp(brandName, "i");
+  Brand.find({
+    name: regex,
+  })
+    .then(function (result) {
+      res.status(200).json(result);
+    })
+    .catch(function (error) {
+      res.status(403).json(error);
+    });
 };

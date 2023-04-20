@@ -47,17 +47,48 @@ app.service("superadminService", function ($http) {
       });
   };
 
+  //getting registration requests
+  this.getRegistrationRequests = function (pageNumber, pageSize, cb) {
+    return $http
+      .get(
+        "http://localhost:3000/getregistrationrequest?pageNumber=" +
+          pageNumber +
+          "&pageSize=" +
+          pageSize
+      )
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
+  this.approveBrandRequest = function (brandName, cb) {
+    $http
+      .put("http://localhost:3000/approvebrand/" + brandName, {})
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
+  this.cancelBrandRequest = function (brandName, cb) {
+    $http
+      .put("http://localhost:3000/cancelbrandrequest/" + brandName, {})
+      .then(function (result) {
+        cb(result, null);
+      })
+      .catch(function (error) {
+        cb(null, error);
+      });
+  };
+
   //add brand
   var token = localStorage.getItem("token");
-  this.addBrand = function (image, brand, cb) {
-    var formData = new FormData();
-    formData.append("image", image);
-    formData.append("email", brand.email);
-    formData.append("name", brand.name);
-    formData.append("category", brand.category);
-    formData.append("phoneNumber", brand.phoneNumber);
-    formData.append("address", brand.address);
-
+  this.addBrand = function (formData, cb) {
     $http({
       method: "POST",
       url: "http://localhost:3000/addbrand",
@@ -74,6 +105,7 @@ app.service("superadminService", function ($http) {
       },
       function (error) {
         // handle error
+        console.log(error);
         if (error.status == 409) {
           var error_msg = error.data.value + " already exist";
           cb(null, error_msg);
@@ -85,21 +117,7 @@ app.service("superadminService", function ($http) {
   };
 
   //add brand admin
-  this.addBrandAdmin = function (admin, brandDetails, cb) {
-    var data = {
-      email: admin.email,
-      userName: admin.name,
-      firstName: admin.firstName,
-      lastName: admin.lastName,
-      phoneNumber: admin.phoneNumber1,
-      password: admin.password,
-      brandId: brandDetails.brandId,
-      brandEmail: brandDetails.email,
-      brandName: brandDetails.name,
-      brandCategory: brandDetails.category,
-      brandPhoneNumber: brandDetails.phoneNumber,
-      brandAddress: brandDetails.address,
-    };
+  this.addBrandAdmin = function (data, cb) {
     $http
       .post("http://localhost:3000/addbrandadmin", data)
       .then(function (result) {

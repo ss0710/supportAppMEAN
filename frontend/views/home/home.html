@@ -1,0 +1,500 @@
+<div ng-controller="homePage">
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand navbar-logo" href="#">
+      <img
+        src="https://w7.pngwing.com/pngs/4/758/png-transparent-computer-icons-social-media-facebook-technical-support-blue-team-logo-thumbnail.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      TechSupport
+    </a>
+    <div>
+      <button
+        class="btn-outline-primary manager-logout-button"
+        style="width: 160px"
+        ui-sref="login"
+      >
+        Admin Login
+      </button>
+      <button
+        class="btn-outline-primary manager-logout-button"
+        style="width: 160px"
+        ui-sref="customerlogin"
+      >
+        Customer Login
+      </button>
+    </div>
+  </nav>
+  <div class="background-image-div-outer">
+    <div class="background-image-div-inner">
+      <h6 class="support-app-tag-line">
+        Help is just a tap away with our support app
+      </h6>
+      <div class="button-options-div">
+        <button class="admin-login-button" ui-sref="login">Admin Login</button>
+        <button class="customer-login-button" ui-sref="customerlogin">
+          Customer Login
+        </button>
+      </div>
+      <div>
+        <h6 style="color: white; margin-top: 30px">
+          Missing out on all the support? Register your brand and join our app
+          to never miss a beat!
+        </h6>
+      </div>
+      <div>
+        <button
+          style="
+            width: 7%;
+            padding: 0.1%;
+            border-radius: 3px;
+            border: 2px solid white;
+            cursor: pointer;
+            font-size: 0.8rem;
+          "
+          data-toggle="modal"
+          data-target="#addBrandModal"
+        >
+          Register Brand
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="app-information-container">
+    <div class="app-information-container-left">
+      <div style="width: 100%; text-align: center">
+        <h4 style="font-weight: bold; color: rgb(97, 97, 97)">
+          Discover Your Perks
+        </h4>
+      </div>
+      <p style="color: rgb(86, 86, 86)">
+        Users can access support from anywhere
+      </p>
+      <p style="color: rgb(86, 86, 86)">
+        Support issues can be resolved quickly through the app
+      </p>
+      <p style="color: rgb(86, 86, 86)">
+        Support apps can be tailored to the individual user
+      </p>
+      <p style="color: rgb(86, 86, 86)">
+        Support apps can reduce the cost of providing customer support
+      </p>
+      <p style="color: rgb(86, 86, 86)">
+        Support apps can provide valuable data on user behavior and preferences
+      </p>
+    </div>
+    <div class="app-information-container-right">
+      <div style="width: 100%; text-align: center">
+        <h4 style="font-weight: bold; color: rgb(97, 97, 97)">
+          Join in Few Easy Steps
+        </h4>
+      </div>
+      <p style="color: rgb(86, 86, 86)">Fill out the application form</p>
+      <p style="color: rgb(86, 86, 86)">
+        double-check that you have entered all the required information
+        correctly
+      </p>
+      <p style="color: rgb(86, 86, 86)">
+        The application will be reviewed by a superadmin to ensure that all
+        details are valid
+      </p>
+      <p style="color: rgb(86, 86, 86)">
+        If your application is valid, you will receive your authentication
+        details via email
+      </p>
+    </div>
+  </div>
+  <div class="brands-logo-customers-outer-div">
+    <div class="brand-logo-customers-text">
+      <h4
+        style="
+          font-weight: bold;
+          color: rgb(97, 97, 97);
+          font-size: 3rem;
+          margin-bottom: 10px;
+        "
+      >
+        Our Customers
+      </h4>
+      <p style="font-weight: bold; color: rgb(99, 99, 99); margin-bottom: 40px">
+        With the trust of 1000+ brands, we seamlessly deliver all services
+        without a hitch
+      </p>
+    </div>
+    <div class="brands-logo-customers">
+      <img
+        class="customer-logo-brand"
+        src="../../assets/ALABNK.png"
+        alt="product-logo"
+      />
+      <img
+        class="customer-logo-brand"
+        src="../../assets/burgerking.png"
+        alt="product-logo"
+      />
+      <img
+        class="customer-logo-brand"
+        src="../../assets/HDFC-Bank.jpg"
+        alt="product-logo"
+      />
+      <img
+        class="customer-logo-brand"
+        src="../../assets/Tata.jpg"
+        alt="product-logo"
+      />
+      <img
+        class="customer-logo-brand"
+        src="../../assets/wipro.png"
+        alt="product-logo"
+      />
+      <img
+        class="customer-logo-brand"
+        src="../../assets/tesla.png"
+        alt="product-logo"
+      />
+    </div>
+  </div>
+  <div class="plan-container">
+    <div class="plan-container-div">
+      <div>
+        <p style="font-size: 2rem; color: rgb(80, 80, 80)">Basic Plan</p>
+      </div>
+      <div>
+        <p style="font-size: 3rem; color: rgb(42, 42, 42)">2,100 Rs/Month</p>
+      </div>
+      <div>
+        <p>Company Size</p>
+        <p>10-50 people</p>
+      </div>
+    </div>
+    <div class="plan-container-div">
+      <div>
+        <p style="font-size: 2rem; color: rgb(80, 80, 80)">Moderate Plan</p>
+      </div>
+      <div>
+        <p style="font-size: 3rem; color: rgb(42, 42, 42)">5,100 Rs/Month</p>
+      </div>
+      <div>
+        <p>Company Size</p>
+        <p>50-200 people</p>
+      </div>
+    </div>
+    <div class="plan-container-div">
+      <div>
+        <p style="font-size: 2rem; color: rgb(80, 80, 80)">Premium Plan</p>
+      </div>
+      <div>
+        <p style="font-size: 3rem; color: rgb(42, 42, 42)">11,100 Rs/Month</p>
+      </div>
+      <div>
+        <p>Company Size</p>
+        <p>200-1000 people</p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <!-- Site footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <h6>About</h6>
+            <p class="text-justify">
+              Tech support is a tool designed to help businesses or
+              organizations manage customer inquiries, complaints, and other
+              support-related issues. This app allows multiple apps to register
+              and create, resolve, and close tickets within the system.The
+              support app serves as a centralized hub where all support tickets
+              can be managed, tracked, and resolved by a team of support agents.
+              This eliminates the need for different apps to manage their own
+              support tickets, which can lead to confusion, lost tickets, and
+              delays in response times.Overall, a support app that allows
+              multiple apps to register and create, resolve, and close tickets
+              can greatly improve the efficiency and effectiveness of a support
+              team, leading to happier customers and a better overall customer
+              experience.
+            </p>
+          </div>
+
+          <div class="col-xs-6 col-md-3">
+            <h6>Categories</h6>
+            <ul class="footer-links">
+              <li><a href="http://scanfcode.com/category/c-language/">C</a></li>
+              <li>
+                <a href="http://scanfcode.com/category/front-end-development/"
+                  >UI Design</a
+                >
+              </li>
+              <li>
+                <a href="http://scanfcode.com/category/back-end-development/"
+                  >PHP</a
+                >
+              </li>
+              <li>
+                <a
+                  href="http://scanfcode.com/category/java-programming-language/"
+                  >Java</a
+                >
+              </li>
+              <li>
+                <a href="http://scanfcode.com/category/android/">Android</a>
+              </li>
+              <li>
+                <a href="http://scanfcode.com/category/templates/">Templates</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-xs-6 col-md-3">
+            <h6>Quick Links</h6>
+            <ul class="footer-links">
+              <li><a href="http://scanfcode.com/about/">About Us</a></li>
+              <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
+              <li>
+                <a href="http://scanfcode.com/contribute-at-scanfcode/"
+                  >Contribute</a
+                >
+              </li>
+              <li>
+                <a href="http://scanfcode.com/privacy-policy/"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+        <hr />
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-sm-6 col-xs-12">
+            <p class="copyright-text">
+              Copyright &copy; 2023 All Rights Reserved by
+              <a href="#">Tech Support</a>.
+            </p>
+          </div>
+
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <ul class="social-icons">
+              <li>
+                <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
+              </li>
+              <li>
+                <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </li>
+              <li>
+                <a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a>
+              </li>
+              <li>
+                <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <!-- ADD BRAND MODAL -->
+  <div
+    class="modal fade"
+    id="addBrandModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Request Registration
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form name="myForm1" novalidate>
+            <input
+              class="input-element"
+              type="email"
+              id="email"
+              name="email"
+              ng-model="brand.email"
+              required
+              ng-pattern="emailRegex"
+              placeholder="Enter email"
+              style="width: 70%"
+            />
+            <br />
+            <label ng-show="myForm1.$submitted || myForm1.email.$dirty">
+              <label
+                ng-model="emailError1"
+                class="error"
+                ng-show="myForm1.email.$error.required"
+                >Email is required</label
+              >
+              <label
+                ng-model="emailError2"
+                class="error"
+                ng-show="myForm1.email.$error.pattern"
+                >Email is not valid</label
+              >
+            </label>
+            <br />
+
+            <input
+              class="input-element"
+              type="text"
+              name="name"
+              id="name"
+              ng-model="brand.name"
+              required
+              placeholder="Enter name"
+              style="width: 70%"
+            />
+            <br />
+            <label ng-show="myForm1.$submitted || myForm1.name.$dirty">
+              <span
+                ng-model="nameError"
+                class="error"
+                ng-show="myForm1.name.$error.required"
+                >Name is required</span
+              ><br />
+            </label>
+            <br />
+
+            <!-- category -->
+            <span for="category">Choose a category:</span>
+            <select
+              name="category"
+              id="category"
+              ng-model="brand.category"
+              ng-required="true"
+              style="width: 36%"
+            >
+              <option value="Food">Food</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Banking">Banking</option>
+              <option value="Aviation">Aviation</option>
+              <option value="Private">Private</option>
+              <option value="Sports">Sports</option>
+              <option value="Transport">Transport</option>
+              <option value="Others">Others</option>
+            </select>
+            <br />
+            <label>
+              <span
+                ng-model="categoryError1"
+                class="category"
+                ng-show="myForm1.category.$error.required"
+                >Select Category</span
+              ><br />
+            </label>
+            <br />
+
+            <span for="logoimage">Upload logo:</span>
+            <input
+              class="input-element"
+              type="file"
+              required
+              name="logoimage"
+              file-model="formData.image"
+            />
+            <br />
+            <label ng-show="myForm1.$submitted || myForm1.logoimage.$dirty">
+              <span
+                ng-model="passsError1"
+                class="logoimage"
+                ng-show="myForm1.logoimage.$error.required"
+                >Logo is required</span
+              ><br />
+            </label>
+            <br />
+
+            <input
+              class="input-element"
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              ng-model="brand.phoneNumber"
+              ng-minlength="10"
+              ng-maxlength="10"
+              required
+              placeholder="Enter phone number"
+              style="width: 70%"
+            />
+            <br />
+            <label ng-show="myForm1.$submitted || myForm1.phoneNumber.$dirty">
+              <label
+                ng-model="phoneError1"
+                class="error"
+                ng-show="myForm1.phoneNumber.$error.required"
+                >Phone Number is required</label
+              >
+              <label
+                ng-model="phoneError2"
+                class="error"
+                ng-show="((myForm1.phoneNumber.$error.minlength || myForm1.phoneNumber.$error.maxlength) && myForm1.phoneNumber.$dirty)"
+                >Phone Number should be of 10 digits</label
+              >
+            </label>
+            <br />
+
+            <input
+              class="input-element"
+              type="text"
+              name="address"
+              id="address"
+              ng-model="brand.address"
+              required
+              placeholder="Enter address"
+              style="width: 70%"
+            />
+            <br />
+            <label ng-show="myForm1.$submitted || myForm1.address.$dirty">
+              <span
+                ng-model="nameError"
+                class="error"
+                ng-show="myForm1.address.$error.required"
+                >Address is required</span
+              ><br />
+            </label>
+            <br />
+            <div class="modal-footer">
+              <button class="btn btn-secondary" data-dismiss="modal">
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                ng-disabled="myForm1.$invalid"
+                ng-show="submitString"
+                ng-click="onSubmitBrand()"
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                ng-disabled="true"
+                ng-show="!submitString"
+                ng-click="onSubmitBrand()"
+              >
+                Submitting
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

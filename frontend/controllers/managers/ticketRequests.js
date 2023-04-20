@@ -1,11 +1,13 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/managers/manager.service.js" />
+///<reference path="../../factory/ticket/ticket.js" />
 
 app.controller("TicketRequests", [
   "$scope",
   "$location",
   "managerService",
-  function ($scope, $location, managerService) {
+  "ticketFactory",
+  function ($scope, $location, managerService, ticketFactory) {
     $scope.Created = "Created";
     $scope.Assigned = "Assigned";
     $scope.Resolved = "resolved";
@@ -138,7 +140,7 @@ app.controller("TicketRequests", [
 
     //create tickets handler
     $scope.createTicketsHandler = function () {
-      managerService.addTickets(
+      ticketFactory.addTicketFactory(
         $scope.subject,
         $scope.query,
         $scope.brandManagerDetails,

@@ -1,0 +1,278 @@
+<div ng-controller="customerSignup">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand navbar-logo" href="#">
+      <img
+        src="https://w7.pngwing.com/pngs/4/758/png-transparent-computer-icons-social-media-facebook-technical-support-blue-team-logo-thumbnail.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      TechSupport
+    </a>
+  </nav>
+  <div class="signup-main-div">
+    <div class="signup-inner-div">
+      <div class="signup-inner-div-right">
+        <p class="sign-up-text">Sign Up</p>
+        <form name="myForm" novalidate>
+          <!-- USER NAME -->
+          <input
+            class="input-element"
+            type="text"
+            name="brand"
+            id="brand"
+            placeholder="search brand"
+            ng-model="brandSearchName"
+            ng-change="brandNameChangeHandler()"
+            style="
+              width: 60%;
+              border-radius: 5px;
+              padding-left: 5px;
+              color: rgb(70, 70, 70);
+              border: 2px solid rgba(56, 29, 56, 0.74);
+              margin-bottom: 25px;
+            "
+          />
+          <img
+            src="../../assets/cross.png"
+            alt="cross-png"
+            style="
+              height: 30px;
+              width: 30px;
+              cursor: pointer;
+              margin-left: -33px;
+              margin-top: -3px;
+            "
+            ng-click="hideList()"
+            ng-show="brandTableBool"
+          />
+          <div
+            style="
+              width: 20.5%;
+              max-height: 200px;
+              background-color: white;
+              position: absolute;
+              margin-left: 7%;
+              margin-top: -25px;
+              border: 1px solid rgb(67, 67, 67);
+              overflow-y: scroll;
+            "
+            ng-show="brandTableBool"
+          >
+            <table>
+              <tr ng-repeat="item in brandList" style="cursor: pointer">
+                <td ng-click="selectBrand(item)">{{item.name}}</td>
+              </tr>
+            </table>
+          </div>
+
+          <input
+            class="input-element"
+            type="email"
+            id="email"
+            name="email"
+            ng-model="user.email"
+            required
+            ng-pattern="emailRegex"
+            placeholder="Enter email"
+            style="
+              width: 60%;
+              border-radius: 5px;
+              padding-left: 5px;
+              color: rgb(70, 70, 70);
+              border: 2px solid rgba(56, 29, 56, 0.74);
+            "
+          />
+          <br />
+          <label ng-show="myForm.$submitted || myForm.email.$dirty">
+            <label
+              ng-model="emailError1"
+              class="error"
+              ng-show="myForm.email.$error.required"
+              style="position: relative"
+              >Email is required</label
+            >
+            <label
+              ng-model="emailError2"
+              class="error"
+              ng-show="myForm.email.$error.pattern"
+              style="position: relative"
+              >Email is not valid</label
+            >
+          </label>
+          <br />
+
+          <input
+            class="input-element"
+            type="text"
+            name="name"
+            id="name"
+            ng-model="user.name"
+            required
+            placeholder="Enter user name"
+            style="
+              width: 60%;
+              border-radius: 5px;
+              padding-left: 5px;
+              color: rgb(70, 70, 70);
+              border: 2px solid rgba(56, 29, 56, 0.74);
+            "
+          />
+          <br />
+          <label ng-show="myForm.$submitted || myForm.name.$dirty">
+            <span
+              ng-model="nameError"
+              class="error"
+              ng-show="myForm.name.$error.required"
+              >Name is required</span
+            ><br />
+          </label>
+          <br />
+
+          <input
+            class="input-element"
+            type="text"
+            name="firstName"
+            id="firstName"
+            ng-model="user.firstName"
+            required
+            placeholder="Enter first name"
+            style="
+              width: 60%;
+              border-radius: 5px;
+              padding-left: 5px;
+              color: rgb(70, 70, 70);
+              border: 2px solid rgba(56, 29, 56, 0.74);
+            "
+          />
+          <br />
+          <label ng-show="myForm.$submitted || myForm.firstName.$dirty">
+            <span
+              ng-model="firstNameError"
+              class="error"
+              ng-show="myForm.firstName.$error.required"
+              >First Name is required</span
+            ><br />
+          </label>
+          <br />
+
+          <input
+            class="input-element"
+            type="text"
+            name="lastName"
+            id="lastName"
+            ng-model="user.lastName"
+            required
+            placeholder="Enter last name"
+            style="
+              width: 60%;
+              border-radius: 5px;
+              padding-left: 5px;
+              color: rgb(70, 70, 70);
+              border: 2px solid rgba(56, 29, 56, 0.74);
+            "
+          />
+          <br />
+          <label ng-show="myForm.$submitted || myForm.lastName.$dirty">
+            <span
+              ng-model="lastNameError"
+              class="error"
+              ng-show="myForm.lastName.$error.required"
+              >Last Name is required</span
+            ><br />
+          </label>
+          <br />
+
+          <input
+            class="input-element"
+            type="text"
+            name="phoneNumber1"
+            id="phoneNumber1"
+            ng-model="user.phoneNumber1"
+            ng-minlength="10"
+            ng-maxlength="10"
+            required
+            placeholder="Enter Phone Number"
+            style="
+              width: 60%;
+              border-radius: 5px;
+              padding-left: 5px;
+              color: rgb(70, 70, 70);
+              border: 2px solid rgba(56, 29, 56, 0.74);
+            "
+          />
+          <br />
+          <label ng-show="myForm.$submitted || myForm.phoneNumber1.$dirty">
+            <span
+              ng-model="phoneNumber1Error"
+              class="error"
+              ng-show="myForm.phoneNumber1.$error.required"
+              >Phone Number is required</span
+            ><br />
+          </label>
+          <label
+            ng-model="phoneNumber1Error"
+            class="error"
+            ng-show="((myForm.phoneNumber1.$error.minlength || myForm.phoneNumber1.$error.maxlength) && myForm.phoneNumber1.$dirty)"
+            >Phone Number should be of 10 digits</label
+          >
+          <br />
+
+          <input
+            class="input-field1"
+            type="password"
+            id="password"
+            name="password"
+            ng-model="user.password"
+            required
+            placeholder="Enter passsword"
+            style="
+              width: 60%;
+              border-radius: 5px;
+              padding-left: 5px;
+              color: rgb(70, 70, 70);
+              border: 2px solid rgba(56, 29, 56, 0.74);
+            "
+          />
+          <br />
+          <label ng-show="myForm.$submitted || myForm.password.$dirty">
+            <span
+              ng-model="passwordError"
+              class="error"
+              ng-show="myForm.password.$error.required"
+              >Password is required</span
+            ><br />
+          </label>
+          <br />
+
+          <button
+            class="btn btn-primary"
+            type="submit"
+            ng-click="loginHandler()"
+            ng-disabled="myForm.$invalid"
+            style="width: 60%"
+          >
+            Submit
+          </button>
+          <h6 style="margin-top: 20px; color: rgba(78, 78, 78, 0.898)">
+            Already have an account!!
+            <a
+              style="color: rgba(78, 78, 255, 0.91); cursor: pointer"
+              ui-sref="customerlogin"
+              >Login</a
+            >
+          </h6>
+        </form>
+      </div>
+      <div class="signup-inner-div-left">
+        <img
+          class="signup-img"
+          src="../../assets/support3.png"
+          alt="signup-page-png"
+        />
+      </div>
+    </div>
+  </div>
+</div>

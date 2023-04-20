@@ -1,13 +1,15 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/managers/manager.service.js" />
 ///<reference path="../../services/socket/socket.service.js" />
+///<reference path="../../factory/files/file.js" />
 
 app.controller("Tickets", [
   "$scope",
   "$location",
   "managerService",
   "socketService",
-  function ($scope, $location, managerService, socketService) {
+  "fileFactory",
+  function ($scope, $location, managerService, socketService, fileFactory) {
     $scope.Created = "Created";
     $scope.Resolved = "resolved";
     $scope.listenTicketId = null;
@@ -213,7 +215,7 @@ app.controller("Tickets", [
     };
 
     $scope.addFile = function (ticketId) {
-      managerService.addFilesToTicket(
+      fileFactory.addFileByManagerFactory(
         $scope.formData.image,
         ticketId,
         $scope.brandManagerDetails,

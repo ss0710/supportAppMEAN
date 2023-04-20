@@ -1,6 +1,7 @@
 ///<reference path="../app.js" />
 ///<reference path="../../services/agents/agent.service.js" />
 ///<reference path="../../services/socket/socket.service.js" />
+///<reference path="../../factory/files/file.js" />
 
 app.controller("agentTickets", [
   "$scope",
@@ -8,7 +9,15 @@ app.controller("agentTickets", [
   "agentService",
   "socketService",
   "$anchorScroll",
-  function ($scope, $location, agentService, socketService, $anchorScroll) {
+  "fileFactory",
+  function (
+    $scope,
+    $location,
+    agentService,
+    socketService,
+    $anchorScroll,
+    fileFactory
+  ) {
     $scope.tickets = [];
     $scope.ticketComments = [];
     $scope.ticketStatusChangeDetails;
@@ -335,12 +344,12 @@ app.controller("agentTickets", [
 
     //function to add File
     $scope.addFile = function (ticketId) {
-      agentService.addFileToTicket(
+      fileFactory.addFileByAgentFactory(
         $scope.formData.image,
         ticketId,
         $scope.brandName,
         $scope.brandAgentName,
-        "manager",
+        "agent",
         function (result, error) {
           if (result) {
             alert("Successfully  uploaded");

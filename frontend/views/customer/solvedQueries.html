@@ -1,0 +1,28 @@
+<div ng-controller="customerSolvedQueries" style="padding: 2%">
+  <h6
+    style="
+      font-size: 1.5rem;
+      color: rgb(79, 79, 79);
+      font-weight: bold;
+      margin-bottom: 20px;
+    "
+  >
+    Resolved Queries
+  </h6>
+  <table>
+    <tr>
+      <th>Subject</th>
+      <th>Created At</th>
+      <!-- <th>Details</th> -->
+      <th>Status</th>
+      <!-- <th>Chat</th> -->
+    </tr>
+    <tr ng-repeat="item in queriesList">
+      <td>{{item.subject}}</td>
+      <td>{{item.customer.createdAt}}</td>
+      <!-- <th>Details</th> -->
+      <td>Solved</td>
+      <!-- <th>Chat</th> -->
+    </tr>
+  </table>
+</div>

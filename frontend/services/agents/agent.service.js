@@ -208,21 +208,7 @@ app.service("agentService", function ($http) {
   };
 
   //add attachments to ticket
-  this.addFileToTicket = function (
-    Image,
-    ticketId,
-    brandName,
-    brandAgentName,
-    type,
-    cb
-  ) {
-    var formData = new FormData();
-    formData.append("image", Image);
-    formData.append("ticketId", ticketId);
-    formData.append("brandName", brandName);
-    formData.append("userName", brandAgentName);
-    formData.append("type", type);
-
+  this.addFileToTicket = function (formData, cb) {
     $http({
       method: "POST",
       url: "http://localhost:3000/addfile",
@@ -233,7 +219,7 @@ app.service("agentService", function ($http) {
       data: formData,
     }).then(
       function (response) {
-        cb(result, null);
+        cb(response, null);
       },
       function (error) {
         cb(null, result);

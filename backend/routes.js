@@ -35,18 +35,25 @@ router.post("/login", passport.authenticate("local"), loginController);
 //user routes
 router.post("/addbrandadmin", brandController.addBrandAdmin);
 router.get("/searchuser", userController.searchUserHandler);
+router.post("/addcustomer", userController.addCustomer);
 //api for user-type
 router.get("/usertype", userController.getUserType);
 
 //brand routes
 router.get("/getactivebrands", brandController.getActiveBrand);
 router.get("/getinactivebrands", brandController.getInActiveBrand);
+router.get("/getregistrationrequest", brandController.getRegistrationRequests);
 router.get("/getbrandbyid/:id", brandController.getBrandById);
 router.put("/updatebrand", brandController.updateBrand);
 router.put("/disablebrand/:id", brandController.disableBrand);
 router.put("/enablebrand/:id", brandController.enableBrand);
 router.put("/deletebrand/:id", brandController.deleteBrand);
 router.get("/searchbrand/:id", brandController.searchBrand);
+router.put("/approvebrand/:id", brandController.approveBrands);
+router.put(
+  "/cancelbrandrequest/:id",
+  brandController.cancelRegistrationRequest
+);
 
 var s3 = new S3({
   region,
@@ -260,6 +267,11 @@ router.put(
 );
 router.put("/resolveTicketbyagent", ticketController.resolveTicketByAgent);
 router.get("/filtertickets", ticketController.filterTickets);
+router.post("/raisequery", ticketController.addCustomerQuery);
+router.get("/getrequestedqueries/:id", ticketController.getrequestedQueries);
+router.get("/customerqueriesbybrand/:id", ticketController.getCustomersQueries);
+router.put("/assigncustomerqueries", ticketController.assignCustomersQueries);
+router.get("/solvedqueries/:id", ticketController.getSolvedQueries);
 
 //comments routes
 router.post("/addcomment", commentController.addComment);
